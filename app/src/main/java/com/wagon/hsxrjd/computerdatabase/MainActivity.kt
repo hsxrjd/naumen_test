@@ -2,7 +2,7 @@ package com.wagon.hsxrjd.computerdatabase
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.wagon.hsxrjd.computerdatabase.fragment.MainFragment
+import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         savedInstanceState ?:
                 supportFragmentManager
                         .beginTransaction()
-                        .add(R.id.fragment_container, MainFragment.newInstance())
+                        .add(R.id.fragment_container, CardListFragment.newInstance())
                         .commit()
     }
 }

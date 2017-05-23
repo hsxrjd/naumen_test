@@ -1,5 +1,8 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
+import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.model.Page
+import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -9,14 +12,13 @@ import retrofit2.http.Query
  */
 
 interface NaumenRestAPI {
-    //TODO: доделать апи до нормального вида - добавить типы к методам, после добавления основных типов
 
     @GET("/rest/computers")
-    fun getListOfCards(@Query("p") page: Int)
+    fun getPage(@Query("p") page: Int): Observable<Page>
 
     @GET("/rest/computers/{id}")
-    fun getCard(@Path("id") id: Int)
+    fun getCard(@Path("id") id: Int): Observable<Card>
 
     @GET("/rest/computers/{id}/similar")
-    fun getSimilarTo(@Path("id") id: Int)
+    fun getSimilarTo(@Path("id") id: Int): Observable<List<Card>>
 }
