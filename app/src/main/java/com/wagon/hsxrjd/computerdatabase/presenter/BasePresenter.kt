@@ -8,8 +8,8 @@ import com.wagon.hsxrjd.computerdatabase.view.BaseView
  */
 
 
-abstract class BasePresenter<in T: BaseView> : BaseContract.Presenter<T>{
-    private var mView: T? = null
+abstract class BasePresenter<T: BaseView> : BaseContract.Presenter<T>{
+    internal var mView: T? = null
 
     override fun setView(view: T) {
         mView = view

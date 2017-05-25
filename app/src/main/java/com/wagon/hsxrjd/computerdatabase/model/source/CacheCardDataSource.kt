@@ -7,7 +7,8 @@ import io.reactivex.Observable
 /**
  * Created by hsxrjd on 24.05.17.
  */
-object CacheCardDataSource : CardDataSource {
+class CacheCardDataSource : CardDataSource {
+
     override fun getCards(page: Int): Observable<Page> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -19,5 +20,6 @@ object CacheCardDataSource : CardDataSource {
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
 
 }

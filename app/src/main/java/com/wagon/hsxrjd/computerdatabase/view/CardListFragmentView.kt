@@ -10,7 +10,7 @@ import com.wagon.hsxrjd.computerdatabase.model.Card
 interface CardListFragmentView : BaseView{
     fun showLoading()
     fun hideLoading()
-    fun showMessage()
+    fun showMessage(message: String)
     fun showCardList(cardList: List<Card>)
     fun showCard(card: Card)
 }

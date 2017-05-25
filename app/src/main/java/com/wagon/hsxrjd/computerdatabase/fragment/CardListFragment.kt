@@ -7,13 +7,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Card
-import com.wagon.hsxrjd.computerdatabase.model.source.CacheCardDataSource
-import com.wagon.hsxrjd.computerdatabase.model.source.RemoteCardDataSource
+import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
 import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 import com.wagon.hsxrjd.computerdatabase.view.CardRecyclerViewAdapter
@@ -25,6 +25,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
     }
 
     @BindView(R.id.recycler_view_cards) lateinit var mRecyclerView: RecyclerView
+    @BindView(R.id.progress_bar) lateinit var mProgressBar: ProgressBar
 
     lateinit var mRvAdapter: CardRecyclerViewAdapter
     lateinit var mListPresenter: CardListPresenter
@@ -34,9 +35,16 @@ class CardListFragment : Fragment(), CardListFragmentView {
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_main, container, false)
         ButterKnife.bind(this, view)
-        setupRecyclerView()
-        mListPresenter = CardListPresenter(CacheCardDataSource, RemoteCardDataSource)
+        mListPresenter = CardListPresenter(CardDataRepository.instance)
         savedInstanceState ?: mListPresenter.start()
+        mClickListener = object : CardClickListener {
+            override fun onCardClicked(card: Card) {
+                showMessage("Not implemented")
+            }
+        }
+        mProgressBar.isIndeterminate = true
+        hideLoading()
+        setupRecyclerView()
         return view
     }
 
@@ -47,21 +55,26 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     fun setupRecyclerView() {
         mRvAdapter = CardRecyclerViewAdapter()
+        mRvAdapter.setOnItemClickListener(object : CardRecyclerViewAdapter.OnItemClickListener {
+            override fun onItemClick(card: Card) {
+                mClickListener.onCardClicked(card)
+            }
+        })
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mRvAdapter
 
     }
 
     override fun showLoading() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mProgressBar.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mProgressBar.visibility = View.GONE
     }
 
-    override fun showMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)

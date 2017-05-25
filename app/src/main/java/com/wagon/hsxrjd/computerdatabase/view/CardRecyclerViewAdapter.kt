@@ -20,7 +20,7 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
         fun onItemClick(card: Card)
     }
 
-    private var onItemClickListener: OnItemClickListener? = null
+    private lateinit var onItemClickListener: OnItemClickListener
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
@@ -29,6 +29,7 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
     fun setCardList(cardList: List<Card>) {
         mCardList.clear()
         mCardList.addAll(cardList)
+        notifyDataSetChanged()
     }
 
     fun addCardsToList(cardList: List<Card>) {
@@ -38,14 +39,18 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
     override fun onBindViewHolder(viewHolder: CardViewHolder?, p1: Int) {
         val card: Card = mCardList[p1]
         viewHolder?.title?.text = card.name
-        viewHolder?.itemView!!.setOnClickListener { onItemClickListener!!.onItemClick(card) }
+        viewHolder?.itemView!!.setOnClickListener { onItemClickListener.onItemClick(card) }
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup?, p1: Int): CardViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup?, viewType: Int): CardViewHolder {
         val v: View = LayoutInflater
                 .from(viewGroup?.context)
-                .inflate(R.layout.card_list_item, viewGroup, false)
+                .inflate(viewType, viewGroup, false)
         return CardViewHolder(v)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return mCardList.getOrNull(position)?.let { R.layout.card_list_item } ?: R.layout.loading_list_item
     }
 
     override fun getItemCount(): Int {
@@ -53,7 +58,7 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
     }
 
     class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.card_text_item) internal lateinit var title: TextView
+        @BindView(R.id.card_text_item) lateinit var title: TextView
 
         init {
             ButterKnife.bind(this, itemView)

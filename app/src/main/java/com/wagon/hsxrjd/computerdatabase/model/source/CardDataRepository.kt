@@ -7,16 +7,26 @@ import io.reactivex.Observable
 /**
  * Created by hsxrjd on 24.05.17.
  */
-object CardDataRepository : CardDataSource {
+class CardDataRepository private constructor(): CardDataSource {
+    private object Holder {
+        val mInstance: CardDataRepository = CardDataRepository()
+    }
+    private val mRemoteSource: RemoteCardDataSource = RemoteCardDataSource()
+    private val mLocalSource: CacheCardDataSource = CacheCardDataSource()
+
     override fun getCards(page: Int): Observable<Page> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mRemoteSource.getCards(page)
     }
 
     override fun getCard(id: Int): Observable<Card> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mRemoteSource.getCard(id)
     }
 
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return mRemoteSource.getSimilarTo(id)
+    }
+
+    companion object {
+        val instance: CardDataRepository by lazy { Holder.mInstance }
     }
 }
