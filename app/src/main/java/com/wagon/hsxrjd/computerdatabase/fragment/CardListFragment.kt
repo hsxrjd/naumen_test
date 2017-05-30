@@ -1,6 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.fragment
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -31,15 +32,26 @@ class CardListFragment : Fragment(), CardListFragmentView {
     lateinit var mListPresenter: CardListPresenter
     lateinit var mClickListener: CardClickListener
 
+    private val tag_lm: String = "LAYOUT_MANAGER"
+    private val tag_ld: String = "LIST_OF_DATA"
+
+    private var mLayoutManagerState: Parcelable? = null
+    private var mDataList: Array<Parcelable>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_main, container, false)
         ButterKnife.bind(this, view)
-        mListPresenter = CardListPresenter(CardDataRepository.instance)
-        savedInstanceState ?: mListPresenter.start()
+        mListPresenter = CardListPresenter.instance
+        savedInstanceState ?: mListPresenter.setDataSource(CardDataRepository.instance)
         mClickListener = object : CardClickListener {
             override fun onCardClicked(card: Card) {
-                showMessage("Not implemented")
+                mListPresenter.onCardClicked(card)
             }
         }
         mProgressBar.isIndeterminate = true
@@ -48,9 +60,29 @@ class CardListFragment : Fragment(), CardListFragmentView {
         return view
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putParcelable(tag_lm, mRecyclerView.layoutManager.onSaveInstanceState())
+        outState?.putParcelableArray(tag_ld, mRvAdapter.getCardList().toTypedArray())
+    }
+
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mListPresenter.setView(this)
+        savedInstanceState
+                ?.let {
+                    mLayoutManagerState = it.getParcelable(tag_lm)
+                    mDataList = it.getParcelableArray(tag_ld)
+                }
+                ?: mListPresenter.start()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mDataList?.let { mRvAdapter.setCardList(it.toList() as List<Card>) }
+        mLayoutManagerState?.let { mRecyclerView.layoutManager.onRestoreInstanceState(it) }
     }
 
     fun setupRecyclerView() {

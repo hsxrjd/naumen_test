@@ -3,22 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
-    android:divider="@color/colorPrimary"
-    android:maxHeight="60dp"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:divider="#505050"
     android:orientation="horizontal"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:maxHeight="?android:attr/listPreferredItemHeight"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
+    android:paddingBottom="8dp"
     android:paddingTop="8dp">
 
     <TextView
-        android:id="@+id/card_text_item"
+        android:id="@+id/card_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
         android:textAlignment="center"
-        />
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/card_company_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/card_title"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

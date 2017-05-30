@@ -26,6 +26,10 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
         this.onItemClickListener = onItemClickListener
     }
 
+    fun getCardList(): List<Card> {
+        return mCardList
+    }
+
     fun setCardList(cardList: List<Card>) {
         mCardList.clear()
         mCardList.addAll(cardList)
@@ -39,7 +43,16 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
     override fun onBindViewHolder(viewHolder: CardViewHolder?, p1: Int) {
         val card: Card = mCardList[p1]
         viewHolder?.title?.text = card.name
-        viewHolder?.itemView!!.setOnClickListener { onItemClickListener.onItemClick(card) }
+
+        card.company?.let {
+            viewHolder?.company?.visibility = View.VISIBLE
+            viewHolder?.company?.text = it.name
+        }
+        if (card.company == null){
+            viewHolder?.company?.visibility = View.GONE
+        }
+
+        viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(card) }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup?, viewType: Int): CardViewHolder {
@@ -58,7 +71,8 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
     }
 
     class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        @BindView(R.id.card_text_item) lateinit var title: TextView
+        @BindView(R.id.card_title) lateinit var title: TextView
+        @BindView(R.id.card_company_name) lateinit var company: TextView
 
         init {
             ButterKnife.bind(this, itemView)
