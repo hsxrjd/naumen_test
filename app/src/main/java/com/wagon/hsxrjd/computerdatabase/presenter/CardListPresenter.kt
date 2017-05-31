@@ -20,7 +20,7 @@ class CardListPresenter : BasePresenter<CardListFragmentView>() {
         loadCardList(0)
     }
 
-    private fun loadCardList(page: Int) {
+    fun loadCardList(page: Int) {
         val view: CardListFragmentView? = mView.get()
         view?.showLoading()
         mDataSource.getCards(page)

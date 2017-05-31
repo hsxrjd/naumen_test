@@ -19,6 +19,7 @@ import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 import com.wagon.hsxrjd.computerdatabase.view.CardRecyclerViewAdapter
 
+
 class CardListFragment : Fragment(), CardListFragmentView {
 
     interface CardClickListener {
@@ -28,7 +29,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
     @BindView(R.id.recycler_view_cards) lateinit var mRecyclerView: RecyclerView
     @BindView(R.id.progress_bar) lateinit var mProgressBar: ProgressBar
 
-    lateinit var mRvAdapter: CardRecyclerViewAdapter
+    var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
     lateinit var mListPresenter: CardListPresenter
     lateinit var mClickListener: CardClickListener
 
@@ -37,6 +38,18 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     private var mLayoutManagerState: Parcelable? = null
     private var mDataList: Array<Parcelable>? = null
+    private var pageCount = 1
+
+    private val mRVOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = recyclerView?.layoutManager as LinearLayoutManager?
+            val lastVisibleItemPosition = layoutManager?.findLastVisibleItemPosition()
+            if (lastVisibleItemPosition == mRvAdapter.itemCount - 1) {
+                mListPresenter.loadCardList(++pageCount)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +99,6 @@ class CardListFragment : Fragment(), CardListFragmentView {
     }
 
     fun setupRecyclerView() {
-        mRvAdapter = CardRecyclerViewAdapter()
         mRvAdapter.setOnItemClickListener(object : CardRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(card: Card) {
                 mClickListener.onCardClicked(card)
@@ -94,6 +106,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
         })
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mRvAdapter
+        mRecyclerView.addOnScrollListener(mRVOnScrollListener)
 
     }
 
@@ -109,7 +122,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)
+    override fun showCardList(cardList: List<Card>) = mRvAdapter.addCardsToList(cardList)
 
 
     override fun showCard(card: Card) = mClickListener.onCardClicked(card)

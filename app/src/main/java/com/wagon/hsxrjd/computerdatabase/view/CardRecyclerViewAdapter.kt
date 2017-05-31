@@ -13,8 +13,10 @@ import com.wagon.hsxrjd.computerdatabase.model.Card
 /**
  * Created by hsxrjd on 23.05.17.
  */
-class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.CardViewHolder>() {
+class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.BaseViewHolder>(){
+
     private var mCardList: MutableList<Card> = mutableListOf()
+
 
     interface OnItemClickListener {
         fun onItemClick(card: Card)
@@ -38,28 +40,38 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
 
     fun addCardsToList(cardList: List<Card>) {
         mCardList.addAll(cardList)
+        notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(viewHolder: CardViewHolder?, p1: Int) {
-        val card: Card = mCardList[p1]
-        viewHolder?.title?.text = card.name
+    override fun onBindViewHolder(viewHolder: BaseViewHolder?, position: Int) {
 
-        card.company?.let {
-            viewHolder?.company?.visibility = View.VISIBLE
-            viewHolder?.company?.text = it.name
-        }
-        if (card.company == null){
-            viewHolder?.company?.visibility = View.GONE
+        when (viewHolder) {
+            is CardViewHolder? -> {
+                val card: Card = mCardList[position]
+                val localViewHolder = viewHolder
+                localViewHolder?.title?.text = card.name
+
+                card.company?.let {
+                    localViewHolder?.company?.visibility = View.VISIBLE
+                    localViewHolder?.company?.text = it.name
+                }
+                if (card.company == null) {
+                    localViewHolder?.company?.visibility = View.GONE
+                }
+
+                localViewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(card) }
+            }
+            is LoaderViewHolder? -> {
+            }
         }
 
-        viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(card) }
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup?, viewType: Int): CardViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup?, viewType: Int): BaseViewHolder {
         val v: View = LayoutInflater
                 .from(viewGroup?.context)
                 .inflate(viewType, viewGroup, false)
-        return CardViewHolder(v)
+        return if (viewType == R.layout.card_list_item) CardViewHolder(v) else LoaderViewHolder(v)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -67,16 +79,24 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Car
     }
 
     override fun getItemCount(): Int {
-        return mCardList.size
+        return if (mCardList.isEmpty()) 0 else mCardList.size
     }
 
-    class CardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    class CardViewHolder(itemView: View) : BaseViewHolder(itemView) {
         @BindView(R.id.card_title) lateinit var title: TextView
         @BindView(R.id.card_company_name) lateinit var company: TextView
 
         init {
             ButterKnife.bind(this, itemView)
         }
+    }
 
+    class LoaderViewHolder(itemView: View) : BaseViewHolder(itemView) {
+
+        init {
+            ButterKnife.bind(this, itemView)
+        }
     }
 }
