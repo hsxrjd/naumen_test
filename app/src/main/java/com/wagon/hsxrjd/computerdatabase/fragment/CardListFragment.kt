@@ -3,6 +3,7 @@ package com.wagon.hsxrjd.computerdatabase.fragment
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
+import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 import com.wagon.hsxrjd.computerdatabase.view.CardRecyclerViewAdapter
@@ -38,17 +40,25 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     private var mLayoutManagerState: Parcelable? = null
     private var mDataList: Array<Parcelable>? = null
-    private var pageCount = 1
+    private var isStart = true
+    private var mLoading = false
 
     private val mRVOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView?.layoutManager as LinearLayoutManager?
             val lastVisibleItemPosition = layoutManager?.findLastVisibleItemPosition()
-            if (lastVisibleItemPosition == mRvAdapter.itemCount - 1) {
-                mListPresenter.loadCardList(++pageCount)
+            if (lastVisibleItemPosition == mRvAdapter.itemCount - 2) {
+                mListPresenter.loadNextPage()
             }
         }
+    }
+
+    override fun isFullFilled(): Boolean {
+        val layoutManager = mRecyclerView.layoutManager as LinearLayoutManager?
+        if (mLoading && layoutManager?.findLastVisibleItemPosition() == mRvAdapter.itemCount - 1)
+            return false
+        return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +98,10 @@ class CardListFragment : Fragment(), CardListFragmentView {
                     mLayoutManagerState = it.getParcelable(tag_lm)
                     mDataList = it.getParcelableArray(tag_ld)
                 }
-                ?: mListPresenter.start()
+                ?: let {
+            mListPresenter.start()
+            isStart = false
+        }
 
     }
 
@@ -106,16 +119,25 @@ class CardListFragment : Fragment(), CardListFragmentView {
         })
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mRvAdapter
+        mRecyclerView.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.dark_divider)))
         mRecyclerView.addOnScrollListener(mRVOnScrollListener)
 
     }
 
     override fun showLoading() {
-        mProgressBar.visibility = View.VISIBLE
+        mLoading = true
+        if (isStart)
+            mProgressBar.visibility = View.VISIBLE
+        else
+            mRvAdapter.showLoading()
     }
 
     override fun hideLoading() {
-        mProgressBar.visibility = View.GONE
+        mLoading = false
+        if (mProgressBar.visibility == View.VISIBLE)
+            mProgressBar.visibility = View.GONE
+        else
+            mRvAdapter.hideLoading()
     }
 
     override fun showMessage(message: String) {

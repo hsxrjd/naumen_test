@@ -7,8 +7,9 @@ import com.wagon.hsxrjd.computerdatabase.model.Card
  */
 
 
-interface CardListFragmentView : BaseView, Loading{
+interface CardListFragmentView : BaseView, Loading {
     fun showMessage(message: String)
     fun showCardList(cardList: List<Card>)
     fun showCard(card: Card)
+    fun isFullFilled(): Boolean
 }

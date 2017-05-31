@@ -1,26 +1,28 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
+import android.util.Log
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.model.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
-import io.reactivex.subjects.ReplaySubject
 
 /**
  * Created by hsxrjd on 24.05.17.
  */
 class CardListPresenter : BasePresenter<CardListFragmentView>() {
     private lateinit var mDataSource: CardDataSource
+    private var pageCount: Int = 0
 
     fun setDataSource(source: CardDataSource) {
         mDataSource = source
     }
 
     fun start() {
-        loadCardList(0)
+        loadPage(0)
     }
 
-    fun loadCardList(page: Int) {
+    fun loadPage(page: Int) {
+        pageCount = page
         val view: CardListFragmentView? = mView.get()
         view?.showLoading()
         mDataSource.getCards(page)
@@ -28,6 +30,20 @@ class CardListPresenter : BasePresenter<CardListFragmentView>() {
                 .doOnError { view?.showMessage("Error loading data on page $page") }
                 .subscribe { p: Page? -> p?.items?.let { view?.showCardList(it) } }
 
+    }
+
+    fun loadNextPage() {
+        pageCount++
+        Log.d("DEBUG", "Page to load: $pageCount")
+        val view: CardListFragmentView? = mView.get()
+        view?.showLoading()
+        mDataSource.getCards(pageCount)
+                .doOnComplete { view?.hideLoading() }
+                .doOnError {
+                    view?.showMessage("Error loading data on page $pageCount")
+                    pageCount--
+                }
+                .subscribe { p: Page? -> p?.items?.let { view?.showCardList(it) } }
     }
 
     fun onCardClicked(card: Card) {

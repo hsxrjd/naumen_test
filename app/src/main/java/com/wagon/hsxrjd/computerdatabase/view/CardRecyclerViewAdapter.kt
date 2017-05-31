@@ -4,25 +4,35 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
+import com.wagon.hsxrjd.computerdatabase.other.addUnique
 import com.wagon.hsxrjd.computerdatabase.model.Card
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
-class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.BaseViewHolder>(){
+class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.BaseViewHolder>(), Loading {
 
     private var mCardList: MutableList<Card> = mutableListOf()
-
+    private var loading: Boolean = false
 
     interface OnItemClickListener {
         fun onItemClick(card: Card)
     }
 
     private lateinit var onItemClickListener: OnItemClickListener
+
+    override fun showLoading() {
+        loading = true
+    }
+
+    override fun hideLoading() {
+        loading = false
+    }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
@@ -39,7 +49,7 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     fun addCardsToList(cardList: List<Card>) {
-        mCardList.addAll(cardList)
+        mCardList.addUnique(cardList)
         notifyDataSetChanged()
     }
 
@@ -48,20 +58,20 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
         when (viewHolder) {
             is CardViewHolder? -> {
                 val card: Card = mCardList[position]
-                val localViewHolder = viewHolder
-                localViewHolder?.title?.text = card.name
+                viewHolder?.title?.text = card.name
 
                 card.company?.let {
-                    localViewHolder?.company?.visibility = View.VISIBLE
-                    localViewHolder?.company?.text = it.name
+                    viewHolder?.company?.text = it.name
                 }
-                if (card.company == null) {
-                    localViewHolder?.company?.visibility = View.GONE
-                }
-
-                localViewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(card) }
+                viewHolder?.company?.visibility =
+                        if (card.company == null)
+                            View.GONE
+                        else
+                            View.VISIBLE
+                viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(card) }
             }
             is LoaderViewHolder? -> {
+                viewHolder?.progressBar?.visibility = if (loading) View.VISIBLE else View.GONE
             }
         }
 
@@ -79,7 +89,7 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     override fun getItemCount(): Int {
-        return if (mCardList.isEmpty()) 0 else mCardList.size
+        return if (mCardList.isEmpty()) 0 else mCardList.size + 1
     }
 
     open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -94,6 +104,8 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     class LoaderViewHolder(itemView: View) : BaseViewHolder(itemView) {
+
+        @BindView(R.id.progress_bar_item) lateinit var progressBar: ProgressBar
 
         init {
             ButterKnife.bind(this, itemView)
