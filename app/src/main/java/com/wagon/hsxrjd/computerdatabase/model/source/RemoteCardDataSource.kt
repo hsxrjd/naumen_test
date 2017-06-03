@@ -12,21 +12,22 @@ import io.reactivex.schedulers.Schedulers
  * Created by hsxrjd on 24.05.17.
  */
 class RemoteCardDataSource : CardDataSource {
+    val service: NaumenAPI = NaumenAPI.instance
 
     override fun getCard(id: Int): Observable<Card> {
-        return NaumenAPI.api.getCard(id)
+        return service.api.getCard(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
-        return NaumenAPI.api.getSimilarTo(id)
+        return service.api.getSimilarTo(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getCards(page: Int): Observable<Page> {
-        return NaumenAPI.api.getPage(page)
+        return service.api.getPage(page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
     }

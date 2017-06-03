@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.view
 
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -19,9 +20,10 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
 
     private var mCardList: MutableList<Card> = mutableListOf()
     private var loading: Boolean = false
+    private val loadElement: Int = 1
 
     interface OnItemClickListener {
-        fun onItemClick(card: Card)
+        fun onItemClick(view: View, card: Card)
     }
 
     private lateinit var onItemClickListener: OnItemClickListener
@@ -49,8 +51,11 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     fun addCardsToList(cardList: List<Card>) {
+        val cnt = mCardList.count()
         mCardList.addUnique(cardList)
         notifyDataSetChanged()
+        //todo check fix (about animation)
+//        notifyItemRangeInserted(cnt, cardList.count())
     }
 
     override fun onBindViewHolder(viewHolder: BaseViewHolder?, position: Int) {
@@ -59,7 +64,6 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
             is CardViewHolder? -> {
                 val card: Card = mCardList[position]
                 viewHolder?.title?.text = card.name
-
                 card.company?.let {
                     viewHolder?.company?.text = it.name
                 }
@@ -68,7 +72,8 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
                             View.GONE
                         else
                             View.VISIBLE
-                viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(card) }
+                viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(it, card) }
+                ViewCompat.setTransitionName(viewHolder?.itemView, card.id.toString())
             }
             is LoaderViewHolder? -> {
                 viewHolder?.progressBar?.visibility = if (loading) View.VISIBLE else View.GONE
@@ -89,7 +94,8 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     override fun getItemCount(): Int {
-        return if (mCardList.isEmpty()) 0 else mCardList.size + 1
+        //todo check fix (about blank line)
+        return if (mCardList.isEmpty()) 0 else mCardList.size + loadElement
     }
 
     open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

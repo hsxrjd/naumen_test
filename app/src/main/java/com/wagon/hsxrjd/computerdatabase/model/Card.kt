@@ -9,12 +9,12 @@ import android.os.Parcelable
 class Card(
         val id: Int,
         val name: String,
-        var imageUrl: String,
+        var imageUrl: String?,
         var company: Company?,
-        var description: String = ""
+        var description: String?
 ) : Parcelable {
 
-    constructor(p: Parcel) : this(p.readInt(), p.readString(), p.readString(), p.readParcelable(Company::class.java.classLoader))
+    constructor(p: Parcel) : this(p.readInt(), p.readString(), p.readString(), p.readParcelable(Company::class.java.classLoader), p.readString())
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
 
@@ -22,7 +22,7 @@ class Card(
             it.writeInt(id)
             it.writeString(name)
             it.writeString(imageUrl)
-            company ?: it.writeParcelable(company, 0)
+            it.writeParcelable(company, 0)
             it.writeString(description)
         }
     }

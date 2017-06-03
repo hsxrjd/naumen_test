@@ -1,8 +1,11 @@
 package com.wagon.hsxrjd.computerdatabase.view
 
 import com.wagon.hsxrjd.computerdatabase.BaseContract
+import com.wagon.hsxrjd.computerdatabase.model.Card
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
-interface BaseView : BaseContract.View
+interface BaseCardView : BaseContract.View, Loading{
+    fun showMessage(message: String)
+}

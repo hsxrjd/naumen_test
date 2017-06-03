@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.view
 
+import android.view.View
 import com.wagon.hsxrjd.computerdatabase.model.Card
 
 /**
@@ -7,9 +8,7 @@ import com.wagon.hsxrjd.computerdatabase.model.Card
  */
 
 
-interface CardListFragmentView : BaseView, Loading {
-    fun showMessage(message: String)
+interface CardListFragmentView : BaseCardView {
     fun showCardList(cardList: List<Card>)
-    fun showCard(card: Card)
-    fun isFullFilled(): Boolean
+    fun cardClicked(view: View, card: Card)
 }
