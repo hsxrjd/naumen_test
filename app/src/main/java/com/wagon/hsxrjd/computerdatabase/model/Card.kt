@@ -16,6 +16,9 @@ class Card(
 
     constructor(p: Parcel) : this(p.readInt(), p.readString(), p.readString(), p.readParcelable(Company::class.java.classLoader), p.readString())
 
+
+    constructor(id: Int) : this(id, "", "", Company(-1, ""), "")
+
     override fun writeToParcel(dest: Parcel?, flags: Int) {
 
         dest?.let {

@@ -11,7 +11,7 @@ import retrofit2.http.Query
  * Created by hsxrjd on 23.05.17.
  */
 
-interface NaumenRestAPI {
+interface NaumenRestApi {
 
     @GET("/rest/computers")
     fun getPage(@Query("p") page: Int): Observable<Page>

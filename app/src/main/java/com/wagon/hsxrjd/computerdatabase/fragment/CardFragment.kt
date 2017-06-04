@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.transition.AutoTransition
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ class CardFragment : Fragment(), CardFragmentView {
 
     lateinit var mCardPresenter: CardPresenter
     private var mCardId: Int = -1
+    private var mCardName: String = ""
     private var mCard: Card? = null
 
     private val mCardTag: String = "SAVED_CARD"
@@ -79,7 +81,6 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun showCard(card: Card) {
         mCard = card
-        activity?.actionBar?.title = card.name
 
         card.company
                 ?.let {
@@ -123,6 +124,11 @@ class CardFragment : Fragment(), CardFragmentView {
         setupDescriptionVisibility(false)
         setupCompanyNameVisibility(false)
         setupImageVisibility(false)
+        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
+        actionBar?.title = mCardName
+        actionBar?.setDisplayShowHomeEnabled(true)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+
         mCardPresenter = CardPresenter.instance
         savedInstanceState ?: mCardPresenter.setDataSource(CardDataRepository.instance)
         return view
@@ -145,26 +151,37 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun onResume() {
         super.onResume()
-        activity.actionBar?.setDisplayShowHomeEnabled(true)
-        activity.actionBar?.setDisplayHomeAsUpEnabled(true)
         mCard?.let { showCard(it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCardId = arguments.get(CardFragment.tag_id) as Int
+        mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
+        mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setupTransition()
         }
     }
 
-    companion object {
-        val tag_id: String = "CARD_ID"
 
-        fun newInstance(id: Int): CardFragment {
+    override fun onDetach() {
+        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
+        actionBar?.setTitle(R.string.app_name)
+        actionBar?.setDisplayShowHomeEnabled(false)
+        actionBar?.setDisplayHomeAsUpEnabled(false)
+        super.onDetach()
+
+    }
+
+    companion object {
+        val BUNDLE_TAG_CARD_ID: String = "CARD_ID"
+        val BUNDLE_TAG_CARD_NAME: String = "CARD_NAME"
+
+        fun newInstance(id: Int, name: String): CardFragment {
             val fragment = CardFragment()
             val args = Bundle()
-            args.putInt(CardFragment.tag_id, id)
+            args.putInt(CardFragment.BUNDLE_TAG_CARD_ID, id)
+            args.putString(CardFragment.BUNDLE_TAG_CARD_NAME, name)
             fragment.arguments = args
             return fragment
         }

@@ -7,20 +7,20 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 /**
  * Created by hsxrjd on 24.05.17.
  */
-class NaumenAPI private constructor(){
-    val api: NaumenRestAPI = Retrofit
+class NaumenApi private constructor(){
+    val mApi: NaumenRestApi = Retrofit
             .Builder()
             .baseUrl("http://testwork.nsd.naumen.ru/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
-            .create(NaumenRestAPI::class.java)
+            .create(NaumenRestApi::class.java)
 
     private object Holder {
-        val instance = NaumenAPI()
+        val mInstance = NaumenApi()
     }
 
     companion object {
-        val instance: NaumenAPI by lazy { Holder.instance }
+        val instance: NaumenApi by lazy { Holder.mInstance }
     }
 }

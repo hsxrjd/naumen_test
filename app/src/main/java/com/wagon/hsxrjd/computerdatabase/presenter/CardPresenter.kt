@@ -26,10 +26,10 @@ class CardPresenter private constructor(): BasePresenter<CardFragmentView>() {
     }
 
     private object Holder {
-        val instance = CardPresenter()
+        val mInstance = CardPresenter()
     }
 
     companion object {
-        val instance: CardPresenter by lazy { Holder.instance }
+        val instance: CardPresenter by lazy { Holder.mInstance }
     }
 }

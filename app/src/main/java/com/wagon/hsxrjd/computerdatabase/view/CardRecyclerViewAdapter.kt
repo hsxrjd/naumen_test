@@ -2,6 +2,7 @@ package com.wagon.hsxrjd.computerdatabase.view
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +11,16 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.other.addUnique
 import com.wagon.hsxrjd.computerdatabase.model.Card
+import java.lang.ref.WeakReference
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
 class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.BaseViewHolder>(), Loading {
 
-    private var mCardList: MutableList<Card> = mutableListOf()
-    private var loading: Boolean = false
-    private val loadElement: Int = 1
+    private var mCardList: MutableList<Card?> = mutableListOf(null)
+    private var mProgressBar: WeakReference<Loading?> = WeakReference(null)
 
     interface OnItemClickListener {
         fun onItemClick(view: View, card: Card)
@@ -28,12 +28,30 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
 
     private lateinit var onItemClickListener: OnItemClickListener
 
+
+    fun setLoadItemVisibility(flag: Boolean) {
+        val lastIsNull = mCardList[mCardList.size - 1] == null
+        when {
+            flag && !lastIsNull -> {
+                mCardList.add(null)
+                Log.d("DEBUGgggg", "added ${null}")
+                notifyDataSetChanged()
+            }
+
+            !flag && lastIsNull -> {
+                Log.d("DEBUGgggg", "removed ${mCardList[mCardList.size - 1]}")
+                mCardList.removeAt(mCardList.size - 1)
+                notifyDataSetChanged()
+            }
+        }
+    }
+
     override fun showLoading() {
-        loading = true
+        mProgressBar.get()?.showLoading()
     }
 
     override fun hideLoading() {
-        loading = false
+        mProgressBar.get()?.hideLoading()
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -41,33 +59,32 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     fun getCardList(): List<Card> {
-        return mCardList
+        return mCardList.subList(0, mCardList.size - 1) as List<Card>
     }
 
     fun setCardList(cardList: List<Card>) {
         mCardList.clear()
         mCardList.addAll(cardList)
+        mCardList.add(null)
         notifyDataSetChanged()
     }
 
     fun addCardsToList(cardList: List<Card>) {
-        val cnt = mCardList.count()
-        mCardList.addUnique(cardList)
-        notifyDataSetChanged()
-        //todo check fix (about animation)
-//        notifyItemRangeInserted(cnt, cardList.count())
+        val count = mCardList.size - 1
+        mCardList.addAll(count, cardList)
+        notifyItemRangeInserted(count, cardList.size)
     }
 
     override fun onBindViewHolder(viewHolder: BaseViewHolder?, position: Int) {
 
         when (viewHolder) {
             is CardViewHolder? -> {
-                val card: Card = mCardList[position]
-                viewHolder?.title?.text = card.name
+                val card: Card = mCardList[position]!!
+                viewHolder?.mTitle?.text = card.name
                 card.company?.let {
-                    viewHolder?.company?.text = it.name
+                    viewHolder?.mCompany?.text = it.name
                 }
-                viewHolder?.company?.visibility =
+                viewHolder?.mCompany?.visibility =
                         if (card.company == null)
                             View.GONE
                         else
@@ -75,43 +92,49 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
                 viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(it, card) }
                 ViewCompat.setTransitionName(viewHolder?.itemView, card.id.toString())
             }
-            is LoaderViewHolder? -> {
-                viewHolder?.progressBar?.visibility = if (loading) View.VISIBLE else View.GONE
-            }
         }
-
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup?, viewType: Int): BaseViewHolder {
         val v: View = LayoutInflater
                 .from(viewGroup?.context)
                 .inflate(viewType, viewGroup, false)
-        return if (viewType == R.layout.card_list_item) CardViewHolder(v) else LoaderViewHolder(v)
+        return if (viewType == R.layout.list_item_card) CardViewHolder(v) else {
+            val holder = LoaderViewHolder(v)
+            mProgressBar = WeakReference(holder)
+            return holder
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return mCardList.getOrNull(position)?.let { R.layout.card_list_item } ?: R.layout.loading_list_item
+        return mCardList[position]?.let { R.layout.list_item_card } ?: R.layout.list_item_loading
     }
 
     override fun getItemCount(): Int {
-        //todo check fix (about blank line)
-        return if (mCardList.isEmpty()) 0 else mCardList.size + loadElement
+        return if (mCardList.size <= 1) 0 else mCardList.size
     }
 
     open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     class CardViewHolder(itemView: View) : BaseViewHolder(itemView) {
-        @BindView(R.id.card_title) lateinit var title: TextView
-        @BindView(R.id.card_company_name) lateinit var company: TextView
+        @BindView(R.id.card_title) lateinit var mTitle: TextView
+        @BindView(R.id.card_company_name) lateinit var mCompany: TextView
 
         init {
             ButterKnife.bind(this, itemView)
         }
     }
 
-    class LoaderViewHolder(itemView: View) : BaseViewHolder(itemView) {
+    class LoaderViewHolder(itemView: View) : BaseViewHolder(itemView), Loading {
+        override fun showLoading() {
+            itemView.visibility = View.VISIBLE
+        }
 
-        @BindView(R.id.progress_bar_item) lateinit var progressBar: ProgressBar
+        override fun hideLoading() {
+            itemView.visibility = View.GONE
+        }
+
+        @BindView(R.id.progress_bar_item) lateinit var mProgressBar: ProgressBar
 
         init {
             ButterKnife.bind(this, itemView)

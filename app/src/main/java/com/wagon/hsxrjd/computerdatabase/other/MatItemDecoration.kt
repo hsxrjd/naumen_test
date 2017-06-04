@@ -10,7 +10,7 @@ import android.view.View
 /**
  * Created by hsxrjd on 01.06.17.
  */
-class MatItemDecoration(val divider: Drawable) : RecyclerView.ItemDecoration() {
+class MatItemDecoration(val mDivider: Drawable) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
         super.getItemOffsets(outRect, view, parent, state)
@@ -18,10 +18,10 @@ class MatItemDecoration(val divider: Drawable) : RecyclerView.ItemDecoration() {
         if (parent?.getChildAdapterPosition(view) == 0) return
         when ((parent?.layoutManager as LinearLayoutManager).orientation) {
             LinearLayoutManager.HORIZONTAL -> {
-                outRect?.left = divider.intrinsicWidth
+                outRect?.left = mDivider.intrinsicWidth
             }
             LinearLayoutManager.VERTICAL -> {
-                outRect?.left = divider.intrinsicHeight
+                outRect?.left = mDivider.intrinsicHeight
             }
         }
     }
@@ -30,11 +30,11 @@ class MatItemDecoration(val divider: Drawable) : RecyclerView.ItemDecoration() {
         super.onDraw(c, parent, state)
 
         when ((parent?.layoutManager as LinearLayoutManager).orientation) {
-            LinearLayoutManager.HORIZONTAL ->{
-                c?.let{drawHorizontalDividers(c, parent)}
+            LinearLayoutManager.HORIZONTAL -> {
+                c?.let { drawHorizontalDividers(c, parent) }
             }
-            LinearLayoutManager.VERTICAL ->{
-                c?.let{drawVerticalDividers(c, parent)}
+            LinearLayoutManager.VERTICAL -> {
+                c?.let { drawVerticalDividers(c, parent) }
             }
         }
     }
@@ -50,10 +50,10 @@ class MatItemDecoration(val divider: Drawable) : RecyclerView.ItemDecoration() {
             val params = child.layoutParams as RecyclerView.LayoutParams
 
             val parentLeft = child.right + params.rightMargin
-            val parentRight = parentLeft + divider.intrinsicWidth
+            val parentRight = parentLeft + mDivider.intrinsicWidth
 
-            divider.setBounds(parentLeft, parentTop, parentRight, parentBottom)
-            divider.draw(canvas)
+            mDivider.setBounds(parentLeft, parentTop, parentRight, parentBottom)
+            mDivider.draw(canvas)
         }
     }
 
@@ -68,10 +68,10 @@ class MatItemDecoration(val divider: Drawable) : RecyclerView.ItemDecoration() {
             val params = child.layoutParams as RecyclerView.LayoutParams
 
             val parentTop = child.bottom + params.bottomMargin
-            val parentBottom = parentTop + divider.intrinsicHeight
+            val parentBottom = parentTop + mDivider.intrinsicHeight
 
-            divider.setBounds(parentLeft, parentTop, parentRight, parentBottom)
-            divider.draw(canvas)
+            mDivider.setBounds(parentLeft, parentTop, parentRight, parentBottom)
+            mDivider.draw(canvas)
         }
     }
 }

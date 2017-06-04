@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.MenuItem
 import android.view.Window
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -12,9 +13,9 @@ import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
 
 class MainActivity : AppCompatActivity() {
 
-    @BindView(R.id.toolbar_main) lateinit var toolbar: Toolbar
+    @BindView(R.id.toolbar_main) lateinit var mToolbar: Toolbar
 
-    private val tag_lvf: String = "LIST_VIEW_FRAGMENT"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -23,19 +24,45 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
-        Log.d("TOOLBAR?", "$toolbar")
-        setSupportActionBar(toolbar)
-
-        val retainFragment = supportFragmentManager.findFragmentByTag(tag_lvf)
-        retainFragment ?:
+        setSupportActionBar(mToolbar)
+        val retainListFragment = supportFragmentManager.findFragmentByTag(MainActivity.cardListFragmentBackStackName)
+//        val cardFragment = supportFragmentManager.findFragmentByTag(MainActivity.cardFragmentBackStackName)
+        retainListFragment ?:
+                /*cardFragment
+                        ?.let {
+                            supportFragmentManager
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, cardFragment, MainActivity.cardFragmentBackStackName)
+                                    .commit()
+                        }
+                ?:*/
                 supportFragmentManager
                         .beginTransaction()
-                        .add(R.id.fragment_container, CardListFragment.newInstance(), tag_lvf)
+                        .add(R.id.fragment_container, CardListFragment.newInstance(), MainActivity.cardListFragmentBackStackName)
                         .commit()
 
     }
 
-    companion object{
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> {
+                supportActionBar?.setTitle(R.string.app_name)
+                supportActionBar?.setDisplayShowHomeEnabled(false)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                supportFragmentManager.popBackStack()
+                val retainFragment = supportFragmentManager.findFragmentByTag(MainActivity.cardListFragmentBackStackName)
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, retainFragment, MainActivity.cardListFragmentBackStackName)
+                        .commit()
+            }
+        }
+        return true
+    }
+
+    companion object {
         val cardFragmentBackStackName: String = "CARD_FRAGMENT"
+        val cardListFragmentBackStackName: String = "LIST_VIEW_FRAGMENT"
     }
 }

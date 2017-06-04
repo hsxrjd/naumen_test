@@ -12,7 +12,7 @@ class CardDataRepository private constructor(): CardDataSource {
         val mInstance: CardDataRepository = CardDataRepository()
     }
     private val mRemoteSource: RemoteCardDataSource = RemoteCardDataSource()
-    private val mLocalSource: CacheCardDataSource = CacheCardDataSource()
+//    private val mLocalSource: CacheCardDataSource = CacheCardDataSource()
 
     override fun getCards(page: Int): Observable<Page> {
         return mRemoteSource.getCards(page)

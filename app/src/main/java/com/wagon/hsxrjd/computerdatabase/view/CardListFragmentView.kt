@@ -10,5 +10,7 @@ import com.wagon.hsxrjd.computerdatabase.model.Card
 
 interface CardListFragmentView : BaseCardView {
     fun showCardList(cardList: List<Card>)
+    fun showNextPage(cardList: List<Card>)
     fun cardClicked(view: View, card: Card)
+    fun switchIndicatorState(flag: Boolean)
 }

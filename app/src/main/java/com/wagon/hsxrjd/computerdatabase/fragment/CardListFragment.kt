@@ -26,10 +26,6 @@ import com.wagon.hsxrjd.computerdatabase.view.CardRecyclerViewAdapter
 
 
 class CardListFragment : Fragment(), CardListFragmentView {
-    //TODO зафигачить di, при быстром скролле исчезает нижний элемент и ничего не грузится
-    interface CardClickListener {
-        fun onCardClicked(card: Card)
-    }
 
     @BindView(R.id.recycler_view_cards) lateinit var mRecyclerView: RecyclerView
     @BindView(R.id.progress_bar) lateinit var mProgressBar: ProgressBar
@@ -38,12 +34,10 @@ class CardListFragment : Fragment(), CardListFragmentView {
     var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
     lateinit var mListPresenter: CardListPresenter
 
-    private val tag_lm: String = "LAYOUT_MANAGER"
-    private val tag_ld: String = "LIST_OF_DATA"
 
     private var mLayoutManagerState: Parcelable? = null
     private var mDataList: Array<Parcelable>? = null
-    private var isStart = true
+    private var mIsStart = true
     private var mLoading = false
 
     private val mRVOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
@@ -52,7 +46,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
             val layoutManager = recyclerView?.layoutManager as LinearLayoutManager?
             val lastVisibleItemPosition = layoutManager?.findLastVisibleItemPosition()
             if (lastVisibleItemPosition != null) {
-                if (lastVisibleItemPosition >= mRvAdapter.itemCount - 3) {
+                if (lastVisibleItemPosition >= mRvAdapter.itemCount - 4) {
                     if (!mLoading)
                         mListPresenter.loadNextPage()
                 }
@@ -68,44 +62,38 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view: View = inflater!!.inflate(R.layout.fragment_main, container, false)
+        val view: View = inflater!!.inflate(R.layout.fragment_card_list, container, false)
         ButterKnife.bind(this, view)
         mListPresenter = CardListPresenter.instance
         savedInstanceState ?: mListPresenter.setDataSource(CardDataRepository.instance)
-
         mProgressBar.isIndeterminate = true
-        hideLoading()
         setupRecyclerView()
         return view
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelable(tag_lm, mRecyclerView.layoutManager.onSaveInstanceState())
-        outState?.putParcelableArray(tag_ld, mRvAdapter.getCardList().toTypedArray())
+        outState?.putParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG, mRecyclerView.layoutManager.onSaveInstanceState())
+        outState?.putParcelableArray(BUNDLE_TAG_DATA_LIST, mRvAdapter.getCardList().toTypedArray())
     }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mListPresenter.setView(this)
-        Log.d("EBUH", "$savedInstanceState")
+        hideLoading()
         savedInstanceState
                 ?.let {
-                    mLayoutManagerState = it.getParcelable(tag_lm)
-                    mDataList = it.getParcelableArray(tag_ld)
+                    mLayoutManagerState = it.getParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG)
+                    mDataList = it.getParcelableArray(BUNDLE_TAG_DATA_LIST)
                 }
-                ?: let {
-            if (isStart) mListPresenter.start()
-            isStart = false
-        }
+                ?: let { if (mIsStart) mListPresenter.start() }
+        mIsStart = false
 
     }
 
     override fun onResume() {
         super.onResume()
-        activity.actionBar?.setDisplayShowHomeEnabled(false)
-        activity.actionBar?.setDisplayHomeAsUpEnabled(false)
         mDataList?.let { mRvAdapter.setCardList(it.toList() as List<Card>) }
         mLayoutManagerState?.let { mRecyclerView.layoutManager.onRestoreInstanceState(it) }
     }
@@ -118,44 +106,53 @@ class CardListFragment : Fragment(), CardListFragmentView {
         })
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mRvAdapter
-        mRecyclerView.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.dark_divider)))
+        mRecyclerView.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
         mRecyclerView.addOnScrollListener(mRVOnScrollListener)
 
     }
 
     override fun showLoading() {
         mLoading = true
-        if (isStart)
+        if (mRvAdapter.itemCount == 0)
             mProgressBar.visibility = View.VISIBLE
         else
             mRvAdapter.showLoading()
+        Log.d("DEBUG", "show loading")
     }
 
     override fun hideLoading() {
         mLoading = false
-        if (mProgressBar.visibility == View.VISIBLE)
+//        if (mProgressBar.visibility == View.VISIBLE)
             mProgressBar.visibility = View.GONE
-        else
-            mRvAdapter.hideLoading()
+//        else
+        mRvAdapter.hideLoading()
+        Log.d("DEBUG", "hide loading")
     }
 
     override fun showMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showCardList(cardList: List<Card>) = mRvAdapter.addCardsToList(cardList)
+    override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)
 
+    override fun showNextPage(cardList: List<Card>) = mRvAdapter.addCardsToList(cardList)
+
+    override fun switchIndicatorState(flag: Boolean) {
+        mRvAdapter.setLoadItemVisibility(flag)
+    }
 
     override fun cardClicked(view: View, card: Card) {
         fragmentManager
                 .beginTransaction()
                 .addSharedElement(view, ViewCompat.getTransitionName(view))
-                .replace(R.id.fragment_container, CardFragment.newInstance(ViewCompat.getTransitionName(view).toInt()))
+                .replace(R.id.fragment_container, CardFragment.newInstance(card.id, card.name))
                 .addToBackStack(MainActivity.cardFragmentBackStackName)
                 .commit()
     }
 
     companion object {
+        val BUNDLE_TAG_LAYOUT_MANAGER_CONFIG: String = "LAYOUT_MANAGER"
+        val BUNDLE_TAG_DATA_LIST: String = "LIST_OF_DATA"
         fun newInstance(): CardListFragment {
             return CardListFragment()
         }
