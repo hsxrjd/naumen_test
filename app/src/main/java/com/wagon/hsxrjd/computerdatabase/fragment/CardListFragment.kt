@@ -1,7 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.fragment
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
@@ -31,22 +30,19 @@ class CardListFragment : Fragment(), CardListFragmentView {
     @BindView(R.id.progress_bar) lateinit var mProgressBar: ProgressBar
 
 
-    var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
-    lateinit var mListPresenter: CardListPresenter
+    private var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
+    private lateinit var mListPresenter: CardListPresenter
+    private var mIsStart: Boolean = true
+    private var mLoading: Boolean = false
+    private val mPossibleItemCount: Int = 4
 
-
-    private var mLayoutManagerState: Parcelable? = null
-    private var mDataList: Array<Parcelable>? = null
-    private var mIsStart = true
-    private var mLoading = false
-
-    private val mRVOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
+    private val mOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView?.layoutManager as LinearLayoutManager?
             val lastVisibleItemPosition = layoutManager?.findLastVisibleItemPosition()
             if (lastVisibleItemPosition != null) {
-                if (lastVisibleItemPosition >= mRvAdapter.itemCount - 4) {
+                if (lastVisibleItemPosition >= mRvAdapter.itemCount - mPossibleItemCount) {
                     if (!mLoading)
                         mListPresenter.loadNextPage()
                 }
@@ -84,18 +80,29 @@ class CardListFragment : Fragment(), CardListFragmentView {
         hideLoading()
         savedInstanceState
                 ?.let {
-                    mLayoutManagerState = it.getParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG)
-                    mDataList = it.getParcelableArray(BUNDLE_TAG_DATA_LIST)
+                    mRecyclerView.layoutManager.onRestoreInstanceState(it.getParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG))
+                    val dataList = it.getParcelableArray(BUNDLE_TAG_DATA_LIST)
+                    dataList?.let {
+                        mRvAdapter.setCardList(it.toList() as List<Card>)
+                        if (mListPresenter.isAllLoaded()) mRvAdapter.setLoadItemVisibility(false)
+                    }
                 }
                 ?: let { if (mIsStart) mListPresenter.start() }
         mIsStart = false
 
     }
 
+    override fun switchLoadingAbility(flag: Boolean) {
+        if (flag)
+            mRecyclerView.addOnScrollListener(mOnScrollListener)
+        else
+            mRecyclerView.removeOnScrollListener(mOnScrollListener)
+        mRvAdapter.setLoadItemVisibility(flag)
+    }
+
+
     override fun onResume() {
         super.onResume()
-        mDataList?.let { mRvAdapter.setCardList(it.toList() as List<Card>) }
-        mLayoutManagerState?.let { mRecyclerView.layoutManager.onRestoreInstanceState(it) }
     }
 
     fun setupRecyclerView() {
@@ -107,7 +114,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mRvAdapter
         mRecyclerView.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
-        mRecyclerView.addOnScrollListener(mRVOnScrollListener)
+        mRecyclerView.addOnScrollListener(mOnScrollListener)
 
     }
 
@@ -122,9 +129,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun hideLoading() {
         mLoading = false
-//        if (mProgressBar.visibility == View.VISIBLE)
-            mProgressBar.visibility = View.GONE
-//        else
+        mProgressBar.visibility = View.GONE
         mRvAdapter.hideLoading()
         Log.d("DEBUG", "hide loading")
     }
@@ -133,13 +138,15 @@ class CardListFragment : Fragment(), CardListFragmentView {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
+    override fun showMessage(resource: Int) {
+        Toast.makeText(context, resource, Toast.LENGTH_SHORT).show()
+    }
+
     override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)
 
     override fun showNextPage(cardList: List<Card>) = mRvAdapter.addCardsToList(cardList)
 
-    override fun switchIndicatorState(flag: Boolean) {
-        mRvAdapter.setLoadItemVisibility(flag)
-    }
+
 
     override fun cardClicked(view: View, card: Card) {
         fragmentManager

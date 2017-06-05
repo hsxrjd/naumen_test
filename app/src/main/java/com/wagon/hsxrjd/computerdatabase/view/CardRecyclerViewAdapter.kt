@@ -2,7 +2,6 @@ package com.wagon.hsxrjd.computerdatabase.view
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,8 @@ import java.lang.ref.WeakReference
  */
 class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.BaseViewHolder>(), Loading {
 
-    private var mCardList: MutableList<Card?> = mutableListOf(null)
+    private var mCardList: MutableList<Card?> = mutableListOf()
+    private var mLoadVisible: Boolean = true
     private var mProgressBar: WeakReference<Loading?> = WeakReference(null)
 
     interface OnItemClickListener {
@@ -28,18 +28,14 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
 
     private lateinit var onItemClickListener: OnItemClickListener
 
-
     fun setLoadItemVisibility(flag: Boolean) {
-        val lastIsNull = mCardList[mCardList.size - 1] == null
         when {
-            flag && !lastIsNull -> {
+            flag && (mCardList.isEmpty() || mCardList.last() != null) -> {
                 mCardList.add(null)
-                Log.d("DEBUGgggg", "added ${null}")
                 notifyDataSetChanged()
             }
 
-            !flag && lastIsNull -> {
-                Log.d("DEBUGgggg", "removed ${mCardList[mCardList.size - 1]}")
+            !flag && mCardList.isNotEmpty() && mCardList.last() == null -> {
                 mCardList.removeAt(mCardList.size - 1)
                 notifyDataSetChanged()
             }
@@ -48,10 +44,12 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
 
     override fun showLoading() {
         mProgressBar.get()?.showLoading()
+        mLoadVisible = true
     }
 
     override fun hideLoading() {
         mProgressBar.get()?.hideLoading()
+        mLoadVisible = false
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -59,7 +57,10 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     fun getCardList(): List<Card> {
-        return mCardList.subList(0, mCardList.size - 1) as List<Card>
+        if (mCardList.isNotEmpty() && mCardList.last() == null)
+            return mCardList.subList(0, mCardList.size - 1) as List<Card>
+        else
+            return mCardList as List<Card>
     }
 
     fun setCardList(cardList: List<Card>) {
@@ -70,7 +71,7 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
     }
 
     fun addCardsToList(cardList: List<Card>) {
-        val count = mCardList.size - 1
+        val count = mCardList.size - if (mCardList.isNotEmpty() && mCardList.last() == null) 1 else 0
         mCardList.addAll(count, cardList)
         notifyItemRangeInserted(count, cardList.size)
     }
@@ -91,6 +92,9 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
                             View.VISIBLE
                 viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(it, card) }
                 ViewCompat.setTransitionName(viewHolder?.itemView, card.id.toString())
+            }
+            is LoaderViewHolder? -> {
+                viewHolder?.itemView?.visibility = if (mLoadVisible) View.VISIBLE else View.GONE
             }
         }
     }

@@ -33,7 +33,7 @@ class CardFragment : Fragment(), CardFragmentView {
     @BindView(R.id.similarities_text) lateinit var mSimilaritiesText: TextView
     @BindView(R.id.similarities) lateinit var mSimilarities: ListView
 
-    lateinit var mCardPresenter: CardPresenter
+    private lateinit var mCardPresenter: CardPresenter
     private var mCardId: Int = -1
     private var mCardName: String = ""
     private var mCard: Card? = null
@@ -59,6 +59,10 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun showMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showMessage(resource: Int) {
+        Toast.makeText(context, resource, Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading() {

@@ -8,4 +8,5 @@ import com.wagon.hsxrjd.computerdatabase.model.Card
  */
 interface BaseCardView : BaseContract.View, Loading{
     fun showMessage(message: String)
+    fun showMessage(resource: Int)
 }
