@@ -1,33 +1,20 @@
-package com.wagon.hsxrjd.computerdatabase.view
+package com.wagon.hsxrjd.computerdatabase.adapter
 
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.view.Loading
 import java.lang.ref.WeakReference
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
-class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.BaseViewHolder>(), Loading {
+class EndlessCardRecyclerViewAdapter : CardRecyclerViewAdapter(), Loading {
 
-    private var mCardList: MutableList<Card?> = mutableListOf()
     private var mLoadVisible: Boolean = true
     private var mProgressBar: WeakReference<Loading?> = WeakReference(null)
-
-    interface OnItemClickListener {
-        fun onItemClick(view: View, card: Card)
-    }
-
-    private lateinit var onItemClickListener: OnItemClickListener
-
     fun setLoadItemVisibility(flag: Boolean) {
         when {
             flag && (mCardList.isEmpty() || mCardList.last() != null) -> {
@@ -52,18 +39,14 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
         mLoadVisible = false
     }
 
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
-        this.onItemClickListener = onItemClickListener
-    }
-
-    fun getCardList(): List<Card> {
+    override fun getCardList(): List<Card> {
         if (mCardList.isNotEmpty() && mCardList.last() == null)
             return mCardList.subList(0, mCardList.size - 1) as List<Card>
         else
             return mCardList as List<Card>
     }
 
-    fun setCardList(cardList: List<Card>) {
+    override fun setCardList(cardList: List<Card>) {
         mCardList.clear()
         mCardList.addAll(cardList)
         mCardList.add(null)
@@ -76,35 +59,21 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
         notifyItemRangeInserted(count, cardList.size)
     }
 
-    override fun onBindViewHolder(viewHolder: BaseViewHolder?, position: Int) {
-
+    override fun onBindViewHolder(viewHolder: CardRecyclerViewAdapter.BaseViewHolder?, position: Int) {
+        super.onBindViewHolder(viewHolder, position)
         when (viewHolder) {
-            is CardViewHolder? -> {
-                val card: Card = mCardList[position]!!
-                viewHolder?.mTitle?.text = card.name
-                card.company?.let {
-                    viewHolder?.mCompany?.text = it.name
-                }
-                viewHolder?.mCompany?.visibility =
-                        if (card.company == null)
-                            View.GONE
-                        else
-                            View.VISIBLE
-                viewHolder?.itemView?.setOnClickListener { onItemClickListener.onItemClick(it, card) }
-                ViewCompat.setTransitionName(viewHolder?.itemView, card.id.toString())
-            }
             is LoaderViewHolder? -> {
                 viewHolder?.itemView?.visibility = if (mLoadVisible) View.VISIBLE else View.GONE
             }
         }
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup?, viewType: Int): BaseViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup?, viewType: Int): CardRecyclerViewAdapter.BaseViewHolder {
         val v: View = LayoutInflater
                 .from(viewGroup?.context)
                 .inflate(viewType, viewGroup, false)
-        return if (viewType == R.layout.list_item_card) CardViewHolder(v) else {
-            val holder = LoaderViewHolder(v)
+        return if (viewType == R.layout.list_item_card) CardRecyclerViewAdapter.CardViewHolder(v) else {
+            val holder = EndlessCardRecyclerViewAdapter.LoaderViewHolder(v)
             mProgressBar = WeakReference(holder)
             return holder
         }
@@ -118,17 +87,6 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
         return if (mCardList.size <= 1) 0 else mCardList.size
     }
 
-    open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-    class CardViewHolder(itemView: View) : BaseViewHolder(itemView) {
-        @BindView(R.id.card_title) lateinit var mTitle: TextView
-        @BindView(R.id.card_company_name) lateinit var mCompany: TextView
-
-        init {
-            ButterKnife.bind(this, itemView)
-        }
-    }
-
     class LoaderViewHolder(itemView: View) : BaseViewHolder(itemView), Loading {
         override fun showLoading() {
             itemView.visibility = View.VISIBLE
@@ -138,10 +96,10 @@ class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapter.Bas
             itemView.visibility = View.GONE
         }
 
-        @BindView(R.id.progress_bar_item) lateinit var mProgressBar: ProgressBar
+        @butterknife.BindView(R.id.progress_bar_item) lateinit var mProgressBar: android.widget.ProgressBar
 
         init {
-            ButterKnife.bind(this, itemView)
+            butterknife.ButterKnife.bind(this, itemView)
         }
     }
 }

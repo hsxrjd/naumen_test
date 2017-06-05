@@ -6,7 +6,7 @@ import com.wagon.hsxrjd.computerdatabase.view.CardFragmentView
 /**
  * Created by hsxrjd on 03.06.17.
  */
-class CardPresenter private constructor(): BasePresenter<CardFragmentView>() {
+class CardPresenter private constructor() : BasePresenter<CardFragmentView>() {
 
     fun loadCard(id: Int) {
         val view: CardFragmentView? = mView.get()
@@ -20,9 +20,16 @@ class CardPresenter private constructor(): BasePresenter<CardFragmentView>() {
         }
     }
 
-    fun showSimilarities() {
+    fun showSimilarTo(id: Int) {
         val view: CardFragmentView? = mView.get()
         view?.showLoading()
+        mDataSource.get()?.let {
+            it
+                    .getSimilarTo(id)
+                    .doOnComplete { view?.hideLoading() }
+                    .doOnError { view?.showMessage("Error loading similar to $id") }
+                    .subscribe { c: List<Card>? -> c?.let { view?.showSimilarTo(it) } }
+        }
     }
 
     private object Holder {

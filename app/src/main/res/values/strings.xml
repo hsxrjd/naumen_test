@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Computer Database</string>
+    <string name="transition_name_toolbar">transition_name_toolbar</string>
 
 </resources>

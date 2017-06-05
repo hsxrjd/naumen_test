@@ -7,4 +7,5 @@ import com.wagon.hsxrjd.computerdatabase.model.Card
  */
 interface CardFragmentView : BaseCardView  {
     fun showCard(card: Card)
+    fun showSimilarTo(cardList: List<Card>)
 }

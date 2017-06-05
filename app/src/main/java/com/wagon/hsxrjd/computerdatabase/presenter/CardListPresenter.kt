@@ -1,9 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
 import android.os.Handler
-import android.util.Log
-import android.view.View
-import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.model.Page
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 
@@ -29,6 +26,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
     fun isAllLoaded(): Boolean {
         return mIsAllLoaded
     }
+
     fun loadPage(page: Int) {
         val view: CardListFragmentView? = mView.get()
         mDataSource.get()?.let {
@@ -77,10 +75,6 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         }
                     }
         }
-    }
-
-    fun onCardClicked(view: View, card: Card) {
-        mView.get()?.cardClicked(view, card)
     }
 
     private object Holder {

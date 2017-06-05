@@ -3,10 +3,8 @@ package com.wagon.hsxrjd.computerdatabase.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,23 +12,27 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.wagon.hsxrjd.computerdatabase.MainActivity
+import com.wagon.hsxrjd.computerdatabase.BaseNavigator
+import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
-import com.wagon.hsxrjd.computerdatabase.view.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.adapter.EndlessCardRecyclerViewAdapter
+import java.lang.ref.WeakReference
 
 
 class CardListFragment : Fragment(), CardListFragmentView {
 
     @BindView(R.id.recycler_view_cards) lateinit var mRecyclerView: RecyclerView
     @BindView(R.id.progress_bar) lateinit var mProgressBar: ProgressBar
+    private val mNavigator: WeakReference<Navigator> = WeakReference(BaseNavigator.instance)
 
 
-    private var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
+    private var mRvAdapter: EndlessCardRecyclerViewAdapter = EndlessCardRecyclerViewAdapter()
     private lateinit var mListPresenter: CardListPresenter
     private var mIsStart: Boolean = true
     private var mLoading: Boolean = false
@@ -103,12 +105,13 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun onResume() {
         super.onResume()
+        mNavigator.get()?.resumeCardListFragment()
     }
 
     fun setupRecyclerView() {
         mRvAdapter.setOnItemClickListener(object : CardRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, card: Card) {
-                mListPresenter.onCardClicked(view, card)
+                mNavigator.get()?.startCardFragment(view, card)
             }
         })
         mRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -144,20 +147,10 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun showNextPage(cardList: List<Card>) = mRvAdapter.addCardsToList(cardList)
 
-
-
-    override fun cardClicked(view: View, card: Card) {
-        fragmentManager
-                .beginTransaction()
-                .addSharedElement(view, ViewCompat.getTransitionName(view))
-                .replace(R.id.fragment_container, CardFragment.newInstance(card.id, card.name))
-                .addToBackStack(MainActivity.cardFragmentBackStackName)
-                .commit()
-    }
-
     companion object {
         val BUNDLE_TAG_LAYOUT_MANAGER_CONFIG: String = "LAYOUT_MANAGER"
         val BUNDLE_TAG_DATA_LIST: String = "LIST_OF_DATA"
+
         fun newInstance(): CardListFragment {
             return CardListFragment()
         }
