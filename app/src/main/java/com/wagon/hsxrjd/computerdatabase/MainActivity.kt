@@ -26,16 +26,7 @@ class MainActivity : AppCompatActivity() {
         ButterKnife.bind(this)
         setSupportActionBar(mToolbar)
         val retainListFragment = supportFragmentManager.findFragmentByTag(MainActivity.cardListFragmentBackStackName)
-//        val cardFragment = supportFragmentManager.findFragmentByTag(MainActivity.cardFragmentBackStackName)
         retainListFragment ?:
-                /*cardFragment
-                        ?.let {
-                            supportFragmentManager
-                                    .beginTransaction()
-                                    .replace(R.id.fragment_container, cardFragment, MainActivity.cardFragmentBackStackName)
-                                    .commit()
-                        }
-                ?:*/
                 supportFragmentManager
                         .beginTransaction()
                         .add(R.id.fragment_container, CardListFragment.newInstance(), MainActivity.cardListFragmentBackStackName)

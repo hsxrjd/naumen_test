@@ -13,44 +13,22 @@ import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 class CardListPresenter private constructor() : BasePresenter<CardListFragmentView>() {
 
     private var mPageCount: Int = 0
-//    private var mLastTimeUpdated: Long = 0
-//    private var mShouldUpdate: Boolean = true
     private var mIsAllLoaded: Boolean = false
 
     private val mHandler: Handler = Handler()
 
     private val mRunnable: Runnable = Runnable {
-        Log.d("UPD", "UPDAAATABLE")
         mIsAllLoaded = false
         mView.get()?.switchLoadingAbility(true)
     }
 
     fun start() {
         loadPage(0)
-//        mHandler.postDelayed(mRunnable, 10000)
     }
 
     fun isAllLoaded(): Boolean {
         return mIsAllLoaded
     }
-/*
-    private fun isUpdatable(): Boolean {
-        if (!mShouldUpdate) {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - mLastTimeUpdated > EXPIRATION_TIME) {
-                mShouldUpdate = true
-                mIsAllLoaded = false
-                mLastTimeUpdated = currentTime
-                return true
-            } else {
-                Log.d("DEBUG", "not updatable, time $currentTime - $mLastTimeUpdated")
-                return false
-            }
-        }
-        return true
-    }*/
-
-
     fun loadPage(page: Int) {
         val view: CardListFragmentView? = mView.get()
         mDataSource.get()?.let {
@@ -76,7 +54,6 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
         mHandler.removeCallbacks(mRunnable)
         val view: CardListFragmentView? = mView.get()
         mPageCount++
-        Log.d("DEBUG", "$mPageCount")
         mDataSource.get()?.let {
             it
                     .getCards(mPageCount)

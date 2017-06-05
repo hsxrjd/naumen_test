@@ -23,7 +23,6 @@ import com.wagon.hsxrjd.computerdatabase.view.CardFragmentView
  * Created by hsxrjd on 02.06.17.
  */
 class CardFragment : Fragment(), CardFragmentView {
-    //todo утечки где-то, не сильные, но есть
     @BindView(R.id.progress_bar_card) lateinit var mProgressBar: ProgressBar
     @BindView(R.id.computer_image) lateinit var mComputerImage: ImageView
     @BindView(R.id.company_name) lateinit var mCompanyName: TextView
@@ -76,7 +75,6 @@ class CardFragment : Fragment(), CardFragmentView {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setupTransition() {
         val mTransition = AutoTransition()
-//        mTransition.
         sharedElementEnterTransition = mTransition
         enterTransition = mTransition
         sharedElementReturnTransition = mTransition
@@ -112,7 +110,6 @@ class CardFragment : Fragment(), CardFragmentView {
                 ?: setupImageVisibility(false)
     }
 
-    //TODO привязать, сделать переходы, анимации, подумать над картинкой в оверлее, продумать кнопку
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_card, container, false)
         ButterKnife.bind(this, view)

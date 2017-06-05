@@ -124,14 +124,12 @@ class CardListFragment : Fragment(), CardListFragmentView {
             mProgressBar.visibility = View.VISIBLE
         else
             mRvAdapter.showLoading()
-        Log.d("DEBUG", "show loading")
     }
 
     override fun hideLoading() {
         mLoading = false
         mProgressBar.visibility = View.GONE
         mRvAdapter.hideLoading()
-        Log.d("DEBUG", "hide loading")
     }
 
     override fun showMessage(message: String) {
