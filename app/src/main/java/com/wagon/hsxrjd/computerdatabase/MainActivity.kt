@@ -23,11 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-        }
         setContentView(R.layout.activity_main)
-
         ButterKnife.bind(this)
         setSupportActionBar(mToolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -36,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         retainListFragment ?: let {
             mToolbarTitle.setText(R.string.app_name)
             val fragment = CardListFragment.newInstance()
-            mNavigator.get()?.configureTransition(fragment)
+//            mNavigator.get()?.configureTransition(fragment)
             supportFragmentManager
                     .beginTransaction()
                     .add(R.id.fragment_container, fragment, MainActivity.BACK_STACK_TAG_CARD_LIST)

@@ -59,11 +59,14 @@ class BaseNavigator : Navigator {
     override fun startCardFragment(view: View, card: Card) {
         val fragment = CardFragment.newInstance(card.id, card.name)
         enableToolbar(true)
-        configureTransition(fragment)
+//        configureTransition(fragment)
         setToolbarTitle(card.name)
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mToolbarTitle.get()?.transitionName = ViewCompat.getTransitionName(view)
+        }*/
         (mActivity.get()?.supportFragmentManager as FragmentManager)
                 .beginTransaction()
-                .addSharedElement(view, ViewCompat.getTransitionName(mToolbarTitle.get()))
+//                .addSharedElement(view, ViewCompat.getTransitionName(view))
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(MainActivity.BACK_STACK_TAG_CARD + card.id)
                 .commit()

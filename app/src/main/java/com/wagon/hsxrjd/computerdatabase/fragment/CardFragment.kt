@@ -225,7 +225,6 @@ class CardFragment : Fragment(), CardFragmentView {
         mNavigator.get()?.setToolbarTitle(mCardName)
         mNavigator.get()?.enableToolbar(true)
         mCard?.let { showCard(it) }
-        startPostponedEnterTransition()
     }
 
     override fun onPause() {
@@ -246,7 +245,6 @@ class CardFragment : Fragment(), CardFragmentView {
         super.onCreate(savedInstanceState)
         mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
-        postponeEnterTransition()
     }
 
     companion object {
