@@ -1,9 +1,11 @@
 package com.wagon.hsxrjd.computerdatabase
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import android.view.Window
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -20,7 +22,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+        }
         setContentView(R.layout.activity_main)
+
         ButterKnife.bind(this)
         setSupportActionBar(mToolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)

@@ -3,13 +3,13 @@ package com.wagon.hsxrjd.computerdatabase.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
@@ -31,7 +31,7 @@ import java.lang.ref.WeakReference
  * Created by hsxrjd on 02.06.17.
  */
 class CardFragment : Fragment(), CardFragmentView {
-    @BindView(R.id.progress_bar_card) lateinit var mProgressBar: ProgressBar
+    //    @BindView(R.id.progress_bar_card) lateinit var mProgressBar: ProgressBar
     @BindView(R.id.computer_image) lateinit var mComputerImage: ImageView
     @BindView(R.id.company_name) lateinit var mCompanyName: TextView
     @BindView(R.id.company_text) lateinit var mCompanyNameText: TextView
@@ -39,12 +39,14 @@ class CardFragment : Fragment(), CardFragmentView {
     @BindView(R.id.description_text) lateinit var mDescriptionText: TextView
     @BindView(R.id.similar_text) lateinit var mSimilaritiesText: TextView
     @BindView(R.id.similar) lateinit var mSimilarities: RecyclerView
+    @BindView(R.id.card_swipe_refresh_layout) lateinit var mSwipeRefresh: SwipeRefreshLayout
 
     private lateinit var mCardPresenter: CardPresenter
     private var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
     private var mCardId: Int = -1
     private var mCardName: String = ""
     private var mCard: Card? = null
+    private var mOperationCount: Int = 0
 
     private val mNavigator: WeakReference<Navigator> = WeakReference(BaseNavigator.instance)
 
@@ -62,13 +64,24 @@ class CardFragment : Fragment(), CardFragmentView {
         }
     }
 
+    private val mOnRefreshListener = SwipeRefreshLayout.OnRefreshListener {
+        setupDescriptionVisibility(false)
+        setupCompanyNameVisibility(false)
+        setupImageVisibility(false)
+        setupSimilaritiesVisibility(false)
+        mCardPresenter.loadCard(mCardId)
+        mCardPresenter.showSimilarTo(mCardId)
+    }
+
     private val mPicassoCallback = object : Callback {
         override fun onError() {
+            hideLoading()
             setupImageVisibility(false)
             showMessage("Error loading image")
         }
 
         override fun onSuccess() {
+            hideLoading()
         }
     }
 
@@ -105,11 +118,15 @@ class CardFragment : Fragment(), CardFragmentView {
     }
 
     override fun showLoading() {
-        mProgressBar.visibility = View.VISIBLE
+        mOperationCount++
+        mSwipeRefresh.isRefreshing = true
     }
 
     override fun hideLoading() {
-        mProgressBar.visibility = View.GONE
+        mOperationCount--
+        if (mOperationCount == 0) {
+            mSwipeRefresh.isRefreshing = false
+        }
     }
 
     override fun showCard(card: Card) {
@@ -133,10 +150,10 @@ class CardFragment : Fragment(), CardFragmentView {
         card.imageUrl
                 ?.let {
                     setupImageVisibility(true)
+                    showLoading()
                     Picasso
                             .with(context)
                             .load(it)
-                            .fit()
                             .into(mComputerImage, mPicassoCallback)
                 }
                 ?: setupImageVisibility(false)
@@ -154,8 +171,9 @@ class CardFragment : Fragment(), CardFragmentView {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_card, container, false)
         ButterKnife.bind(this, view)
-        mProgressBar.isIndeterminate = true
+
         mDescription.setOnClickListener(mClickListener)
+        mSwipeRefresh.setOnRefreshListener(mOnRefreshListener)
         setupDescriptionVisibility(false)
         setupCompanyNameVisibility(false)
         setupImageVisibility(false)

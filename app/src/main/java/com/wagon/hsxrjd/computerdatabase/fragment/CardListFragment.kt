@@ -3,6 +3,7 @@ package com.wagon.hsxrjd.computerdatabase.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,20 +16,20 @@ import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.BaseNavigator
 import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
+import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.adapter.EndlessCardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
-import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
-import com.wagon.hsxrjd.computerdatabase.adapter.EndlessCardRecyclerViewAdapter
 import java.lang.ref.WeakReference
 
 
 class CardListFragment : Fragment(), CardListFragmentView {
 
     @BindView(R.id.recycler_view_cards) lateinit var mRecyclerView: RecyclerView
-    @BindView(R.id.progress_bar) lateinit var mProgressBar: ProgressBar
+    @BindView(R.id.card_list_swipe_refresh_layout) lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private val mNavigator: WeakReference<Navigator> = WeakReference(BaseNavigator.instance)
 
 
@@ -52,6 +53,11 @@ class CardListFragment : Fragment(), CardListFragmentView {
         }
     }
 
+    private val mOnRefreshListener = SwipeRefreshLayout.OnRefreshListener {
+        mIsStart = true
+        mListPresenter.start()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +70,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
         ButterKnife.bind(this, view)
         mListPresenter = CardListPresenter.instance
         savedInstanceState ?: mListPresenter.setDataSource(CardDataRepository.instance)
-        mProgressBar.isIndeterminate = true
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener)
         setupRecyclerView()
         return view
     }
@@ -124,14 +130,14 @@ class CardListFragment : Fragment(), CardListFragmentView {
     override fun showLoading() {
         mLoading = true
         if (mRvAdapter.itemCount == 0)
-            mProgressBar.visibility = View.VISIBLE
+            mSwipeRefreshLayout.isRefreshing = true
         else
             mRvAdapter.showLoading()
     }
 
     override fun hideLoading() {
         mLoading = false
-        mProgressBar.visibility = View.GONE
+        mSwipeRefreshLayout.isRefreshing = false
         mRvAdapter.hideLoading()
     }
 

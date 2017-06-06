@@ -2,6 +2,7 @@ package com.wagon.hsxrjd.computerdatabase.presenter
 
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.view.CardFragmentView
+import io.reactivex.Observable
 
 /**
  * Created by hsxrjd on 03.06.17.

@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.model.source
 
+import android.util.Log
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.model.Page
 import com.wagon.hsxrjd.computerdatabase.presenter.NaumenApi

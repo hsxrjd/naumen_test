@@ -28,6 +28,8 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
     }
 
     fun loadPage(page: Int) {
+        val pageCache = mPageCount
+        mPageCount = page
         val view: CardListFragmentView? = mView.get()
         mDataSource.get()?.let {
             it
@@ -36,14 +38,20 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         view?.showLoading()
                     }
                     .doOnComplete { view?.hideLoading() }
-                    .doOnError { view?.showMessage("Error loading data on page $page") }
-                    .subscribe { p: Page? ->
+                    .subscribe({
+                        p: Page? ->
                         p?.items?.let {
                             if (it.isEmpty()) {
                                 view?.showMessage("No data available")
                             } else view?.showCardList(it)
                         }
-                    }
+                    }, {
+                        t: Throwable ->
+                        view?.showMessage("Error loading data on page $page because ${t.localizedMessage}")
+                        mPageCount = pageCache
+                        view?.hideLoading()
+                    })
+
         }
 
     }
@@ -59,11 +67,8 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         view?.showLoading()
                     }
                     .doOnComplete { view?.hideLoading() }
-                    .doOnError {
-                        view?.showMessage("Error loading data on page $mPageCount")
-                        mPageCount--
-                    }
-                    .subscribe { p: Page? ->
+                    .subscribe({
+                        p: Page? ->
                         p?.items?.let {
                             if (it.isEmpty()) {
                                 view?.showMessage("All cards loaded")
@@ -73,7 +78,12 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                                 mPageCount--
                             } else view?.showNextPage(it)
                         }
-                    }
+                    }, {
+                        t: Throwable ->
+                        view?.showMessage("Error loading data on page $mPageCount because ${t.localizedMessage}")
+                        mPageCount--
+                        view?.hideLoading()
+                    })
         }
     }
 
