@@ -2,9 +2,11 @@ package com.wagon.hsxrjd.computerdatabase
 
 import android.os.Build
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.transition.Slide
+import android.transition.Transition
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -44,7 +46,7 @@ class BaseNavigator : Navigator {
 
     override fun configureTransition(fragment: Fragment) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val transition = Slide()
+            val transition : Transition = Slide()
             fragment.sharedElementReturnTransition = transition
             fragment.sharedElementEnterTransition = transition
             fragment.exitTransition = transition
@@ -59,12 +61,12 @@ class BaseNavigator : Navigator {
         enableToolbar(true)
         configureTransition(fragment)
         setToolbarTitle(card.name)
-        mActivity.get()?.supportFragmentManager
-                ?.beginTransaction()
-                ?.addSharedElement(view, ViewCompat.getTransitionName(mToolbarTitle.get()))
-                ?.replace(R.id.fragment_container, fragment)
-                ?.addToBackStack(MainActivity.BACK_STACK_TAG_CARD)
-                ?.commit()
+        (mActivity.get()?.supportFragmentManager as FragmentManager)
+                .beginTransaction()
+                .addSharedElement(view, ViewCompat.getTransitionName(mToolbarTitle.get()))
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(MainActivity.BACK_STACK_TAG_CARD + card.id)
+                .commit()
     }
 
 

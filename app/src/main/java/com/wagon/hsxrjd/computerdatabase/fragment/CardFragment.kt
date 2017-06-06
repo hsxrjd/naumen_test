@@ -6,10 +6,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
@@ -31,7 +33,6 @@ import java.lang.ref.WeakReference
  * Created by hsxrjd on 02.06.17.
  */
 class CardFragment : Fragment(), CardFragmentView {
-    //    @BindView(R.id.progress_bar_card) lateinit var mProgressBar: ProgressBar
     @BindView(R.id.computer_image) lateinit var mComputerImage: ImageView
     @BindView(R.id.company_name) lateinit var mCompanyName: TextView
     @BindView(R.id.company_text) lateinit var mCompanyNameText: TextView
@@ -49,7 +50,6 @@ class CardFragment : Fragment(), CardFragmentView {
     private var mOperationCount: Int = 0
 
     private val mNavigator: WeakReference<Navigator> = WeakReference(BaseNavigator.instance)
-
     private var mPressed: Boolean = false
 
     private val mClickListener = View.OnClickListener {
@@ -191,7 +191,6 @@ class CardFragment : Fragment(), CardFragmentView {
                 ?.let {
                     mCard = it.getParcelable(BUNDLE_TAG_CARD)
                     mCardName = it.getString(BUNDLE_TAG_CARD_NAME)
-                    mSimilarities.layoutManager.onRestoreInstanceState(it.getParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG))
                     it.getParcelableArray(BUNDLE_TAG_DATA_LIST)?.let { showSimilarTo(it.toList() as List<Card>) }
                 }
                 ?: let {
@@ -203,6 +202,7 @@ class CardFragment : Fragment(), CardFragmentView {
     fun setupRecyclerView() {
         mRvAdapter.setOnItemClickListener(object : CardRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, card: Card) {
+                mSwipeRefresh.isRefreshing = false
                 mNavigator.get()?.startCardFragment(view, card)
             }
         })
@@ -217,16 +217,29 @@ class CardFragment : Fragment(), CardFragmentView {
         super.onSaveInstanceState(outState)
         outState?.putParcelable(BUNDLE_TAG_CARD, mCard)
         outState?.putString(BUNDLE_TAG_CARD_NAME, mCardName)
-        outState?.putParcelable(CardListFragment.BUNDLE_TAG_LAYOUT_MANAGER_CONFIG, mSimilarities.layoutManager.onSaveInstanceState())
         outState?.putParcelableArray(CardListFragment.BUNDLE_TAG_DATA_LIST, mRvAdapter.getCardList().toTypedArray())
     }
 
     override fun onResume() {
+        super.onResume()
         mNavigator.get()?.setToolbarTitle(mCardName)
         mNavigator.get()?.enableToolbar(true)
-        super.onResume()
         mCard?.let { showCard(it) }
         startPostponedEnterTransition()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mSwipeRefresh.isRefreshing = false
+        mSwipeRefresh.destroyDrawingCache()
+        mSwipeRefresh.clearAnimation()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Picasso
+                .with(context)
+                .cancelRequest(mComputerImage)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -240,9 +253,9 @@ class CardFragment : Fragment(), CardFragmentView {
         val BUNDLE_TAG_CARD_ID: String = "CARD_ID"
         val BUNDLE_TAG_CARD: String = "SAVED_CARD"
         val BUNDLE_TAG_CARD_NAME: String = "CARD_NAME"
-        val BUNDLE_TAG_LAYOUT_MANAGER_CONFIG: String = "LAYOUT_MANAGER"
         val BUNDLE_TAG_DATA_LIST: String = "LIST_OF_DATA"
         val DESCRIPTION_MAX_LINES_COLLAPSED: Int = 2
+
 
         fun newInstance(id: Int, name: String): CardFragment {
             val fragment = CardFragment()
