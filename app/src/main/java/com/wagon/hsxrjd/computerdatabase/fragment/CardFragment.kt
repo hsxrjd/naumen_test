@@ -6,12 +6,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
@@ -77,7 +75,7 @@ class CardFragment : Fragment(), CardFragmentView {
         override fun onError() {
             hideLoading()
             setupImageVisibility(false)
-            showMessage("Error loading image")
+            showMessage(R.string.message_error_image_loading)
         }
 
         override fun onSuccess() {
@@ -115,6 +113,11 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun showMessage(resource: Int) {
         Toast.makeText(context, resource, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showMessage(resource: Int, vararg varargs: Any) {
+        val message = getString(resource, varargs)
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading() {
@@ -210,7 +213,6 @@ class CardFragment : Fragment(), CardFragmentView {
         mSimilarities.adapter = mRvAdapter
         mSimilarities.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
         mSimilarities.isNestedScrollingEnabled = false
-        mSimilarities.isScrollContainer = false
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

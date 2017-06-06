@@ -1,16 +1,12 @@
 package com.wagon.hsxrjd.computerdatabase
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.MenuItem
-import android.view.Window
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.squareup.picasso.Picasso
 import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
 import java.lang.ref.WeakReference
 

@@ -149,6 +149,11 @@ class CardListFragment : Fragment(), CardListFragmentView {
         Toast.makeText(context, resource, Toast.LENGTH_SHORT).show()
     }
 
+    override fun showMessage(resource: Int, vararg varargs: Any) {
+        val message = getString(resource, varargs)
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)
 
     override fun showNextPage(cardList: List<Card>) = mRvAdapter.addCardsToList(cardList)

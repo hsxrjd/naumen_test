@@ -3,11 +3,9 @@ package com.wagon.hsxrjd.computerdatabase
 import android.os.Build
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.transition.Slide
 import android.transition.Transition
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.wagon.hsxrjd.computerdatabase.fragment.CardFragment
@@ -28,8 +26,8 @@ class BaseNavigator : Navigator {
 
     override fun enableToolbar(toggle: Boolean) {
         val supportActionBar = mActivity.get()?.supportActionBar
-            supportActionBar?.setDisplayShowHomeEnabled(toggle)
-            supportActionBar?.setDisplayHomeAsUpEnabled(toggle)
+        supportActionBar?.setDisplayShowHomeEnabled(toggle)
+        supportActionBar?.setDisplayHomeAsUpEnabled(toggle)
     }
 
     override fun setToolbarTitle(title: String) {
@@ -39,6 +37,7 @@ class BaseNavigator : Navigator {
     override fun setToolbarTitle(resource: Int) {
         mToolbarTitle.get()?.setText(resource)
     }
+
     override fun setActivity(activity: AppCompatActivity) {
         mActivity = WeakReference(activity)
         mToolbarTitle = WeakReference((activity as MainActivity).mToolbarTitle)
@@ -46,7 +45,7 @@ class BaseNavigator : Navigator {
 
     override fun configureTransition(fragment: Fragment) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val transition : Transition = Slide()
+            val transition: Transition = Slide()
             fragment.sharedElementReturnTransition = transition
             fragment.sharedElementEnterTransition = transition
             fragment.exitTransition = transition

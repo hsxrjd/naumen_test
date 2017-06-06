@@ -1,6 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
 import android.os.Handler
+import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Page
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 
@@ -42,12 +43,12 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         p: Page? ->
                         p?.items?.let {
                             if (it.isEmpty()) {
-                                view?.showMessage("No data available")
+                                view?.showMessage(R.string.message_all_data_loaded)
                             } else view?.showCardList(it)
                         }
                     }, {
                         t: Throwable ->
-                        view?.showMessage("Error loading data on page $page because ${t.localizedMessage}")
+                        view?.showMessage(R.string.message_error_loading_page, page, t.localizedMessage)
                         mPageCount = pageCache
                         view?.hideLoading()
                     })
@@ -71,7 +72,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         p: Page? ->
                         p?.items?.let {
                             if (it.isEmpty()) {
-                                view?.showMessage("All cards loaded")
+                                view?.showMessage(R.string.message_all_data_loaded)
                                 mIsAllLoaded = true
                                 view?.switchLoadingAbility(false)
                                 mHandler.postDelayed(mRunnable, EXPIRATION_TIME)
@@ -80,7 +81,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         }
                     }, {
                         t: Throwable ->
-                        view?.showMessage("Error loading data on page $mPageCount because ${t.localizedMessage}")
+                        view?.showMessage(R.string.message_error_loading_page, mPageCount, t.localizedMessage)
                         mPageCount--
                         view?.hideLoading()
                     })

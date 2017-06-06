@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <size android:height="1dp" />
+    <size android:height="@dimen/divider_height" />
     <padding
-        android:left="8dp"
-        android:right="8dp" />
-    <solid
-        android:color="#ddd"
-        />
+        android:left="@dimen/divider_padding"
+        android:right="@dimen/divider_padding" />
+    <solid android:color="@color/divider" />
 
 </shape>

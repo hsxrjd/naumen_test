@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
     android:background="@color/colorPrimary"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    >
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <TextView
         android:id="@+id/toolbar_title"
-        android:transitionName="@string/transition_name_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical|start"
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="@dimen/text_size_toolbar_title"
+        android:transitionName="@string/transition_name_toolbar" />
 </android.support.v7.widget.Toolbar>

@@ -1,6 +1,5 @@
 package com.wagon.hsxrjd.computerdatabase.view
 
-import android.view.View
 import com.wagon.hsxrjd.computerdatabase.model.Card
 
 /**

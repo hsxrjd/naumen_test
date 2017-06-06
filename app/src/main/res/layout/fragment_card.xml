@@ -7,8 +7,8 @@
     tools:context="com.wagon.hsxrjd.computerdatabase.fragment.CardFragment">
 
     <ScrollView
-        android:layout_width="match_parent"
         android:id="@+id/card_scroll_view"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <RelativeLayout
@@ -22,14 +22,13 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:lines="1"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:paddingEnd="@dimen/list_item_padding_end_right"
+                android:paddingLeft="@dimen/list_item_padding_start_left"
+                android:paddingRight="@dimen/list_item_padding_end_right"
+                android:paddingStart="@dimen/list_item_padding_start_left"
+                android:paddingTop="@dimen/padding_8dp"
+                android:textColor="@color/list_item_title"
+                android:textSize="@dimen/text_size_list_item_primary" />
 
             <TextView
                 android:id="@+id/company_text"
@@ -38,12 +37,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/company_name"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingStart="16dp"
-                android:text="Company"
-                android:textSize="14sp" />
+                android:paddingEnd="@dimen/list_item_padding_end_right"
+                android:paddingLeft="@dimen/list_item_padding_start_left"
+                android:paddingRight="@dimen/list_item_padding_end_right"
+                android:paddingStart="@dimen/list_item_padding_start_left"
+                android:text="@string/company"
+                android:textSize="@dimen/text_size_list_item_secondary" />
 
 
             <TextView
@@ -53,15 +52,15 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/company_text"
-                android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingStart="16dp"
-                android:textColor="#000"
-                android:textSize="16sp" />
+                android:paddingEnd="@dimen/list_item_padding_end_right"
+                android:paddingLeft="@dimen/list_item_padding_start_left"
+                android:paddingRight="@dimen/list_item_padding_end_right"
+                android:paddingStart="@dimen/list_item_padding_start_left"
+                android:paddingTop="@dimen/padding_8dp"
+                android:textColor="@color/list_item_title"
+                android:textSize="@dimen/text_size_list_item_primary" />
 
 
             <TextView
@@ -71,12 +70,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/description"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingStart="16dp"
-                android:text="Description"
-                android:textSize="14sp" />
+                android:paddingEnd="@dimen/list_item_padding_end_right"
+                android:paddingLeft="@dimen/list_item_padding_start_left"
+                android:paddingRight="@dimen/list_item_padding_end_right"
+                android:paddingStart="@dimen/list_item_padding_start_left"
+                android:text="@string/description"
+                android:textSize="@dimen/text_size_list_item_secondary" />
 
             <ImageView
                 android:id="@+id/computer_image"
@@ -84,16 +83,16 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/description_text"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:contentDescription="Computer Image"
-                android:maxHeight="256dp"
-                android:maxWidth="256dp"
-                android:minHeight="256dp"
-                android:minWidth="256dp"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingStart="16dp"
+                android:contentDescription="@string/computer_image"
+                android:maxHeight="@dimen/image_height"
+                android:maxWidth="@dimen/image_width"
+                android:minHeight="@dimen/image_height"
+                android:minWidth="@dimen/image_width"
+                android:paddingEnd="@dimen/list_item_padding_end_right"
+                android:paddingLeft="@dimen/list_item_padding_start_left"
+                android:paddingRight="@dimen/list_item_padding_end_right"
+                android:paddingStart="@dimen/list_item_padding_start_left"
+                android:paddingTop="@dimen/padding_8dp"
                 android:visibility="visible" />
 
 
@@ -102,21 +101,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/computer_image"
-                android:layout_marginTop="8dp"
-                android:paddingEnd="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingStart="16dp"
-                android:text="You might be looking for:"
-                android:textAlignment="center" />
+                android:paddingEnd="@dimen/list_item_padding_end_right"
+                android:paddingLeft="@dimen/list_item_padding_start_left"
+                android:paddingRight="@dimen/list_item_padding_end_right"
+                android:paddingStart="@dimen/list_item_padding_start_left"
+                android:paddingTop="@dimen/padding_8dp"
+                android:text="@string/you_might_be_looking_for"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_size_list_item_secondary" />
 
+            <ImageView
+                android:id="@+id/similar_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/similar_text"
+                android:paddingTop="@dimen/padding_8dp"
+                android:src="@drawable/divider_dark"
+                tools:ignore="ContentDescription" />
+            
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/similar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/similar_text"
+                android:layout_below="@id/similar_divider"
                 android:isScrollContainer="false"
                 android:overScrollMode="never"
+                android:paddingTop="@dimen/recycler_view_padding_top"
                 android:scrollbars="none" />
         </RelativeLayout>
     </ScrollView>

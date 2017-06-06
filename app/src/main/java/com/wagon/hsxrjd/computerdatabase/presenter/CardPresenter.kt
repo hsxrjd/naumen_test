@@ -1,8 +1,8 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
+import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.view.CardFragmentView
-import io.reactivex.Observable
 
 /**
  * Created by hsxrjd on 03.06.17.
@@ -16,8 +16,10 @@ class CardPresenter private constructor() : BasePresenter<CardFragmentView>() {
             it
                     .getCard(id)
                     .doOnComplete { view?.hideLoading() }
-                    .doOnError { view?.showMessage("Error loading card $id") }
-                    .subscribe { c: Card? -> c?.let { view?.showCard(it) } }
+                    .subscribe(
+                            { c: Card? -> c?.let { view?.showCard(it) } },
+                            { t: Throwable -> view?.showMessage(R.string.message_error_loading_card, id, t.localizedMessage) }
+                    )
         }
     }
 
@@ -28,8 +30,9 @@ class CardPresenter private constructor() : BasePresenter<CardFragmentView>() {
             it
                     .getSimilarTo(id)
                     .doOnComplete { view?.hideLoading() }
-                    .doOnError { view?.showMessage("Error loading similar to $id") }
-                    .subscribe { c: List<Card>? -> c?.let { view?.showSimilarTo(it) } }
+                    .subscribe({ c: List<Card>? -> c?.let { view?.showSimilarTo(it) } },
+                            { t: Throwable -> view?.showMessage(R.string.message_error_loading_similar_to, id, t.localizedMessage) }
+                    )
         }
     }
 

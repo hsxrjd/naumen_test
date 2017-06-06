@@ -17,7 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:clipToPadding="false"
-            android:paddingTop="8dp"
+            android:paddingTop="@dimen/recycler_view_padding_top"
             android:scrollbars="vertical" />
 
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -7,10 +7,11 @@ import io.reactivex.Observable
 /**
  * Created by hsxrjd on 24.05.17.
  */
-class CardDataRepository private constructor(): CardDataSource {
+class CardDataRepository private constructor() : CardDataSource {
     private object Holder {
         val mInstance: CardDataRepository = CardDataRepository()
     }
+
     private val mRemoteSource: RemoteCardDataSource = RemoteCardDataSource()
 //    private val mLocalSource: CacheCardDataSource = CacheCardDataSource()
 
