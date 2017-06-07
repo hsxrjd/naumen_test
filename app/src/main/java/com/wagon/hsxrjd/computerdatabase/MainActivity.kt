@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         retainListFragment ?: let {
             mToolbarTitle.setText(R.string.app_name)
             val fragment = CardListFragment.newInstance()
-//            mNavigator.get()?.configureTransition(fragment)
             supportFragmentManager
                     .beginTransaction()
                     .add(R.id.fragment_container, fragment, MainActivity.BACK_STACK_TAG_CARD_LIST)

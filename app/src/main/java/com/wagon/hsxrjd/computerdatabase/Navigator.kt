@@ -14,6 +14,5 @@ interface Navigator {
     fun setToolbarTitle(title: String)
     fun setToolbarTitle(resource: Int)
     fun startCardFragment(view: View, card: Card)
-    fun configureTransition(fragment: Fragment)
     fun enableToolbar(toggle:Boolean)
 }

@@ -3,6 +3,7 @@ package com.wagon.hsxrjd.computerdatabase.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.view.Loading
@@ -96,7 +97,7 @@ class EndlessCardRecyclerViewAdapter : CardRecyclerViewAdapter(), Loading {
             itemView.visibility = View.GONE
         }
 
-        @butterknife.BindView(R.id.progress_bar_item) lateinit var mProgressBar: android.widget.ProgressBar
+        @butterknife.BindView(R.id.progress_bar_item) lateinit var mProgressBar: ProgressBar
 
         init {
             butterknife.ButterKnife.bind(this, itemView)

@@ -118,7 +118,7 @@
                 android:paddingTop="@dimen/padding_8dp"
                 android:src="@drawable/divider_dark"
                 tools:ignore="ContentDescription" />
-            
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/similar"
                 android:layout_width="match_parent"

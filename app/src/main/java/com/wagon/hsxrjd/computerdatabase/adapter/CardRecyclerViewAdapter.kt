@@ -1,6 +1,5 @@
 package com.wagon.hsxrjd.computerdatabase.adapter
 
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -62,7 +61,6 @@ open class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapte
                         else
                             View.VISIBLE
                 viewHolder?.itemView?.setOnClickListener { mOnItemClickListener.onItemClick(viewHolder.mTitle, card) }
-                ViewCompat.setTransitionName(viewHolder?.mTitle, card.id.toString() + this.hashCode().toString())
             }
         }
     }
