@@ -16,9 +16,10 @@ class CardPresenter private constructor() : BasePresenter<CardFragmentView>() {
             it
                     .getCard(id)
                     .doOnComplete { view?.hideLoading() }
+                    .doOnError { view?.showMessage(R.string.message_error_loading_card) }
                     .subscribe(
                             { c: Card? -> c?.let { view?.showCard(it) } },
-                            { t: Throwable -> view?.showMessage(R.string.message_error_loading_card, id, t.localizedMessage) }
+                            { view?.showMessage(R.string.message_error_loading_card) }
                     )
         }
     }
@@ -30,8 +31,9 @@ class CardPresenter private constructor() : BasePresenter<CardFragmentView>() {
             it
                     .getSimilarTo(id)
                     .doOnComplete { view?.hideLoading() }
+                    .doOnError { view?.showMessage(R.string.message_error_loading_similar_to) }
                     .subscribe({ c: List<Card>? -> c?.let { view?.showSimilarTo(it) } },
-                            { t: Throwable -> view?.showMessage(R.string.message_error_loading_similar_to, id, t.localizedMessage) }
+                            { view?.showMessage(R.string.message_error_loading_similar_to) }
                     )
         }
     }

@@ -6,8 +6,8 @@
     <string name="computer_image">Изображение компьютера</string>
     <string name="you_might_be_looking_for">Возможно, вам также понравятся:</string>
     <string name="message_error_image_loading">Возникла ошибка при загрузке изображения</string>
-    <string name="message_error_loading_page">Возникла ошибка при загрузке страницы %1$s, причина: %2$s</string>
-    <string name="message_error_loading_card">Возникла ошибка при загрузке карточки #%1$s, причина: %2$s</string>
-    <string name="message_error_loading_similar_to">Возникла ошибка при загрузке списка компьютеров, похожих на #%1$s, причина: %2$s</string>
+    <string name="message_error_loading_page">Возникла ошибка при загрузке страницы</string>
+    <string name="message_error_loading_card">Возникла ошибка при загрузке карточки</string>
+    <string name="message_error_loading_similar_to">Возникла ошибка при загрузке списка компьютеров, похожих на этот</string>
     <string name="message_all_data_loaded">Все данные загружены</string>
 </resources>

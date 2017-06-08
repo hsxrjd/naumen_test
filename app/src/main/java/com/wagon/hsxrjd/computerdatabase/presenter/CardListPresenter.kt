@@ -39,6 +39,11 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         view?.showLoading()
                     }
                     .doOnComplete { view?.hideLoading() }
+                    .doOnError {
+                        view?.showMessage(R.string.message_error_loading_page)
+                        mPageCount = pageCache
+                        view?.hideLoading()
+                    }
                     .subscribe({
                         p: Page? ->
                         p?.items?.let {
@@ -47,8 +52,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                             } else view?.showCardList(it)
                         }
                     }, {
-                        t: Throwable ->
-                        view?.showMessage(R.string.message_error_loading_page, page, t.localizedMessage)
+                        view?.showMessage(R.string.message_error_loading_page)
                         mPageCount = pageCache
                         view?.hideLoading()
                     })
@@ -68,6 +72,11 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         view?.showLoading()
                     }
                     .doOnComplete { view?.hideLoading() }
+                    .doOnError {
+                        view?.showMessage(R.string.message_error_loading_page)
+                        mPageCount--
+                        view?.hideLoading()
+                    }
                     .subscribe({
                         p: Page? ->
                         p?.items?.let {
@@ -80,8 +89,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                             } else view?.showNextPage(it)
                         }
                     }, {
-                        t: Throwable ->
-                        view?.showMessage(R.string.message_error_loading_page, mPageCount, t.localizedMessage)
+                        view?.showMessage(R.string.message_error_loading_page)
                         mPageCount--
                         view?.hideLoading()
                     })
