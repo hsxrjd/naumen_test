@@ -4,15 +4,16 @@ import android.os.Handler
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Page
+import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 
 /**
  * Created by hsxrjd on 24.05.17.
  */
-class CardListPresenter : BasePresenter<CardListFragmentView>() {
+class CardListPresenter (val mDataSource: CardDataSource): BasePresenter<CardListFragmentView>() {
 
     init {
-        MainApplication.dataSourceComponent.inject(this)
+        MainApplication.appComponent.inject(this)
     }
 
     private var mPageCount: Int = 0
@@ -97,13 +98,13 @@ class CardListPresenter : BasePresenter<CardListFragmentView>() {
                         view?.hideLoading()
                     })
     }
-
-    private object Holder {
-        val mInstance = CardListPresenter()
-    }
+//
+//    private object Holder {
+//        val mInstance = CardListPresenter()
+//    }
 
     companion object {
         val EXPIRATION_TIME: Long = 20000 //20 sec in millis
-        val instance: CardListPresenter by lazy { Holder.mInstance }
+//        val instance: CardListPresenter by lazy { Holder.mInstance }
     }
 }

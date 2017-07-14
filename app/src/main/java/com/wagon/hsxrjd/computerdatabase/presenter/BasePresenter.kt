@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 abstract class BasePresenter<T : BaseCardView> : BaseContract.Presenter<T> {
     protected var mView: WeakReference<T?> = WeakReference(null)
-    @Inject lateinit var mDataSource: CardDataSource
 
     override fun setView(view: T) {
         mView = WeakReference(view)

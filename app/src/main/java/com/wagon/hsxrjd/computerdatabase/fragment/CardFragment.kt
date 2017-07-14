@@ -21,12 +21,11 @@ import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
 import com.wagon.hsxrjd.computerdatabase.model.Card
-import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import com.wagon.hsxrjd.computerdatabase.presenter.CardPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardFragmentView
-import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 /**
@@ -247,7 +246,7 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.cardComponent.inject(this)
+        MainApplication.appComponent.plus(CardPresenterModule()).inject(this)
         mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
 

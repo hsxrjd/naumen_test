@@ -18,6 +18,7 @@ import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.adapter.EndlessCardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
@@ -34,6 +35,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
     private var mRvAdapter: EndlessCardRecyclerViewAdapter = EndlessCardRecyclerViewAdapter()
 
     @Inject lateinit var mListPresenter: CardListPresenter
+
     private var mIsStart: Boolean = true
     private var mLoading: Boolean = false
     private val mPossibleItemCount: Int = 4
@@ -60,7 +62,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.listComponent.inject(this)
+        MainApplication.appComponent.plus(ListPresenterModule()).inject(this)
         retainInstance = true
     }
 

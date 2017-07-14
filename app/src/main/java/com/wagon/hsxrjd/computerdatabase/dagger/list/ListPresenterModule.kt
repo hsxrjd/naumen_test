@@ -1,6 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.list
 
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ListScope
+import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
 import dagger.Module
 import dagger.Provides
@@ -14,7 +15,7 @@ class ListPresenterModule {
 
     @ListScope
     @Provides
-    fun providePresenter(): CardListPresenter {
-        return CardListPresenter()
+    fun providePresenter(dataSource: CardDataSource): CardListPresenter {
+        return CardListPresenter(dataSource)
     }
 }

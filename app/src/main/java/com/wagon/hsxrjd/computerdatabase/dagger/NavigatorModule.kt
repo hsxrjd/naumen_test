@@ -11,6 +11,7 @@ import javax.inject.Singleton
  */
 @Module
 class NavigatorModule {
+
     @Provides
     @Singleton
     fun provideNavigator(): Navigator {
