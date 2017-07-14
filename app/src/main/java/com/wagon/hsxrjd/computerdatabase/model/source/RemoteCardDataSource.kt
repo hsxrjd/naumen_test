@@ -6,13 +6,13 @@ import com.wagon.hsxrjd.computerdatabase.presenter.NaumenApi
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
 /**
  * Created by hsxrjd on 24.05.17.
  */
-class RemoteCardDataSource : CardDataSource {
-    val service: NaumenApi = NaumenApi.instance
+class RemoteCardDataSource constructor(val service: NaumenApi) : CardDataSource {
 
     override fun getCard(id: Int): Observable<Card> {
         return service.mApi.getCard(id)

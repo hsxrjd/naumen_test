@@ -8,7 +8,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 /**
  * Created by hsxrjd on 24.05.17.
  */
-class NaumenApi private constructor() {
+class NaumenApi {
     private val mAdapterFactory = RxJava2CallAdapterFactory
             .createAsync()
 
@@ -30,11 +30,4 @@ class NaumenApi private constructor() {
             .build()
             .create(NaumenRestApi::class.java)
 
-    private object Holder {
-        val mInstance = NaumenApi()
-    }
-
-    companion object {
-        val instance: NaumenApi by lazy { Holder.mInstance }
-    }
 }

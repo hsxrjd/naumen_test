@@ -9,32 +9,32 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.wagon.hsxrjd.computerdatabase.BaseNavigator
+import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.adapter.EndlessCardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
 import com.wagon.hsxrjd.computerdatabase.model.Card
-import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
-import java.lang.ref.WeakReference
+import javax.inject.Inject
 
 
 class CardListFragment : Fragment(), CardListFragmentView {
 
     @BindView(R.id.recycler_view_cards) lateinit var mRecyclerView: RecyclerView
     @BindView(R.id.card_list_swipe_refresh_layout) lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
-    private val mNavigator: WeakReference<Navigator> = WeakReference(BaseNavigator.instance)
-
+    @Inject lateinit var mNavigator: Navigator
 
     private var mRvAdapter: EndlessCardRecyclerViewAdapter = EndlessCardRecyclerViewAdapter()
-    private lateinit var mListPresenter: CardListPresenter
+
+    @Inject lateinit var mListPresenter: CardListPresenter
+
     private var mIsStart: Boolean = true
     private var mLoading: Boolean = false
     private val mPossibleItemCount: Int = 4
@@ -61,6 +61,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MainApplication.appComponent.plus(ListPresenterModule()).inject(this)
         retainInstance = true
     }
 
@@ -68,8 +69,6 @@ class CardListFragment : Fragment(), CardListFragmentView {
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_card_list, container, false)
         ButterKnife.bind(this, view)
-        mListPresenter = CardListPresenter.instance
-        savedInstanceState ?: mListPresenter.setDataSource(CardDataRepository.instance)
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener)
         setupRecyclerView()
         return view
@@ -111,13 +110,13 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun onResume() {
         super.onResume()
-        mNavigator.get()?.resumeCardListFragment()
+        mNavigator.resumeCardListFragment()
     }
 
     fun setupRecyclerView() {
         mRvAdapter.setOnItemClickListener(object : CardRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, card: Card) {
-                mNavigator.get()?.startCardFragment(view, card)
+                mNavigator.startCardFragment(view, card)
             }
         })
         mRecyclerView.layoutManager = LinearLayoutManager(context)

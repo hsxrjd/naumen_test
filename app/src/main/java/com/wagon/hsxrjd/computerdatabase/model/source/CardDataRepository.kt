@@ -2,17 +2,19 @@ package com.wagon.hsxrjd.computerdatabase.model.source
 
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.model.Page
+import com.wagon.hsxrjd.computerdatabase.presenter.NaumenApi
 import io.reactivex.Observable
+import javax.inject.Inject
 
 /**
  * Created by hsxrjd on 24.05.17.
  */
-class CardDataRepository private constructor() : CardDataSource {
-    private object Holder {
-        val mInstance: CardDataRepository = CardDataRepository()
-    }
+class CardDataRepository @Inject constructor(private val mRemoteSource: RemoteCardDataSource) : CardDataSource {
+//    private object Holder {
+//        val mInstance: CardDataRepository = CardDataRepository(RemoteCardDataSource(NaumenApi()))
+//    }
 
-    private val mRemoteSource: RemoteCardDataSource = RemoteCardDataSource()
+//    private val mRemoteSource: RemoteCardDataSource = RemoteCardDataSource()
 //    private val mLocalSource: CacheCardDataSource = CacheCardDataSource()
 
     override fun getCards(page: Int): Observable<Page> {
@@ -27,7 +29,7 @@ class CardDataRepository private constructor() : CardDataSource {
         return mRemoteSource.getSimilarTo(id)
     }
 
-    companion object {
-        val instance: CardDataRepository by lazy { Holder.mInstance }
-    }
+//    companion object {
+//        val instance: CardDataRepository by lazy { Holder.mInstance }
+//    }
 }

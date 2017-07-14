@@ -16,16 +16,16 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import com.wagon.hsxrjd.computerdatabase.BaseNavigator
+import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
 import com.wagon.hsxrjd.computerdatabase.model.Card
-import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import com.wagon.hsxrjd.computerdatabase.presenter.CardPresenter
 import com.wagon.hsxrjd.computerdatabase.view.CardFragmentView
-import java.lang.ref.WeakReference
+import javax.inject.Inject
 
 /**
  * Created by hsxrjd on 02.06.17.
@@ -40,14 +40,14 @@ class CardFragment : Fragment(), CardFragmentView {
     @BindView(R.id.similar) lateinit var mSimilarities: RecyclerView
     @BindView(R.id.card_swipe_refresh_layout) lateinit var mSwipeRefresh: SwipeRefreshLayout
 
-    private lateinit var mCardPresenter: CardPresenter
+    @Inject lateinit var mCardPresenter: CardPresenter
     private var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
     private var mCardId: Int = -1
     private var mCardName: String = ""
     private var mCard: Card? = null
     private var mOperationCount: Int = 0
 
-    private val mNavigator: WeakReference<Navigator> = WeakReference(BaseNavigator.instance)
+    @Inject lateinit var mNavigator: Navigator
     private var mPressed: Boolean = false
 
     private val mClickListener = View.OnClickListener {
@@ -181,8 +181,8 @@ class CardFragment : Fragment(), CardFragmentView {
         setupCompanyNameVisibility(false)
         setupImageVisibility(false)
         setupSimilaritiesVisibility(false)
-        mCardPresenter = CardPresenter.instance
-        savedInstanceState ?: mCardPresenter.setDataSource(CardDataRepository.instance)
+//        mCardPresenter = CardPresenter.instance
+//        savedInstanceState ?: mCardPresenter.setDataSource(CardDataRepository.instance)
         setupRecyclerView()
         return view
     }
@@ -206,7 +206,7 @@ class CardFragment : Fragment(), CardFragmentView {
         mRvAdapter.setOnItemClickListener(object : CardRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, card: Card) {
                 mSwipeRefresh.isRefreshing = false
-                mNavigator.get()?.startCardFragment(view, card)
+                mNavigator.startCardFragment(view, card)
             }
         })
         mSimilarities.layoutManager = LinearLayoutManager(context)
@@ -224,8 +224,8 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun onResume() {
         super.onResume()
-        mNavigator.get()?.setToolbarTitle(mCardName)
-        mNavigator.get()?.enableToolbar(true)
+        mNavigator.setToolbarTitle(mCardName)
+        mNavigator.enableToolbar(true)
         mCard?.let { showCard(it) }
     }
 
@@ -245,8 +245,10 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MainApplication.appComponent.plus(CardPresenterModule()).inject(this)
         mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
+
     }
 
     companion object {

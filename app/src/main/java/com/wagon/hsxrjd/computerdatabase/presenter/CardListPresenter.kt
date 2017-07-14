@@ -1,14 +1,16 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
 import android.os.Handler
+import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Page
+import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
 
 /**
  * Created by hsxrjd on 24.05.17.
  */
-class CardListPresenter private constructor() : BasePresenter<CardListFragmentView>() {
+class CardListPresenter (val mDataSource: CardDataSource): BasePresenter<CardListFragmentView>() {
 
     private var mPageCount: Int = 0
     private var mIsAllLoaded: Boolean = false
@@ -32,8 +34,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
         val pageCache = mPageCount
         mPageCount = page
         val view: CardListFragmentView? = mView.get()
-        mDataSource.get()?.let {
-            it
+        mDataSource
                     .getCards(page)
                     .doOnSubscribe {
                         view?.showLoading()
@@ -57,7 +58,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         view?.hideLoading()
                     })
 
-        }
+
 
     }
 
@@ -65,8 +66,7 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
         mHandler.removeCallbacks(mRunnable)
         val view: CardListFragmentView? = mView.get()
         mPageCount++
-        mDataSource.get()?.let {
-            it
+        mDataSource
                     .getCards(mPageCount)
                     .doOnSubscribe {
                         view?.showLoading()
@@ -93,15 +93,9 @@ class CardListPresenter private constructor() : BasePresenter<CardListFragmentVi
                         mPageCount--
                         view?.hideLoading()
                     })
-        }
-    }
-
-    private object Holder {
-        val mInstance = CardListPresenter()
     }
 
     companion object {
         val EXPIRATION_TIME: Long = 20000 //20 sec in millis
-        val instance: CardListPresenter by lazy { Holder.mInstance }
     }
 }
