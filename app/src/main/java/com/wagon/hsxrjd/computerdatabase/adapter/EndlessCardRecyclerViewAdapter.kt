@@ -19,12 +19,12 @@ class EndlessCardRecyclerViewAdapter : CardRecyclerViewAdapter(), Loading {
     fun setLoadItemVisibility(flag: Boolean) {
         when {
             flag && (mCardList.isEmpty() || mCardList.last() != null) -> {
-                mCardList.add(null)
+//                mCardList.add(null)
                 notifyDataSetChanged()
             }
 
             !flag && mCardList.isNotEmpty() && mCardList.last() == null -> {
-                mCardList.removeAt(mCardList.size - 1)
+//                mCardList.removeAt(mCardList.size - 1)
                 notifyDataSetChanged()
             }
         }
@@ -50,7 +50,7 @@ class EndlessCardRecyclerViewAdapter : CardRecyclerViewAdapter(), Loading {
     override fun setCardList(cardList: List<Card>) {
         mCardList.clear()
         mCardList.addAll(cardList)
-        mCardList.add(null)
+//        mCardList.add(null)
         notifyDataSetChanged()
     }
 

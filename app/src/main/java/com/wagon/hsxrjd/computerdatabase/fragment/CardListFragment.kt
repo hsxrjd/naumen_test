@@ -17,6 +17,7 @@ import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.adapter.EndlessCardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.dagger.InteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
@@ -37,27 +38,10 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     private var mIsStart: Boolean = true
     private var mLoading: Boolean = false
-    private val mPossibleItemCount: Int = 4
-
-    private val mOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-            val layoutManager = recyclerView?.layoutManager as LinearLayoutManager?
-            val lastVisibleItemPosition = layoutManager?.findLastVisibleItemPosition()
-            if (lastVisibleItemPosition != null) {
-                if (lastVisibleItemPosition >= mRvAdapter.itemCount - mPossibleItemCount) {
-                    if (!mLoading)
-                        mListPresenter.loadNextPage()
-                }
-            }
-        }
-    }
 
     private val mOnRefreshListener = SwipeRefreshLayout.OnRefreshListener {
         mIsStart = true
-        mListPresenter.start()
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,22 +75,14 @@ class CardListFragment : Fragment(), CardListFragmentView {
                     val dataList = it.getParcelableArray(BUNDLE_TAG_DATA_LIST)
                     dataList?.let {
                         mRvAdapter.setCardList(it.toList() as List<Card>)
-                        if (mListPresenter.isAllLoaded()) mRvAdapter.setLoadItemVisibility(false)
                     }
                 }
-                ?: let { if (mIsStart) mListPresenter.start() }
         mIsStart = false
-
     }
 
     override fun switchLoadingAbility(flag: Boolean) {
-        if (flag)
-            mRecyclerView.addOnScrollListener(mOnScrollListener)
-        else
-            mRecyclerView.removeOnScrollListener(mOnScrollListener)
         mRvAdapter.setLoadItemVisibility(flag)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -122,8 +98,6 @@ class CardListFragment : Fragment(), CardListFragmentView {
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mRvAdapter
         mRecyclerView.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
-        mRecyclerView.addOnScrollListener(mOnScrollListener)
-
     }
 
     override fun showLoading() {

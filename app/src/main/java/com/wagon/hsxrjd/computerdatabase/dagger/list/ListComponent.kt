@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.list
 
+import com.wagon.hsxrjd.computerdatabase.dagger.InteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ListScope
 import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
 import dagger.Subcomponent
@@ -10,6 +11,8 @@ import dagger.Subcomponent
 
 @ListScope
 @Subcomponent(modules = arrayOf(
+        InteractorModule::class,
+
         ListPresenterModule::class
 ))
 interface ListComponent {

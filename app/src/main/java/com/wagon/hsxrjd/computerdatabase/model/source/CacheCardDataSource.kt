@@ -26,7 +26,6 @@ class CacheCardDataSource : CardDataSource {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
-
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
         return Observable.just(null)
     }

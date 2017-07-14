@@ -181,8 +181,6 @@ class CardFragment : Fragment(), CardFragmentView {
         setupCompanyNameVisibility(false)
         setupImageVisibility(false)
         setupSimilaritiesVisibility(false)
-//        mCardPresenter = CardPresenter.instance
-//        savedInstanceState ?: mCardPresenter.setDataSource(CardDataRepository.instance)
         setupRecyclerView()
         return view
     }
@@ -248,7 +246,6 @@ class CardFragment : Fragment(), CardFragmentView {
         MainApplication.appComponent.plus(CardPresenterModule()).inject(this)
         mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
-
     }
 
     companion object {

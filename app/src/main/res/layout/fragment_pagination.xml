@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/button_prev"
+        android:layout_width="wrap_content"
+        android:text="@string/button_previous"
+        android:padding="@dimen/padding_8dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/text_count"
+        android:layout_toEndOf="@+id/text_count"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/text_count"
+        android:layout_width="wrap_content"
+        android:padding="@dimen/padding_8dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button_prev"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_next"
+        android:layout_toStartOf="@+id/text_count"
+        android:layout_toLeftOf="@+id/text_count"
+        android:padding="@dimen/padding_8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>

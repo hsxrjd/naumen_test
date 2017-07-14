@@ -8,7 +8,8 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
-import java.lang.ref.WeakReference
+import com.wagon.hsxrjd.computerdatabase.fragment.ContainerFragment
+import com.wagon.hsxrjd.computerdatabase.fragment.PaginationFragment
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -29,10 +30,13 @@ class MainActivity : AppCompatActivity() {
 
         retainListFragment ?: let {
             mToolbarTitle.setText(R.string.app_name)
-            val fragment = CardListFragment.newInstance()
+            val fragment = ContainerFragment()
+//            val fragmentP = PaginationFragment()
             supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.fragment_container, fragment, MainActivity.BACK_STACK_TAG_CARD_LIST)
+//                    .add(R.id.fragment_container, fragment, MainActivity.BACK_STACK_TAG_CARD_LIST)
+//                    .add(R.id.fragment_container, fragmentP, MainActivity.BACK_STACK_TAG_PAGINATOR)
+                    .add(R.id.fragment_container, fragment, MainActivity.BACK_STACK_TAG_LIST_MAIN)
                     .commit()
         }
     }
@@ -54,6 +58,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val BACK_STACK_TAG_CARD: String = "CARD_FRAGMENT"
+        val BACK_STACK_TAG_LIST_MAIN: String = "LIST_VIEW_MAIN"
         val BACK_STACK_TAG_CARD_LIST: String = "LIST_VIEW_FRAGMENT"
+        val BACK_STACK_TAG_PAGINATOR: String = "LIST_VIEW_PAGINATOR"
     }
 }

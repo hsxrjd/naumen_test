@@ -23,6 +23,5 @@ class MainApplication : Application() {
                     .dataSourceModule(DataSourceModule())
                     .build()
         }
-
     }
 }

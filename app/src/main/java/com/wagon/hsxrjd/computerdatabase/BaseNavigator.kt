@@ -51,12 +51,12 @@ class BaseNavigator : Navigator {
     }
 
 
-    private object Holder {
-        val mInstance = BaseNavigator()
-    }
-
-    companion object {
-        val instance: Navigator by lazy { Holder.mInstance }
-    }
+//    private object Holder {
+//        val mInstance = BaseNavigator()
+//    }
+//
+//    companion object {
+//        val instance: Navigator by lazy { Holder.mInstance }
+//    }
 
 }
