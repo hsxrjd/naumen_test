@@ -16,7 +16,6 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import com.wagon.hsxrjd.computerdatabase.BaseNavigator
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
@@ -48,7 +47,7 @@ class CardFragment : Fragment(), CardFragmentView {
     private var mCard: Card? = null
     private var mOperationCount: Int = 0
 
-    var mNavigator: Navigator = BaseNavigator.instance
+    @Inject lateinit var mNavigator: Navigator
     private var mPressed: Boolean = false
 
     private val mClickListener = View.OnClickListener {

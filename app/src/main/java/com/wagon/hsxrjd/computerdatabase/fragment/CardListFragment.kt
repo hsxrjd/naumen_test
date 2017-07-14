@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.wagon.hsxrjd.computerdatabase.BaseNavigator
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
@@ -30,7 +29,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     @BindView(R.id.recycler_view_cards) lateinit var mRecyclerView: RecyclerView
     @BindView(R.id.card_list_swipe_refresh_layout) lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
-    var mNavigator: Navigator = BaseNavigator.instance
+    @Inject lateinit var mNavigator: Navigator
 
     private var mRvAdapter: EndlessCardRecyclerViewAdapter = EndlessCardRecyclerViewAdapter()
 
@@ -70,8 +69,6 @@ class CardListFragment : Fragment(), CardListFragmentView {
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_card_list, container, false)
         ButterKnife.bind(this, view)
-//        mListPresenter = CardListPresenter.instance
-//        savedInstanceState ?: mListPresenter.setDataSource(CardDataRepository.instance)
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener)
         setupRecyclerView()
         return view

@@ -30,11 +30,4 @@ class NaumenApi {
             .build()
             .create(NaumenRestApi::class.java)
 
-    /*private object Holder {
-        val mInstance = NaumenApi()
-    }*/
-
-    /* companion object {
-         val instance: NaumenApi by lazy { Holder.mInstance }
-     }*/
 }

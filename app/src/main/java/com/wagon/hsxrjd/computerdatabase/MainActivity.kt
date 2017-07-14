@@ -9,16 +9,18 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     @BindView(R.id.toolbar_main) lateinit var mToolbar: Toolbar
     @BindView(R.id.toolbar_title) lateinit var mToolbarTitle: TextView
 
-    private val mNavigator: WeakReference<Navigator> = WeakReference(BaseNavigator.instance)
+    @Inject lateinit var mNavigator: Navigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MainApplication.appComponent.inject(this)
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
         setSupportActionBar(mToolbar)
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        mNavigator.get()?.setActivity(this)
+        mNavigator.setActivity(this)
         super.onResume()
     }
 

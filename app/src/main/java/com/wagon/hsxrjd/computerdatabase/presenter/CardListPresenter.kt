@@ -12,10 +12,6 @@ import com.wagon.hsxrjd.computerdatabase.view.CardListFragmentView
  */
 class CardListPresenter (val mDataSource: CardDataSource): BasePresenter<CardListFragmentView>() {
 
-    init {
-        MainApplication.appComponent.inject(this)
-    }
-
     private var mPageCount: Int = 0
     private var mIsAllLoaded: Boolean = false
 
@@ -98,13 +94,8 @@ class CardListPresenter (val mDataSource: CardDataSource): BasePresenter<CardLis
                         view?.hideLoading()
                     })
     }
-//
-//    private object Holder {
-//        val mInstance = CardListPresenter()
-//    }
 
     companion object {
         val EXPIRATION_TIME: Long = 20000 //20 sec in millis
-//        val instance: CardListPresenter by lazy { Holder.mInstance }
     }
 }

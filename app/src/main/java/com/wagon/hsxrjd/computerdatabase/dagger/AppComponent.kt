@@ -1,12 +1,10 @@
 package com.wagon.hsxrjd.computerdatabase.dagger
 
+import com.wagon.hsxrjd.computerdatabase.MainActivity
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
-import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
-import com.wagon.hsxrjd.computerdatabase.presenter.CardListPresenter
-import com.wagon.hsxrjd.computerdatabase.presenter.CardPresenter
 import dagger.Component
 import javax.inject.Singleton
 
@@ -16,12 +14,11 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(
         DataSourceModule::class,
-        ApiModule::class
+        ApiModule::class,
+        NavigatorModule::class
 ))
 interface AppComponent {
-    fun inject(cardListPresenter: CardListPresenter)
-//    fun inject(cardPresenter: CardPresenter)
-
+    fun inject(mainActivity: MainActivity)
     fun plus(cardPresenterModule: CardPresenterModule): CardComponent
     fun plus(cardPresenterModule: ListPresenterModule): ListComponent
 }
