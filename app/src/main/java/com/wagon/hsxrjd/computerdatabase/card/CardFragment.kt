@@ -209,7 +209,7 @@ class CardFragment : Fragment(), CardFragmentView {
         })
         mSimilarities.layoutManager = LinearLayoutManager(context)
         mSimilarities.adapter = mRvAdapter
-        mSimilarities.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
+//        mSimilarities.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
         mSimilarities.isNestedScrollingEnabled = false
     }
 

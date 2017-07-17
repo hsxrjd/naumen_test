@@ -7,4 +7,6 @@ import com.wagon.hsxrjd.computerdatabase.contract.BaseCardView
  */
 interface PaginationFragmentView : BaseCardView {
     fun showPage(id: Int, total: Int)
+    fun changeButtonPrevState(state: Boolean)
+    fun changeButtonNextState(state: Boolean)
 }

@@ -74,7 +74,7 @@ class EndlessCardRecyclerViewAdapter : CardRecyclerViewAdapter(), Loading {
         val v: View = LayoutInflater
                 .from(viewGroup?.context)
                 .inflate(viewType, viewGroup, false)
-        return if (viewType == R.layout.list_item_card) CardRecyclerViewAdapter.CardViewHolder(v) else {
+        return if (viewType == R.layout.list_item_card_cardview) CardRecyclerViewAdapter.CardViewHolder(v) else {
             val holder = EndlessCardRecyclerViewAdapter.LoaderViewHolder(v)
             mProgressBar = WeakReference(holder)
             return holder
@@ -82,7 +82,7 @@ class EndlessCardRecyclerViewAdapter : CardRecyclerViewAdapter(), Loading {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return mCardList[position]?.let { R.layout.list_item_card } ?: R.layout.list_item_loading
+        return mCardList[position]?.let { R.layout.list_item_card_cardview } ?: R.layout.list_item_loading
     }
 
     override fun getItemCount(): Int {

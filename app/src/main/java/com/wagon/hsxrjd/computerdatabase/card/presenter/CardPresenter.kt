@@ -5,6 +5,7 @@ import com.wagon.hsxrjd.computerdatabase.card.CardFragmentView
 import com.wagon.hsxrjd.computerdatabase.card.Interactor.CardInteractor
 import com.wagon.hsxrjd.computerdatabase.contract.BasePresenter
 import com.wagon.hsxrjd.computerdatabase.model.Card
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
  * Created by hsxrjd on 03.06.17.
@@ -16,6 +17,7 @@ class CardPresenter(val mInteractor: CardInteractor) : BasePresenter<CardFragmen
         view?.showLoading()
         mInteractor
                 .getCard(id)
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete { view?.hideLoading() }
                 .doOnError { view?.showMessage(R.string.message_error_loading_card) }
                 .subscribe(
@@ -29,6 +31,7 @@ class CardPresenter(val mInteractor: CardInteractor) : BasePresenter<CardFragmen
         view?.showLoading()
         mInteractor
                 .getSimilarTo(id)
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete { view?.hideLoading() }
                 .doOnError { view?.showMessage(R.string.message_error_loading_similar_to) }
                 .subscribe({ c: List<Card>? -> c?.let { view?.showSimilarTo(it) } },

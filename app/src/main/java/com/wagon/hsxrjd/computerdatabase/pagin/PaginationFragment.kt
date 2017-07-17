@@ -38,6 +38,7 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mPresenter.setView(this)
+        mPresenter.start()
     }
 
     override fun showLoading() {
@@ -47,8 +48,15 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
     }
 
     override fun showPage(id: Int, total: Int) {
-//        mPageCount.text = "Page ${id + 1} of $total"
         mPageCount.text = String.format(getString(R.string.text_paginator), id + 1, total)
+    }
+
+    override fun changeButtonPrevState(state: Boolean) {
+        mButtonPrev.isEnabled = state
+    }
+
+    override fun changeButtonNextState(state: Boolean) {
+        mButtonNext.isEnabled = state
     }
 
     override fun showMessage(message: String) {
@@ -76,8 +84,4 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-        mPresenter.start()
-    }
 }

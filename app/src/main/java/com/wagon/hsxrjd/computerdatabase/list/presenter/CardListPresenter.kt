@@ -5,6 +5,7 @@ import com.wagon.hsxrjd.computerdatabase.model.Page
 import com.wagon.hsxrjd.computerdatabase.contract.BasePresenter
 import com.wagon.hsxrjd.computerdatabase.list.CardListFragmentView
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
  * Created by hsxrjd on 24.05.17.
@@ -13,6 +14,7 @@ class CardListPresenter(mObservable: Observable<Page>) : BasePresenter<CardListF
 
     init {
         mObservable
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     p: Page ->
                     p.items.let {

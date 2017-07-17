@@ -16,19 +16,16 @@ class RemoteCardDataSource constructor(val service: NaumenApi) : CardDataSource 
     override fun getCard(id: Int): Observable<Card> {
         return service.mApi.getCard(id)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
         return service.mApi.getSimilarTo(id)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getCards(page: Int): Observable<Page> {
         return service.mApi.getPage(page)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
     }
 
 }
