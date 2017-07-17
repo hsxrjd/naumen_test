@@ -3,14 +3,12 @@ package com.wagon.hsxrjd.computerdatabase
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
-import com.wagon.hsxrjd.computerdatabase.fragment.ContainerFragment
-import com.wagon.hsxrjd.computerdatabase.fragment.PaginationFragment
+import com.wagon.hsxrjd.computerdatabase.container.ContainerFragment
+import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {

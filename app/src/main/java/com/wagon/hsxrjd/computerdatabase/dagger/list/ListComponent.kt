@@ -1,8 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.list
 
-import com.wagon.hsxrjd.computerdatabase.dagger.container.InteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ListScope
-import com.wagon.hsxrjd.computerdatabase.fragment.CardListFragment
+import com.wagon.hsxrjd.computerdatabase.list.CardListFragment
 import dagger.Subcomponent
 
 /**

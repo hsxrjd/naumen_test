@@ -4,8 +4,8 @@ import com.wagon.hsxrjd.computerdatabase.dagger.scope.ContainerScope
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ObservableQ
 import com.wagon.hsxrjd.computerdatabase.model.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
-import com.wagon.hsxrjd.computerdatabase.presenter.interactor.ListInteractor
-import com.wagon.hsxrjd.computerdatabase.presenter.interactor.ListInteractorImpl
+import com.wagon.hsxrjd.computerdatabase.list.interactor.ListInteractor
+import com.wagon.hsxrjd.computerdatabase.list.interactor.ListInteractorImpl
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Observable

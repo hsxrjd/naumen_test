@@ -1,8 +1,8 @@
 package com.wagon.hsxrjd.computerdatabase.dagger
 
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
-import com.wagon.hsxrjd.computerdatabase.model.source.RemoteCardDataSource
-import com.wagon.hsxrjd.computerdatabase.presenter.NaumenApi
+import com.wagon.hsxrjd.computerdatabase.model.source.api.RemoteCardDataSource
+import com.wagon.hsxrjd.computerdatabase.model.source.api.NaumenApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

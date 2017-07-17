@@ -1,8 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.paginator
 
-import com.wagon.hsxrjd.computerdatabase.dagger.container.InteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ListScope
-import com.wagon.hsxrjd.computerdatabase.fragment.PaginationFragment
+import com.wagon.hsxrjd.computerdatabase.pagin.PaginationFragment
 import dagger.Subcomponent
 
 /**

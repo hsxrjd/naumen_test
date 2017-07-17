@@ -2,8 +2,8 @@ package com.wagon.hsxrjd.computerdatabase.dagger.card
 
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.CardScope
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
-import com.wagon.hsxrjd.computerdatabase.presenter.interactor.CardInteractor
-import com.wagon.hsxrjd.computerdatabase.presenter.interactor.CardInteractorImpl
+import com.wagon.hsxrjd.computerdatabase.card.Interactor.CardInteractor
+import com.wagon.hsxrjd.computerdatabase.card.Interactor.CardInteractorImpl
 import dagger.Module
 import dagger.Provides
 
@@ -15,7 +15,7 @@ class CardInteractorModule {
 
     @CardScope
     @Provides
-    fun provideCardInteractor(dataSource: CardDataSource): CardInteractor{
+    fun provideCardInteractor(dataSource: CardDataSource): CardInteractor {
         return CardInteractorImpl(dataSource)
     }
 }
