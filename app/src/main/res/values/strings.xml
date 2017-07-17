@@ -11,4 +11,7 @@
     <string name="message_error_loading_card">An error occurred when loading card</string>
     <string name="message_error_loading_similar_to">An error occurred when loading  the list of computers that are similar to this</string>
     <string name="message_all_data_loaded">All data are loaded</string>
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
+    <string name="text_paginator" formatted="false">Page %d of %d</string>
 </resources>

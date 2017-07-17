@@ -1,7 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.dagger
 
-import com.wagon.hsxrjd.computerdatabase.BaseNavigator
-import com.wagon.hsxrjd.computerdatabase.Navigator
+import com.wagon.hsxrjd.computerdatabase.navigator.BaseNavigator
+import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
