@@ -3,11 +3,13 @@ package com.wagon.hsxrjd.computerdatabase.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.wagon.hsxrjd.computerdatabase.MainActivity
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
+import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.container.InteractorModule
 
 /**
@@ -15,9 +17,11 @@ import com.wagon.hsxrjd.computerdatabase.dagger.container.InteractorModule
  */
 class ContainerFragment : Fragment() {
 
+    lateinit var containerComponent: ContainerComponent
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.appComponent.plus(InteractorModule())
+        containerComponent = MainApplication.appComponent.plus(InteractorModule())
         createChildFragments()
 
     }
@@ -31,9 +35,10 @@ class ContainerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
     }
 
+
     fun createChildFragments() {
-        val fragmentL = CardListFragment.newInstance()
-        val fragmentP = PaginationFragment()
+        val fragmentL = CardListFragment.newInstance(containerComponent)
+        val fragmentP = PaginationFragment.newInstance(containerComponent)
 
         childFragmentManager
                 .beginTransaction()

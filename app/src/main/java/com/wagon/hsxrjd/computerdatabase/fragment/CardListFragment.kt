@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import com.wagon.hsxrjd.computerdatabase.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.adapter.EndlessCardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
@@ -45,7 +45,6 @@ class CardListFragment : Fragment(), CardListFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.containerComponent.plus(ListPresenterModule()).inject(this)
         retainInstance = true
     }
 
@@ -136,8 +135,10 @@ class CardListFragment : Fragment(), CardListFragmentView {
         val BUNDLE_TAG_LAYOUT_MANAGER_CONFIG: String = "LAYOUT_MANAGER"
         val BUNDLE_TAG_DATA_LIST: String = "LIST_OF_DATA"
 
-        fun newInstance(): CardListFragment {
-            return CardListFragment()
+        fun newInstance(containerComponent: ContainerComponent): CardListFragment {
+            val fragment = CardListFragment()
+            containerComponent.plus(ListPresenterModule()).inject(fragment)
+            return fragment
         }
     }
 

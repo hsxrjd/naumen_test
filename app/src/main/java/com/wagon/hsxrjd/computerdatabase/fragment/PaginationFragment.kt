@@ -3,6 +3,7 @@ package com.wagon.hsxrjd.computerdatabase.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -10,8 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
+import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.paginator.PaginationModule
 import com.wagon.hsxrjd.computerdatabase.presenter.PaginationPresenter
 import com.wagon.hsxrjd.computerdatabase.view.PaginationFragmentView
@@ -22,11 +23,18 @@ import javax.inject.Inject
  */
 class PaginationFragment : Fragment(), PaginationFragmentView {
 
+    companion object {
+        fun newInstance(containerComponent: ContainerComponent): PaginationFragment {
+            val fragment = PaginationFragment()
+            containerComponent.plus(PaginationModule()).inject(fragment)
+            return fragment
+        }
+    }
+
     @Inject lateinit var mPresenter: PaginationPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.containerComponent.plus(PaginationModule()).inject(this)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -42,7 +50,7 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
 
     override fun showPage(id: Int, total: Int) {
 //        mPageCount.text = "Page ${id + 1} of $total"
-        mPageCount.text = String.format(getString(R.string.text_paginator), id+1, total)
+        mPageCount.text = String.format(getString(R.string.text_paginator), id + 1, total)
     }
 
     override fun showMessage(message: String) {

@@ -23,8 +23,5 @@ class MainApplication : Application() {
                     .navigatorModule(NavigatorModule())
                     .build()
         }
-        val containerComponent: ContainerComponent by lazy {
-            MainApplication.appComponent.plus(InteractorModule())
-        }
     }
 }

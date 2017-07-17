@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager
                     .beginTransaction()
                     .add(R.id.fragment_container, fragment)
-                    .addToBackStack(MainActivity.BACK_STACK_TAG_LIST_MAIN)
                     .commit()
         }
     }
