@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.source
 
+import android.content.Context
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.LocalRealmSource
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
@@ -25,7 +26,8 @@ class DataSourceModule {
 
     @Provides
     @Singleton
-    fun provideRealm(): Realm {
+    fun provideRealm(context: Context): Realm {
+        Realm.init(context)
         return Realm.getDefaultInstance()
     }
 

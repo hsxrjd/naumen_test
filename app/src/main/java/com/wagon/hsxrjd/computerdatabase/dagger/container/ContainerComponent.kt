@@ -11,7 +11,7 @@ import dagger.Subcomponent
  * Created by erychkov on 7/17/17.
  */
 @Subcomponent(modules = arrayOf(
-        InteractorModule::class
+        ListInteractorModule::class
 ))
 @ContainerScope
 interface ContainerComponent {

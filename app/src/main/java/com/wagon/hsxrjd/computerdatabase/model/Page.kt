@@ -11,7 +11,7 @@ open class Page() : RealmObject() {
     var items: RealmList<Card> = RealmList()
     @PrimaryKey var page: Int = -1
     var offset: Int = 0
-    var total: Int = -0
+    var total: Int = 0
 
     constructor(
             eitems: RealmList<Card>,

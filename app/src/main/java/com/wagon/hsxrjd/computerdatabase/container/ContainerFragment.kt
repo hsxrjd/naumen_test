@@ -9,7 +9,7 @@ import com.wagon.hsxrjd.computerdatabase.MainActivity
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
-import com.wagon.hsxrjd.computerdatabase.dagger.container.InteractorModule
+import com.wagon.hsxrjd.computerdatabase.dagger.container.ListInteractorModule
 import com.wagon.hsxrjd.computerdatabase.list.CardListFragment
 import com.wagon.hsxrjd.computerdatabase.pagin.PaginationFragment
 
@@ -22,7 +22,7 @@ class ContainerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        containerComponent = MainApplication.appComponent.plus(InteractorModule())
+        containerComponent = MainApplication.appComponent.plus(ListInteractorModule())
         createChildFragments()
 
     }

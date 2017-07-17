@@ -10,8 +10,9 @@ import org.parceler.Parcel
 @Parcel(implementations = arrayOf(CompanyRealmProxy::class),
         value = Parcel.Serialization.BEAN,
         analyze = arrayOf(Company::class))
+
 open class Company() : RealmObject() {
-    var id: Int = 0
+    var id: Int = -1
     var name: String = ""
 
     constructor(eid: Int, ename: String) : this() {

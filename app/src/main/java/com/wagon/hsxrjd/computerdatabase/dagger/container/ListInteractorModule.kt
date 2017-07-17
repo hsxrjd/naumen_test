@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.container
 
+import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.LocalRealmSource
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ContainerScope
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.ObservableQ
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
@@ -16,7 +17,7 @@ import io.reactivex.subjects.ReplaySubject
  * Created by erychkov on 7/14/17.
  */
 @Module
-class InteractorModule {
+class ListInteractorModule {
     val subject: ReplaySubject<Page> = ReplaySubject.create<Page>()
 
     @Provides
@@ -28,7 +29,7 @@ class InteractorModule {
 
     @ContainerScope
     @Provides
-    fun provideInteractor(@RemoteApiSource source: CardDataSource): ListInteractor {
-        return ListInteractorImpl(source, subject)
+    fun provideInteractor(@RemoteApiSource source: CardDataSource, @LocalRealmSource source2: CardDataSource): ListInteractor {
+        return ListInteractorImpl(source, source2, subject)
     }
 }

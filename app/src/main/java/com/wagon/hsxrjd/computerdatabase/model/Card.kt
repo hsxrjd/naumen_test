@@ -1,22 +1,29 @@
 package com.wagon.hsxrjd.computerdatabase.model
 
 import io.realm.CardRealmProxy
+import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.RealmResults
+import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
 import org.parceler.Parcel
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
+
+
 @Parcel(implementations = arrayOf(CardRealmProxy::class),
         value = Parcel.Serialization.BEAN,
         analyze = arrayOf(Card::class))
+
 open class Card() : RealmObject() {
     @PrimaryKey var id: Int = -1
     var name: String = ""
     var imageUrl: String? = null
     var company: Company? = null
     var description: String? = null
+
 
     constructor(
             eid: Int,
