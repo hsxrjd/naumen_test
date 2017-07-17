@@ -1,14 +1,15 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
-import android.util.Log
+import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.model.Page
+import com.wagon.hsxrjd.computerdatabase.presenter.interactor.ListInteractor
 import com.wagon.hsxrjd.computerdatabase.view.PaginationFragmentView
 import io.reactivex.Observable
 
 /**
  * Created by erychkov on 7/14/17.
  */
-class PaginationPresenter(mObservable: Observable<Page>, val mInteractor: Interactor) : BasePresenter<PaginationFragmentView>() {
+class PaginationPresenter(mObservable: Observable<Page>, val mInteractor: ListInteractor) : BasePresenter<PaginationFragmentView>() {
 
     private var mCurrent = 0
     private var mTotal = 0
@@ -20,7 +21,7 @@ class PaginationPresenter(mObservable: Observable<Page>, val mInteractor: Intera
             mTotal = p.total / 10
             mView.get()?.showPage(mCurrent, mTotal)
         }, {
-            mView.get()?.showMessage("some rrr")
+            mView.get()?.showMessage(R.string.message_error_loading_page)
         })
     }
 
@@ -37,7 +38,7 @@ class PaginationPresenter(mObservable: Observable<Page>, val mInteractor: Intera
     }
 
     fun start() {
-        mInteractor.loadPage(0)
+        mInteractor.loadPage(mCurrent)
     }
 
 }

@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.presenter
 
+import android.util.Log
 import com.wagon.hsxrjd.computerdatabase.BaseContract
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.view.BaseCardView

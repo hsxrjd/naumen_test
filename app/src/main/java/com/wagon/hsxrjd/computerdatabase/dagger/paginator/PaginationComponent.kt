@@ -1,7 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.paginator
 
-import com.wagon.hsxrjd.computerdatabase.dagger.InteractorModule
-import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
+import com.wagon.hsxrjd.computerdatabase.dagger.container.InteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ListScope
 import com.wagon.hsxrjd.computerdatabase.fragment.PaginationFragment
 import dagger.Subcomponent
@@ -11,7 +10,6 @@ import dagger.Subcomponent
  */
 @ListScope
 @Subcomponent(modules = arrayOf(
-        InteractorModule::class,
         PaginationModule::class
 ))
 interface PaginationComponent {

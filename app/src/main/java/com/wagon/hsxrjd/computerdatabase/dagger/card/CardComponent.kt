@@ -10,7 +10,8 @@ import dagger.Subcomponent
  */
 @CardScope
 @Subcomponent(modules = arrayOf(
-        CardPresenterModule::class
+        CardPresenterModule::class,
+        CardInteractorModule::class
 ))
 interface CardComponent {
     fun inject(cardFragment: CardFragment)

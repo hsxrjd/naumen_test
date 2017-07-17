@@ -26,7 +26,7 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.appComponent.plus(PaginationModule()).inject(this)
+        MainApplication.containerComponent.plus(PaginationModule()).inject(this)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -41,7 +41,8 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
     }
 
     override fun showPage(id: Int, total: Int) {
-        mPageCount.text = "Page ${id + 1} of $total"
+//        mPageCount.text = "Page ${id + 1} of $total"
+        mPageCount.text = String.format(getString(R.string.text_paginator), id+1, total)
     }
 
     override fun showMessage(message: String) {

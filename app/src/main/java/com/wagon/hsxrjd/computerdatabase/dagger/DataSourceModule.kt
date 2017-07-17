@@ -1,6 +1,5 @@
 package com.wagon.hsxrjd.computerdatabase.dagger
 
-import com.wagon.hsxrjd.computerdatabase.model.source.CardDataRepository
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.RemoteCardDataSource
 import com.wagon.hsxrjd.computerdatabase.presenter.NaumenApi
@@ -16,6 +15,6 @@ class DataSourceModule {
     @Singleton
     @Provides
     fun provideRepository(api: NaumenApi): CardDataSource {
-        return CardDataRepository(RemoteCardDataSource(api))
+        return RemoteCardDataSource(api)
     }
 }

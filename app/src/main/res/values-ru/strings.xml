@@ -10,4 +10,7 @@
     <string name="message_error_loading_card">Возникла ошибка при загрузке карточки</string>
     <string name="message_error_loading_similar_to">Возникла ошибка при загрузке списка компьютеров, похожих на этот</string>
     <string name="message_all_data_loaded">Все данные загружены</string>
+    <string name="text_paginator" formatted="false">Страница %d из %d</string>
+    <string name="button_next">Следующая</string>
+    <string name="button_previous">Предыдущая</string>
 </resources>
