@@ -2,7 +2,6 @@ package com.wagon.hsxrjd.computerdatabase.list
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,15 +11,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.card.adapter.CardRecyclerViewAdapter
-import com.wagon.hsxrjd.computerdatabase.list.adapter.EndlessCardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
-import com.wagon.hsxrjd.computerdatabase.model.Card
-import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
+import com.wagon.hsxrjd.computerdatabase.list.adapter.EndlessCardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.list.presenter.CardListPresenter
+import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
+import org.parceler.Parcels
 import javax.inject.Inject
 
 
@@ -59,7 +58,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG, mRecyclerView.layoutManager.onSaveInstanceState())
-        outState?.putParcelableArray(BUNDLE_TAG_DATA_LIST, mRvAdapter.getCardList().toTypedArray())
+        outState?.putParcelable(BUNDLE_TAG_DATA_LIST, Parcels.wrap(mRvAdapter.getCardList()))
     }
 
 
@@ -70,10 +69,7 @@ class CardListFragment : Fragment(), CardListFragmentView {
         savedInstanceState
                 ?.let {
                     mRecyclerView.layoutManager.onRestoreInstanceState(it.getParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG))
-                    val dataList = it.getParcelableArray(BUNDLE_TAG_DATA_LIST)
-                    dataList?.let {
-                        mRvAdapter.setCardList(it.toList() as List<Card>)
-                    }
+                    mRvAdapter.setCardList(Parcels.unwrap(it.getParcelable(BUNDLE_TAG_DATA_LIST)))
                 }
         mIsStart = false
     }

@@ -4,6 +4,7 @@ import com.wagon.hsxrjd.computerdatabase.dagger.scope.CardScope
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.card.Interactor.CardInteractor
 import com.wagon.hsxrjd.computerdatabase.card.Interactor.CardInteractorImpl
+import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
 import dagger.Module
 import dagger.Provides
 
@@ -15,7 +16,7 @@ class CardInteractorModule {
 
     @CardScope
     @Provides
-    fun provideCardInteractor(dataSource: CardDataSource): CardInteractor {
+    fun provideCardInteractor(@RemoteApiSource dataSource: CardDataSource): CardInteractor {
         return CardInteractorImpl(dataSource)
     }
 }

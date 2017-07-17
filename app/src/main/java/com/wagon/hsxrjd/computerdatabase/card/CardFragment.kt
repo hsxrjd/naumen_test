@@ -26,6 +26,7 @@ import com.wagon.hsxrjd.computerdatabase.list.CardListFragment
 import com.wagon.hsxrjd.computerdatabase.model.Card
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
+import org.parceler.Parcels
 import javax.inject.Inject
 
 /**
@@ -190,9 +191,10 @@ class CardFragment : Fragment(), CardFragmentView {
         mCardPresenter.setView(this)
         savedInstanceState
                 ?.let {
-                    mCard = it.getParcelable(BUNDLE_TAG_CARD)
+
+                    mCard = Parcels.unwrap(it.getParcelable(BUNDLE_TAG_CARD))
                     mCardName = it.getString(BUNDLE_TAG_CARD_NAME)
-                    it.getParcelableArray(BUNDLE_TAG_DATA_LIST)?.let { showSimilarTo(it.toList() as List<Card>) }
+                    showSimilarTo(Parcels.unwrap(it.getParcelable(BUNDLE_TAG_DATA_LIST)))
                 }
                 ?: let {
             mCardPresenter.loadCard(mCardId)
@@ -215,9 +217,9 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelable(BUNDLE_TAG_CARD, mCard)
+        outState?.putParcelable(BUNDLE_TAG_CARD, Parcels.wrap(mCard))
         outState?.putString(BUNDLE_TAG_CARD_NAME, mCardName)
-        outState?.putParcelableArray(CardListFragment.BUNDLE_TAG_DATA_LIST, mRvAdapter.getCardList().toTypedArray())
+        outState?.putParcelable(CardListFragment.BUNDLE_TAG_DATA_LIST, Parcels.wrap(mRvAdapter.getCardList()))
     }
 
     override fun onResume() {

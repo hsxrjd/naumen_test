@@ -1,37 +1,24 @@
 package com.wagon.hsxrjd.computerdatabase.model
 
-import android.os.Parcel
-import android.os.Parcelable
+import io.realm.CompanyRealmProxy
+import io.realm.RealmObject
+import org.parceler.Parcel
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
-class Company(
-        val id: Int,
-        val name: String
-) : Parcelable {
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.let {
-            it.writeInt(id)
-            it.writeString(name)
-        }
-    }
+@Parcel(implementations = arrayOf(CompanyRealmProxy::class),
+        value = Parcel.Serialization.BEAN,
+        analyze = arrayOf(Company::class))
+open class Company() : RealmObject() {
+    var id: Int = 0
+    var name: String = ""
 
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    constructor(p: Parcel) : this(p.readInt(), p.readString())
-
-    companion object {
-        @JvmField val CREATOR: Parcelable.Creator<Company> = object : Parcelable.Creator<Company> {
-            override fun newArray(size: Int): Array<Company?> {
-                return arrayOfNulls(size)
-            }
-
-            override fun createFromParcel(source: Parcel): Company {
-                return Company(source)
-            }
-        }
+    constructor(eid: Int, ename: String) : this() {
+        id = eid
+        name = ename
     }
 }
+
+
+

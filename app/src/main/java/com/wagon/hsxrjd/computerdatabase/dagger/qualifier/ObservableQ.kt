@@ -1,4 +1,4 @@
-package com.wagon.hsxrjd.computerdatabase.dagger.scope
+package com.wagon.hsxrjd.computerdatabase.dagger.qualifier
 
 import javax.inject.Qualifier
 import javax.inject.Scope

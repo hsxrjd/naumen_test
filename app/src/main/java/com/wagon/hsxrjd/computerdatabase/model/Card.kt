@@ -1,37 +1,35 @@
 package com.wagon.hsxrjd.computerdatabase.model
 
-import android.os.Parcel
-import android.os.Parcelable
+import io.realm.CardRealmProxy
+import io.realm.RealmObject
+import io.realm.annotations.PrimaryKey
+import org.parceler.Parcel
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
-class Card(
-        val id: Int,
-        val name: String,
-        var imageUrl: String?,
-        var company: Company?,
-        var description: String?
-) : Parcelable {
+@Parcel(implementations = arrayOf(CardRealmProxy::class),
+        value = Parcel.Serialization.BEAN,
+        analyze = arrayOf(Card::class))
+open class Card() : RealmObject() {
+    @PrimaryKey var id: Int = -1
+    var name: String = ""
+    var imageUrl: String? = null
+    var company: Company? = null
+    var description: String? = null
 
-    constructor(p: Parcel) : this(p.readInt(), p.readString(), p.readString(), p.readParcelable(Company::class.java.classLoader), p.readString())
-
-
-    constructor(id: Int) : this(id, "", "", Company(-1, ""), "")
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-
-        dest?.let {
-            it.writeInt(id)
-            it.writeString(name)
-            it.writeString(imageUrl)
-            it.writeParcelable(company, 0)
-            it.writeString(description)
-        }
-    }
-
-    override fun describeContents(): Int {
-        return 0
+    constructor(
+            eid: Int,
+            ename: String,
+            eImageUrl: String?,
+            eCompany: Company?,
+            eDescription: String?
+    ) : this() {
+        id = eid
+        name = ename
+        imageUrl = eImageUrl
+        company = eCompany
+        description = eDescription
     }
 
     override fun equals(other: Any?): Boolean {
@@ -47,18 +45,6 @@ class Card(
 
     override fun hashCode(): Int {
         return id
-    }
-
-    companion object {
-        @JvmField val CREATOR: Parcelable.Creator<Card> = object : Parcelable.Creator<Card> {
-            override fun newArray(size: Int): Array<Card?> {
-                return arrayOfNulls(size)
-            }
-
-            override fun createFromParcel(source: Parcel): Card {
-                return Card(source)
-            }
-        }
     }
 
 }

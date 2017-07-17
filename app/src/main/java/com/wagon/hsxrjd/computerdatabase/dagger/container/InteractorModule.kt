@@ -1,7 +1,8 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.container
 
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ContainerScope
-import com.wagon.hsxrjd.computerdatabase.dagger.scope.ObservableQ
+import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.ObservableQ
+import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
 import com.wagon.hsxrjd.computerdatabase.model.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.list.interactor.ListInteractor
@@ -27,7 +28,7 @@ class InteractorModule {
 
     @ContainerScope
     @Provides
-    fun provideInteractor(source: CardDataSource): ListInteractor {
+    fun provideInteractor(@RemoteApiSource source: CardDataSource): ListInteractor {
         return ListInteractorImpl(source, subject)
     }
 }
