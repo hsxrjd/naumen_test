@@ -1,4 +1,4 @@
-package com.wagon.hsxrjd.computerdatabase.dagger
+package com.wagon.hsxrjd.computerdatabase.dagger.source
 
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.api.RemoteCardDataSource

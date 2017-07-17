@@ -17,14 +17,15 @@ import butterknife.ButterKnife
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.wagon.hsxrjd.computerdatabase.MainApplication
-import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.card.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.card.presenter.CardPresenter
+import com.wagon.hsxrjd.computerdatabase.dagger.card.CardInteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
 import com.wagon.hsxrjd.computerdatabase.list.CardListFragment
 import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
-import com.wagon.hsxrjd.computerdatabase.card.presenter.CardPresenter
 import javax.inject.Inject
 
 /**
@@ -82,7 +83,6 @@ class CardFragment : Fragment(), CardFragmentView {
             hideLoading()
         }
     }
-
 
     fun setupDescriptionVisibility(flag: Boolean) {
         val visibility: Int = if (flag) View.VISIBLE else View.GONE
@@ -243,7 +243,7 @@ class CardFragment : Fragment(), CardFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.appComponent.plus(CardPresenterModule()).inject(this)
+        MainApplication.appComponent.plus(CardPresenterModule(), CardInteractorModule()).inject(this)
         mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
     }
