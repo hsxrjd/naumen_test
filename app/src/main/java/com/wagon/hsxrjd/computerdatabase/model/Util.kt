@@ -2,13 +2,33 @@ package com.wagon.hsxrjd.computerdatabase.model
 
 import com.wagon.hsxrjd.computerdatabase.model.db.CardRealm
 import com.wagon.hsxrjd.computerdatabase.model.db.CompanyRealm
+import com.wagon.hsxrjd.computerdatabase.model.db.PageRealm
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.model.net.Company
+import com.wagon.hsxrjd.computerdatabase.model.net.Page
 
 /**
  * Created by erychkov on 7/18/17.
  */
 
+
+fun PageRealm.mutate(): Page {
+    return Page(
+            this.items.map { it.mutate() },
+            this.page,
+            this.offset,
+            this.total
+    )
+}
+
+fun Page.mutate(): PageRealm {
+    val pageRealm: PageRealm = PageRealm()
+    this.items.mapTo(pageRealm.items) { it.mutate() }
+    pageRealm.offset = this.offset
+    pageRealm.total = this.total
+    pageRealm.page = this.page
+    return pageRealm
+}
 
 fun CardRealm.mutate(): Card {
     return Card(

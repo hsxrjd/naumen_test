@@ -7,8 +7,8 @@ import io.reactivex.Observable
 /**
  * Created by erychkov on 7/18/17.
  */
-interface CacheDataSource : CardDataSource {
-    fun getDirtyCards(page: Int): Observable<Page?>
+interface CacheDataSource : WritableDataSource {
+    fun getDirtyCards(page: Int): Observable<Page>
     fun getDirtyCard(id: Int): Observable<Card>
     fun getDirtySimilarTo(id: Int): Observable<List<Card>>
 }

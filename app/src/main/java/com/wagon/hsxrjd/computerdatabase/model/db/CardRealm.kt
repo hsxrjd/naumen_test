@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.model.db
 
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
@@ -15,4 +16,5 @@ open class CardRealm : RealmObject() {
     var company: CompanyRealm? = null
     var description: String? = null
     var creationTime: Long = 0
+    var similarities: RealmList<CardRealm> = RealmList()
 }

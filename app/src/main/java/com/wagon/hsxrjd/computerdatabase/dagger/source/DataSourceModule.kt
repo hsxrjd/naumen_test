@@ -3,6 +3,7 @@ package com.wagon.hsxrjd.computerdatabase.dagger.source
 import android.content.Context
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.LocalRealmSource
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
+import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.api.RemoteCardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.api.NaumenApi
@@ -28,7 +29,7 @@ class DataSourceModule {
     @Provides
     @Singleton
     @LocalRealmSource
-    fun provideCacheDataSource(): CardDataSource{
+    fun provideCacheDataSource(): CacheDataSource{
         return RealmCacheCardDataSource()
     }
 }

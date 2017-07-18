@@ -14,7 +14,7 @@ import retrofit2.http.Query
 interface NaumenRestApi {
 
     @GET("/rest/computers")
-    fun getPage(@Query("p") page: Int): Observable<Page?>
+    fun getPage(@Query("p") page: Int): Observable<Page>
 
     @GET("/rest/computers/{id}")
     fun getCard(@Path("id") id: Int): Observable<Card>

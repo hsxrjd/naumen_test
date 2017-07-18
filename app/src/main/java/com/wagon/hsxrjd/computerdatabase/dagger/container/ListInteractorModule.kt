@@ -5,6 +5,7 @@ import com.wagon.hsxrjd.computerdatabase.dagger.scope.ContainerScope
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.ObservableQ
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
 import com.wagon.hsxrjd.computerdatabase.model.net.Page
+import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractor
 import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractorImpl
@@ -29,7 +30,7 @@ class ListInteractorModule {
 
     @ContainerScope
     @Provides
-    fun provideInteractor(@RemoteApiSource source: CardDataSource, @LocalRealmSource source2: CardDataSource): ListInteractor {
-        return ListInteractorImpl(source, source2, subject)
+    fun provideInteractor(@RemoteApiSource remote: CardDataSource, @LocalRealmSource cache: CacheDataSource): ListInteractor {
+        return ListInteractorImpl(remote, cache, subject)
     }
 }
