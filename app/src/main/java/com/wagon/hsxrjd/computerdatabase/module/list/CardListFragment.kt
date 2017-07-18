@@ -5,20 +5,23 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
+import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.module.list.adapter.EndlessCardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.module.list.presenter.CardListPresenter
-import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
+import com.wagon.hsxrjd.computerdatabase.other.ToastMessage
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.parceler.Parcels
 import javax.inject.Inject
 
@@ -108,17 +111,14 @@ class CardListFragment : Fragment(), CardListFragmentView {
         mRvAdapter.hideLoading()
     }
 
+    @Inject lateinit var observable: PublishSubject<ToastMessage>
+
     override fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        Observable.just(message).subscribe { observable.onNext(ToastMessage(message)) }
     }
 
     override fun showMessage(resource: Int) {
-        Toast.makeText(context, resource, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun showMessage(resource: Int, vararg varargs: Any) {
-        val message = getString(resource, varargs)
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        Observable.just(resource).subscribe { observable.onNext(ToastMessage(resource)) }
     }
 
     override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)

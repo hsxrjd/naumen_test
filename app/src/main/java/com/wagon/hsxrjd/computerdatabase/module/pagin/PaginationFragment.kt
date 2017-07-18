@@ -60,16 +60,11 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
     }
 
     override fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+
     }
 
     override fun showMessage(resource: Int) {
-        Toast.makeText(context, resource, Toast.LENGTH_SHORT).show()
-    }
 
-    override fun showMessage(resource: Int, vararg varargs: Any) {
-        val message = getString(resource, varargs)
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     @BindView(R.id.button_prev) lateinit var mButtonPrev: Button

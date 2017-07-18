@@ -15,6 +15,7 @@ class CardPresenter(val mInteractor: CardInteractor) : BasePresenter<CardFragmen
     fun loadCard(id: Int) {
         val view: CardFragmentView? = mView.get()
         view?.showLoading()
+
         mInteractor
                 .getCard(id)
                 .observeOn(AndroidSchedulers.mainThread())

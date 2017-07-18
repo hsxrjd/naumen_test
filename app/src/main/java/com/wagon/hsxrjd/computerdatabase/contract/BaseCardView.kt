@@ -6,5 +6,4 @@ package com.wagon.hsxrjd.computerdatabase.contract
 interface BaseCardView : BaseContract.View, Loading {
     fun showMessage(message: String)
     fun showMessage(resource: Int)
-    fun showMessage(resource: Int, vararg varargs: Any)
 }

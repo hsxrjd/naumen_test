@@ -19,6 +19,8 @@ import javax.inject.Singleton
         modules = arrayOf(
                 DataSourceModule::class,
                 ApiModule::class,
+                ToastModule::class,
+                ContextModule::class,
                 NavigatorModule::class)
 )
 interface AppComponent {

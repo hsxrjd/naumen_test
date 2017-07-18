@@ -5,12 +5,12 @@ import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.ResultObject
 import io.reactivex.Observable
-import io.reactivex.subjects.ReplaySubject
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Created by erychkov on 7/14/17.
  */
-class ListInteractorImpl(val mDataSource: CardDataSource, val mLocalSource: CacheDataSource, internal val mSubject: ReplaySubject<ResultObject>) : ListInteractor {
+class ListInteractorImpl(val mDataSource: CardDataSource, val mLocalSource: CacheDataSource, internal val mSubject: PublishSubject<ResultObject>) : ListInteractor {
 
 
     override fun loadPage(id: Int) {

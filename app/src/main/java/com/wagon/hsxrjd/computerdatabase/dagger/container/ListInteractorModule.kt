@@ -13,6 +13,7 @@ import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractorIm
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.ReplaySubject
 
 /**
@@ -20,7 +21,7 @@ import io.reactivex.subjects.ReplaySubject
  */
 @Module
 class ListInteractorModule {
-    val subject: ReplaySubject<ResultObject> = ReplaySubject.create<ResultObject>()
+    val subject: PublishSubject<ResultObject> = PublishSubject.create<ResultObject>()
 
     @Provides
     @ContainerScope
