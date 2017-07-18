@@ -1,6 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.model.source.api
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -9,6 +10,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * Created by hsxrjd on 24.05.17.
  */
 class NaumenApi {
+    private val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor()
+
     private val mAdapterFactory = RxJava2CallAdapterFactory
             .createAsync()
 
@@ -19,6 +22,7 @@ class NaumenApi {
     private val mHttpClient = OkHttpClient()
             .newBuilder()
             .retryOnConnectionFailure(true)
+            .addInterceptor(interceptor)
             .build()
 
     val mApi: NaumenRestApi = Retrofit
@@ -30,4 +34,7 @@ class NaumenApi {
             .build()
             .create(NaumenRestApi::class.java)
 
+    init {
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+    }
 }

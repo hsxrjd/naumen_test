@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.squareup.picasso.Callback
@@ -24,11 +23,11 @@ import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAda
 import com.wagon.hsxrjd.computerdatabase.module.card.presenter.CardPresenter
 import com.wagon.hsxrjd.computerdatabase.module.list.CardListFragment
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
+import com.wagon.hsxrjd.computerdatabase.other.Logger
 import com.wagon.hsxrjd.computerdatabase.other.ToastMessage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import org.parceler.Parcels
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
