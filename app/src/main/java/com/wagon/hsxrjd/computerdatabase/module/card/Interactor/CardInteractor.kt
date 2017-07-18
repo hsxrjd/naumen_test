@@ -1,6 +1,6 @@
-package com.wagon.hsxrjd.computerdatabase.card.Interactor
+package com.wagon.hsxrjd.computerdatabase.module.card.Interactor
 
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import io.reactivex.Observable
 
 /**

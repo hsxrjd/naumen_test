@@ -6,8 +6,8 @@ import android.view.View
 import android.widget.TextView
 import com.wagon.hsxrjd.computerdatabase.MainActivity
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.card.CardFragment
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.module.card.CardFragment
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import java.lang.ref.WeakReference
 
 /**

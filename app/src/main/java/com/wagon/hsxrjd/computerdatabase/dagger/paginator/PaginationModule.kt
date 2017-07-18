@@ -2,9 +2,9 @@ package com.wagon.hsxrjd.computerdatabase.dagger.paginator
 
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ListScope
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.ObservableQ
-import com.wagon.hsxrjd.computerdatabase.model.Page
-import com.wagon.hsxrjd.computerdatabase.list.interactor.ListInteractor
-import com.wagon.hsxrjd.computerdatabase.pagin.presenter.PaginationPresenter
+import com.wagon.hsxrjd.computerdatabase.model.net.Page
+import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractor
+import com.wagon.hsxrjd.computerdatabase.module.pagin.presenter.PaginationPresenter
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Observable

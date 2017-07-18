@@ -1,7 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.card
 
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.CardScope
-import com.wagon.hsxrjd.computerdatabase.card.CardFragment
+import com.wagon.hsxrjd.computerdatabase.module.card.CardFragment
 import dagger.Subcomponent
 
 /**

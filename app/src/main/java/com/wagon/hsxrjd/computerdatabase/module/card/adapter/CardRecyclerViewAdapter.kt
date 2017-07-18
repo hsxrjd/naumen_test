@@ -1,4 +1,4 @@
-package com.wagon.hsxrjd.computerdatabase.card.adapter
+package com.wagon.hsxrjd.computerdatabase.module.card.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 
 /**
  * Created by hsxrjd on 05.06.17.com.wagon.hsxrjd.computerdatabase.model.
@@ -34,7 +34,7 @@ open class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapte
     }
 
     override fun getItemViewType(position: Int): Int {
-        return R.layout.list_item_card
+        return R.layout.list_item_card_cardview
     }
 
     override fun getItemCount(): Int {
@@ -72,8 +72,8 @@ open class CardRecyclerViewAdapter : RecyclerView.Adapter<CardRecyclerViewAdapte
     open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     class CardViewHolder(itemView: View) : BaseViewHolder(itemView) {
-        @BindView(R.id.card_title) lateinit var mTitle: TextView
-        @BindView(R.id.card_company_name) lateinit var mCompany: TextView
+        @BindView(R.id.card_title_cardview) lateinit var mTitle: TextView
+        @BindView(R.id.card_company_name_cardview) lateinit var mCompany: TextView
 
         init {
             ButterKnife.bind(this, itemView)

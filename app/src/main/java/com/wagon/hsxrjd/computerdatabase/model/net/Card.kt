@@ -1,11 +1,5 @@
-package com.wagon.hsxrjd.computerdatabase.model
+package com.wagon.hsxrjd.computerdatabase.model.net
 
-import io.realm.CardRealmProxy
-import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.RealmResults
-import io.realm.annotations.LinkingObjects
-import io.realm.annotations.PrimaryKey
 import org.parceler.Parcel
 
 /**
@@ -13,12 +7,11 @@ import org.parceler.Parcel
  */
 
 
-@Parcel(implementations = arrayOf(CardRealmProxy::class),
+@Parcel(
         value = Parcel.Serialization.BEAN,
         analyze = arrayOf(Card::class))
-
-open class Card() : RealmObject() {
-    @PrimaryKey var id: Int = -1
+open class Card() {
+    var id: Int = -1
     var name: String = ""
     var imageUrl: String? = null
     var company: Company? = null

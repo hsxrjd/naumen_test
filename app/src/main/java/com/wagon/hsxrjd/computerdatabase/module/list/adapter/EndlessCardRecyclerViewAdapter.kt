@@ -1,12 +1,12 @@
-package com.wagon.hsxrjd.computerdatabase.list.adapter
+package com.wagon.hsxrjd.computerdatabase.module.list.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.card.adapter.CardRecyclerViewAdapter
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.contract.Loading
 import java.lang.ref.WeakReference
 

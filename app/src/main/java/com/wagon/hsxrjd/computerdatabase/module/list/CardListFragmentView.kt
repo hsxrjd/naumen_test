@@ -1,6 +1,6 @@
-package com.wagon.hsxrjd.computerdatabase.list
+package com.wagon.hsxrjd.computerdatabase.module.list
 
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.contract.BaseCardView
 
 /**

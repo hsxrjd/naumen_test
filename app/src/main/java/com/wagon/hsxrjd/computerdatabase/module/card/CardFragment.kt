@@ -1,8 +1,7 @@
-package com.wagon.hsxrjd.computerdatabase.card
+package com.wagon.hsxrjd.computerdatabase.module.card
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,14 +17,13 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.card.adapter.CardRecyclerViewAdapter
-import com.wagon.hsxrjd.computerdatabase.card.presenter.CardPresenter
+import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.module.card.presenter.CardPresenter
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardInteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
-import com.wagon.hsxrjd.computerdatabase.list.CardListFragment
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.module.list.CardListFragment
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
-import com.wagon.hsxrjd.computerdatabase.other.MatItemDecoration
 import org.parceler.Parcels
 import javax.inject.Inject
 

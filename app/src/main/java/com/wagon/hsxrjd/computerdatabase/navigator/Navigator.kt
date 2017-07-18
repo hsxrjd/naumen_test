@@ -1,9 +1,8 @@
 package com.wagon.hsxrjd.computerdatabase.navigator
 
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 
 /**
  * Created by hsxrjd on 05.06.17.

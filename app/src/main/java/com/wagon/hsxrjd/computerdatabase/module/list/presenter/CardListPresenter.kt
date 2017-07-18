@@ -1,9 +1,9 @@
-package com.wagon.hsxrjd.computerdatabase.list.presenter
+package com.wagon.hsxrjd.computerdatabase.module.list.presenter
 
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.model.Page
+import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.contract.BasePresenter
-import com.wagon.hsxrjd.computerdatabase.list.CardListFragmentView
+import com.wagon.hsxrjd.computerdatabase.module.list.CardListFragmentView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -16,8 +16,8 @@ class CardListPresenter(mObservable: Observable<Page>) : BasePresenter<CardListF
         mObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    p: Page ->
-                    p.items.let {
+                    p: Page? ->
+                    p?.items?.let {
                         if (it.isEmpty()) {
                             mView.get()?.showMessage(R.string.message_all_data_loaded)
                         } else mView.get()?.showCardList(it)

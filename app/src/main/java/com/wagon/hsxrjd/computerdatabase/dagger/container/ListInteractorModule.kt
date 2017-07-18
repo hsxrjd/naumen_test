@@ -4,10 +4,10 @@ import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.LocalRealmSource
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.ContainerScope
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.ObservableQ
 import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
-import com.wagon.hsxrjd.computerdatabase.model.Page
+import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
-import com.wagon.hsxrjd.computerdatabase.list.interactor.ListInteractor
-import com.wagon.hsxrjd.computerdatabase.list.interactor.ListInteractorImpl
+import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractor
+import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractorImpl
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Observable

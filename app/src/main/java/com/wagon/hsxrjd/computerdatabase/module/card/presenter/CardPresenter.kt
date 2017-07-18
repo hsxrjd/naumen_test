@@ -1,10 +1,10 @@
-package com.wagon.hsxrjd.computerdatabase.card.presenter
+package com.wagon.hsxrjd.computerdatabase.module.card.presenter
 
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.card.CardFragmentView
-import com.wagon.hsxrjd.computerdatabase.card.Interactor.CardInteractor
+import com.wagon.hsxrjd.computerdatabase.module.card.CardFragmentView
+import com.wagon.hsxrjd.computerdatabase.module.card.Interactor.CardInteractor
 import com.wagon.hsxrjd.computerdatabase.contract.BasePresenter
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**

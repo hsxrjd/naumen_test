@@ -1,17 +1,15 @@
-package com.wagon.hsxrjd.computerdatabase.model
+package com.wagon.hsxrjd.computerdatabase.model.net
 
-import io.realm.CompanyRealmProxy
-import io.realm.RealmObject
 import org.parceler.Parcel
 
 /**
  * Created by hsxrjd on 23.05.17.
  */
-@Parcel(implementations = arrayOf(CompanyRealmProxy::class),
+@Parcel(
         value = Parcel.Serialization.BEAN,
         analyze = arrayOf(Company::class))
 
-open class Company() : RealmObject() {
+open class Company() {
     var id: Int = -1
     var name: String = ""
 

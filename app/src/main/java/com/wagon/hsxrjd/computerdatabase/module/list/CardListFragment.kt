@@ -1,4 +1,4 @@
-package com.wagon.hsxrjd.computerdatabase.list
+package com.wagon.hsxrjd.computerdatabase.module.list
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,12 +12,12 @@ import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.card.adapter.CardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
-import com.wagon.hsxrjd.computerdatabase.list.adapter.EndlessCardRecyclerViewAdapter
-import com.wagon.hsxrjd.computerdatabase.list.presenter.CardListPresenter
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.module.list.adapter.EndlessCardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.module.list.presenter.CardListPresenter
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import org.parceler.Parcels
 import javax.inject.Inject

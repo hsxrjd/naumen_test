@@ -10,8 +10,8 @@ import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ListInteractorModule
-import com.wagon.hsxrjd.computerdatabase.list.CardListFragment
-import com.wagon.hsxrjd.computerdatabase.pagin.PaginationFragment
+import com.wagon.hsxrjd.computerdatabase.module.list.CardListFragment
+import com.wagon.hsxrjd.computerdatabase.module.pagin.PaginationFragment
 
 /**
  * Created by erychkov on 7/14/17.

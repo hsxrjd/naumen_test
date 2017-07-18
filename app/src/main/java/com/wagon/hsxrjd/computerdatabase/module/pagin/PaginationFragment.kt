@@ -1,4 +1,4 @@
-package com.wagon.hsxrjd.computerdatabase.pagin
+package com.wagon.hsxrjd.computerdatabase.module.pagin
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -13,7 +13,7 @@ import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.paginator.PaginationModule
-import com.wagon.hsxrjd.computerdatabase.pagin.presenter.PaginationPresenter
+import com.wagon.hsxrjd.computerdatabase.module.pagin.presenter.PaginationPresenter
 import javax.inject.Inject
 
 /**

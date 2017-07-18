@@ -1,8 +1,8 @@
-package com.wagon.hsxrjd.computerdatabase.list.interactor
+package com.wagon.hsxrjd.computerdatabase.module.list.interactor
 
-import com.wagon.hsxrjd.computerdatabase.model.Page
+import android.util.Log
+import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
-import com.wagon.hsxrjd.computerdatabase.model.source.WritableDataSource
 import io.reactivex.subjects.ReplaySubject
 
 /**
@@ -11,10 +11,8 @@ import io.reactivex.subjects.ReplaySubject
 class ListInteractorImpl(val mDataSource: CardDataSource, val mLocalSource: CardDataSource, internal val mSubject: ReplaySubject<Page>) : ListInteractor {
 
     override fun loadPage(id: Int) {
-        mLocalSource.getCard(id)
         mDataSource.getCards(id).subscribe {
             mSubject.onNext(it)
-            (mLocalSource as WritableDataSource).storePage(it)
         }
     }
 }

@@ -1,10 +1,10 @@
-package com.wagon.hsxrjd.computerdatabase.pagin.presenter
+package com.wagon.hsxrjd.computerdatabase.module.pagin.presenter
 
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.contract.BasePresenter
-import com.wagon.hsxrjd.computerdatabase.list.interactor.ListInteractor
-import com.wagon.hsxrjd.computerdatabase.model.Page
-import com.wagon.hsxrjd.computerdatabase.pagin.PaginationFragmentView
+import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractor
+import com.wagon.hsxrjd.computerdatabase.model.net.Page
+import com.wagon.hsxrjd.computerdatabase.module.pagin.PaginationFragmentView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".pagin.PaginationFragment">
+    tools:context=".module.pagin.PaginationFragment">
 
     <ImageView
         android:id="@+id/paginator_divider"

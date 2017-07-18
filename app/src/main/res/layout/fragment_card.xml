@@ -4,7 +4,7 @@
     android:id="@+id/card_swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wagon.hsxrjd.computerdatabase.card.CardFragment">
+    tools:context=".module.card.CardFragment">
 
     <ScrollView
         android:id="@+id/card_scroll_view"

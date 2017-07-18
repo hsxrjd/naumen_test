@@ -1,8 +1,8 @@
 package com.wagon.hsxrjd.computerdatabase.dagger.card
 
 import com.wagon.hsxrjd.computerdatabase.dagger.scope.CardScope
-import com.wagon.hsxrjd.computerdatabase.card.presenter.CardPresenter
-import com.wagon.hsxrjd.computerdatabase.card.Interactor.CardInteractor
+import com.wagon.hsxrjd.computerdatabase.module.card.presenter.CardPresenter
+import com.wagon.hsxrjd.computerdatabase.module.card.Interactor.CardInteractor
 import dagger.Module
 import dagger.Provides
 

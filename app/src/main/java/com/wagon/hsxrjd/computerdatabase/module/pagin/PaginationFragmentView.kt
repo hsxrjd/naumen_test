@@ -1,4 +1,4 @@
-package com.wagon.hsxrjd.computerdatabase.pagin
+package com.wagon.hsxrjd.computerdatabase.module.pagin
 
 import com.wagon.hsxrjd.computerdatabase.contract.BaseCardView
 
