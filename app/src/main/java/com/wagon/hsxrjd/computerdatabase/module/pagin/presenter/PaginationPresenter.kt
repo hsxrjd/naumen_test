@@ -2,8 +2,8 @@ package com.wagon.hsxrjd.computerdatabase.module.pagin.presenter
 
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.contract.BasePresenter
+import com.wagon.hsxrjd.computerdatabase.model.source.ResultObject
 import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractor
-import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.module.pagin.PaginationFragmentView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,7 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 /**
  * Created by erychkov on 7/14/17.
  */
-class PaginationPresenter(mObservable: Observable<Page>, val mInteractor: ListInteractor) : BasePresenter<PaginationFragmentView>() {
+class PaginationPresenter(mObservable: Observable<ResultObject>, val mInteractor: ListInteractor) : BasePresenter<PaginationFragmentView>() {
 
     private var mCurrent = 0
     private var mTotal = 0
@@ -20,12 +20,21 @@ class PaginationPresenter(mObservable: Observable<Page>, val mInteractor: ListIn
         mObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    p: Page ->
-                    mCurrent = p.page
-                    mTotal = p.total / 10
-                    mView.get()?.showPage(mCurrent, mTotal)
-                    calcButtonNextState()
-                    calcButtonPrevState()
+                    p: ResultObject ->
+                    when (p.state) {
+                        ResultObject.State.Success -> {
+                            p.page?.let {
+                                mCurrent = p.page.page
+                                mTotal = p.page.total / 10
+                                mView.get()?.showPage(mCurrent, mTotal)
+                            }
+                            calcButtonNextState()
+                            calcButtonPrevState()
+                        }
+                        ResultObject.State.Failure -> {
+                            mView.get()?.showMessage(R.string.message_error_loading_page)
+                        }
+                    }
                 }, {
                     mView.get()?.showMessage(R.string.message_error_loading_page)
                 })

@@ -1,11 +1,9 @@
 package com.wagon.hsxrjd.computerdatabase
 
 import android.app.Application
-import android.util.Log
 import com.wagon.hsxrjd.computerdatabase.dagger.AppComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.DaggerAppComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.NavigatorModule
-import com.wagon.hsxrjd.computerdatabase.dagger.RealmModule
 import com.wagon.hsxrjd.computerdatabase.dagger.source.ApiModule
 import com.wagon.hsxrjd.computerdatabase.dagger.source.DataSourceModule
 import io.realm.Realm

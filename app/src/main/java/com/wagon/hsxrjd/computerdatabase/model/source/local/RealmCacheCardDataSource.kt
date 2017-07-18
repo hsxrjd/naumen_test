@@ -22,7 +22,7 @@ class RealmCacheCardDataSource : CacheDataSource {
                 ?.let {
                     return Observable.just(it.mutate())
                 }
-                ?: return Observable.error { Throwable("not in db") }
+                ?: return Observable.error { Throwable("Card with id=$id not in db") }
     }
 
     override fun getDirtySimilarTo(id: Int): Observable<List<Card>> {
@@ -36,7 +36,7 @@ class RealmCacheCardDataSource : CacheDataSource {
                     it.similarities.mapTo(list) { it.mutate() }
                     return Observable.just(list)
                 }
-                ?: return Observable.error { Throwable("not in db") }
+                ?: return Observable.error { Throwable("Card with id=$id not in db") }
     }
 
     override fun getDirtyCards(page: Int): Observable<Page> {
@@ -48,7 +48,7 @@ class RealmCacheCardDataSource : CacheDataSource {
                 ?.let {
                     return Observable.just(it.mutate())
                 }
-                ?: return Observable.error { Throwable("not in db") }
+                ?: return Observable.error { Throwable("Page #$page not in db") }
     }
 
     override fun attachSimilaritiesTo(cardList: List<Card>, id: Int) {
@@ -96,10 +96,10 @@ class RealmCacheCardDataSource : CacheDataSource {
                     if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
                         return Observable.just(it.mutate())
                     } else {
-                        return Observable.error { Throwable("dirty") }
+                        return Observable.error { Throwable("Cache is dirty") }
                     }
                 }
-                ?: return Observable.error { Throwable("not in db") }
+                ?: return Observable.error { Throwable("Page #$page not in db") }
     }
 
     override fun getCard(id: Int): Observable<Card> {
@@ -112,10 +112,10 @@ class RealmCacheCardDataSource : CacheDataSource {
                     if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
                         return Observable.just(it.mutate())
                     } else {
-                        return Observable.error { Throwable("dirty") }
+                        return Observable.error { Throwable("Cache is dirty") }
                     }
                 }
-                ?: return Observable.error { Throwable("not in db") }
+                ?: return Observable.error { Throwable("Card with id=$id not in db") }
     }
 
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
@@ -129,13 +129,13 @@ class RealmCacheCardDataSource : CacheDataSource {
                         val list: MutableList<Card> = mutableListOf()
                         it.similarities.mapTo(list) { it.mutate() }
                         if (list.isEmpty())
-                            return Observable.error { Throwable("not in db") }
+                            return Observable.error { Throwable("Similarities to Card#$id not in db") }
                         return Observable.just(list)
                     } else {
-                        return Observable.error { Throwable("dirty") }
+                        return Observable.error { Throwable("Cache is dirty") }
                     }
                 }
-                ?: return Observable.error { Throwable("not in db") }
+                ?: return Observable.error { Throwable("Card with id=$id not in db") }
     }
 
     companion object {

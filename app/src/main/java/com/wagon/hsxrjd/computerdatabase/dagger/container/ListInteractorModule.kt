@@ -7,6 +7,7 @@ import com.wagon.hsxrjd.computerdatabase.dagger.qualifier.RemoteApiSource
 import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
+import com.wagon.hsxrjd.computerdatabase.model.source.ResultObject
 import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractor
 import com.wagon.hsxrjd.computerdatabase.module.list.interactor.ListInteractorImpl
 import dagger.Module
@@ -19,12 +20,12 @@ import io.reactivex.subjects.ReplaySubject
  */
 @Module
 class ListInteractorModule {
-    val subject: ReplaySubject<Page> = ReplaySubject.create<Page>()
+    val subject: ReplaySubject<ResultObject> = ReplaySubject.create<ResultObject>()
 
     @Provides
     @ContainerScope
     @ObservableQ
-    fun provideObservable(): Observable<Page> {
+    fun provideObservable(): Observable<ResultObject> {
         return subject
     }
 
