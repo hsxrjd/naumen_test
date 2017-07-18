@@ -4,9 +4,7 @@ import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.ResultObject
-import io.reactivex.ObservableSource
-import io.reactivex.Observer
-import io.reactivex.functions.Function
+import io.reactivex.Observable
 import io.reactivex.subjects.ReplaySubject
 
 /**
@@ -15,28 +13,15 @@ import io.reactivex.subjects.ReplaySubject
 class ListInteractorImpl(val mDataSource: CardDataSource, val mLocalSource: CacheDataSource, internal val mSubject: ReplaySubject<ResultObject>) : ListInteractor {
 
 
-    fun loadPageFromRemote(id: Int, observerF: Observer<in Page>) {
-        mDataSource
-                .getCards(id)
-                .doOnNext { mLocalSource.storePage(it) }
-                .onErrorResumeNext { observer: Observer<in Page> -> loadPageFromDirtyCache(id, observer) }
-                .subscribe(observerF)
-    }
-
-    fun loadPageFromDirtyCache(id: Int, observerF: Observer<in Page>) {
-        mLocalSource
-                .getDirtyCards(id)
-                .subscribe(observerF)
-    }
-
     override fun loadPage(id: Int) {
-//        val function: Function<in Throwable, out ObservableSource<Page>> = Function {
-//
-//        }
         mLocalSource
                 .getCards(id)
-//                .onErrorResumeNext(function)
-                .onErrorResumeNext { observer: Observer<in Page> -> loadPageFromRemote(id, observer) }
+                .onErrorResumeNext { _: Throwable -> fetchRemoteAndStore(id) }
+                .onErrorResumeNext { _: Throwable -> mLocalSource.getDirtyCards(id) }
                 .subscribe({ mSubject.onNext(ResultObject(it)) }, { mSubject.onNext(ResultObject(it)) })
+    }
+
+    private fun fetchRemoteAndStore(id: Int): Observable<Page> {
+        return mDataSource.getCards(id).doOnNext { mLocalSource.storePage(it) }
     }
 }
