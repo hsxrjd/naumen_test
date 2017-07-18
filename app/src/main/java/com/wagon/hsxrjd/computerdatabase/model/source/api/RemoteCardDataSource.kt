@@ -1,5 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.model.source.api
 
+import android.util.Log
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource

@@ -10,6 +10,7 @@ import com.wagon.hsxrjd.computerdatabase.model.source.local.RealmCacheCardDataSo
 import dagger.Module
 import dagger.Provides
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import javax.inject.Singleton
 
 /**
@@ -26,15 +27,8 @@ class DataSourceModule {
 
     @Provides
     @Singleton
-    fun provideRealm(context: Context): Realm {
-        Realm.init(context)
-        return Realm.getDefaultInstance()
-    }
-
-    @Provides
-    @Singleton
     @LocalRealmSource
-    fun provideCacheDataSource(realm: Realm): CardDataSource{
-        return RealmCacheCardDataSource(realm)
+    fun provideCacheDataSource(): CardDataSource{
+        return RealmCacheCardDataSource()
     }
 }
