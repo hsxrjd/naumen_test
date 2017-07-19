@@ -1,27 +1,26 @@
 package com.wagon.hsxrjd.computerdatabase.module.list.interactor
 
-import com.wagon.hsxrjd.computerdatabase.model.net.Page
-import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
-import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.ResultObject
-import io.reactivex.Observable
+import com.wagon.hsxrjd.computerdatabase.model.source.strategy.OperationFactory
 import io.reactivex.subjects.PublishSubject
 
 /**
  * Created by erychkov on 7/14/17.
  */
-class ListInteractorImpl(val mDataSource: CardDataSource, val mLocalSource: CacheDataSource, internal val mSubject: PublishSubject<ResultObject>) : ListInteractor {
+class ListInteractorImpl(val operationFactory: OperationFactory, internal val mSubject: PublishSubject<ResultObject>) : ListInteractor {
 
 
     override fun loadPage(id: Int) {
-        mLocalSource
-                .getCards(id)
-                .onErrorResumeNext { _: Throwable -> fetchRemoteAndStore(id) }
-                .onErrorResumeNext { _: Throwable -> mLocalSource.getDirtyCards(id) }
+        operationFactory
+                .buildFetchPageOperation()
+                .perform(id)
+//                .onErrorResumeNext { _: Throwable -> fetchRemoteAndStore(id) }
+//                .onErrorResumeNext { _: Throwable -> mLocalSource.getDirtyPage(id) }
                 .subscribe({ mSubject.onNext(ResultObject(it)) }, { mSubject.onNext(ResultObject(it)) })
     }
-
-    private fun fetchRemoteAndStore(id: Int): Observable<Page> {
-        return mDataSource.getCards(id).doOnNext { mLocalSource.storePage(it) }
-    }
+//    private fun fetchRemoteAndStore(id: Int): Observable<Page> {
+//        return operationFactory.getStrategy()
+//                .getPage(id)
+//                .doOnNext { mLocalSource.storePage(it) }
+//    }
 }

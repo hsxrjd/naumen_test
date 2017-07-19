@@ -8,6 +8,7 @@ import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ListInteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.source.ApiModule
 import com.wagon.hsxrjd.computerdatabase.dagger.source.DataSourceModule
+import com.wagon.hsxrjd.computerdatabase.dagger.strategy.FactoryModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -21,6 +22,7 @@ import javax.inject.Singleton
                 ApiModule::class,
                 ToastModule::class,
                 ContextModule::class,
+                FactoryModule::class,
                 NavigatorModule::class)
 )
 interface AppComponent {

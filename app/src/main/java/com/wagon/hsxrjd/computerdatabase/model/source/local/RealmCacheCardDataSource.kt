@@ -47,8 +47,8 @@ class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
                 ?: return Observable.error { Throwable("Card with id=$id not in db") }
     }
 
-    override fun getDirtyCards(page: Int): Observable<Page> {
-        Logger.logger.debug(getClassName(), this::getDirtyCards.name)
+    override fun getDirtyPage(page: Int): Observable<Page> {
+        Logger.logger.debug(getClassName(), this::getDirtyPage.name)
 
         val source = Realm.getDefaultInstance()
         source
@@ -100,8 +100,8 @@ class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
         }
     }
 
-    override fun getCards(page: Int): Observable<Page> {
-        Logger.logger.debug(getClassName(), this::getCards.name)
+    override fun getPage(page: Int): Observable<Page> {
+        Logger.logger.debug(getClassName(), this::getPage.name)
         val source = Realm.getDefaultInstance()
         source
                 .where(PageRealm::class.java)

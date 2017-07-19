@@ -33,8 +33,8 @@ class RemoteCardDataSource constructor(val service: NaumenApi) : CardDataSource,
                 .subscribeOn(Schedulers.io())
     }
 
-    override fun getCards(page: Int): Observable<Page> {
-        Logger.logger.debug(getClassName(), this::getCards.name)
+    override fun getPage(page: Int): Observable<Page> {
+        Logger.logger.debug(getClassName(), this::getPage.name)
         return service.mApi.getPage(page)
                 .subscribeOn(Schedulers.io())
     }
