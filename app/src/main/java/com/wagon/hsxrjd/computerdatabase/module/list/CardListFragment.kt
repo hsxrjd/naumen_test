@@ -19,6 +19,7 @@ import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAda
 import com.wagon.hsxrjd.computerdatabase.module.list.adapter.EndlessCardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.module.list.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
+import com.wagon.hsxrjd.computerdatabase.other.ToastAdapter
 import com.wagon.hsxrjd.computerdatabase.other.ToastMessage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -111,14 +112,14 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
         mRvAdapter.hideLoading()
     }
 
-    @Inject lateinit var observable: PublishSubject<ToastMessage>
+    @Inject lateinit var toastAdapter: ToastAdapter
 
     override fun showMessage(message: String) {
-        Observable.just(message).subscribe { observable.onNext(ToastMessage(message)) }
+        toastAdapter.makeToast(ToastMessage(message))
     }
 
     override fun showMessage(resource: Int) {
-        Observable.just(resource).subscribe { observable.onNext(ToastMessage(resource)) }
+        toastAdapter.makeToast(ToastMessage(resource))
     }
 
     override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)

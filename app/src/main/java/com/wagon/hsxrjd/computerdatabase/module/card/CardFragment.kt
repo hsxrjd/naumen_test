@@ -23,9 +23,8 @@ import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAda
 import com.wagon.hsxrjd.computerdatabase.module.card.presenter.CardPresenter
 import com.wagon.hsxrjd.computerdatabase.module.list.CardListFragment
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
+import com.wagon.hsxrjd.computerdatabase.other.ToastAdapter
 import com.wagon.hsxrjd.computerdatabase.other.ToastMessage
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import org.parceler.Parcels
 import javax.inject.Inject
 
@@ -107,15 +106,14 @@ class CardFragment : LoggedFragment(), CardFragmentView {
         mSimilarities.visibility = visibility
     }
 
-    @Inject lateinit var observable: PublishSubject<ToastMessage>
-
+    @Inject lateinit var toastAdapter: ToastAdapter
 
     override fun showMessage(message: String) {
-        Observable.just(message).subscribe { observable.onNext(ToastMessage(it)) }
+        toastAdapter.makeToast(ToastMessage(message))
     }
 
     override fun showMessage(resource: Int) {
-        Observable.just(resource).subscribe { observable.onNext(ToastMessage(it)) }
+        toastAdapter.makeToast(ToastMessage(resource))
     }
 
     override fun showLoading() {
