@@ -5,8 +5,9 @@ import io.reactivex.Observable
 /**
  * Created by erychkov on 7/19/17.
  */
-class Operation<T> (private val operation: (Int) -> Observable<T>) {
-    fun perform(n:Int): Observable<T>{
-        return operation.invoke(n)
-    }
+//private val operation: (Int) -> Observable<T>
+interface Operation<T> {
+    fun perform(): Observable<T>
+//        return operation.invoke()
+//    }
 }

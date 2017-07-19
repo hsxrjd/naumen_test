@@ -1,28 +1,31 @@
 package com.wagon.hsxrjd.computerdatabase.model
 
 import com.wagon.hsxrjd.computerdatabase.model.db.CardRealm
+import com.wagon.hsxrjd.computerdatabase.model.db.CardRealmLight
 import com.wagon.hsxrjd.computerdatabase.model.db.CompanyRealm
 import com.wagon.hsxrjd.computerdatabase.model.db.PageRealm
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.model.net.Company
 import com.wagon.hsxrjd.computerdatabase.model.net.Page
+import io.realm.RealmList
+import io.realm.RealmModel
 
 /**
  * Created by erychkov on 7/18/17.
  */
 
 fun PageRealm.mutate(): Page {
-    return Page(
-            this.items.map { it.mutate() },
-            this.page,
-            this.offset,
-            this.total
-    )
+    val page = Page()
+    page.items = this.items.map { it.mutate() }
+    page.page = this.page
+    page.offset = this.offset
+    page.total = total
+    return page
 }
 
 fun Page.mutate(): PageRealm {
     val pageRealm: PageRealm = PageRealm()
-    this.items.mapTo(pageRealm.items) { it.mutate() }
+    pageRealm.items.addAll(this.items.map { it.mutateLight() })
     pageRealm.offset = this.offset
     pageRealm.total = this.total
     pageRealm.page = this.page
@@ -30,13 +33,15 @@ fun Page.mutate(): PageRealm {
 }
 
 fun CardRealm.mutate(): Card {
-    return Card(
-            this.id,
-            this.name,
-            this.imageUrl,
-            this.company?.mutate(),
-            this.description)
+    val card = Card()
+    card.id = this.id
+    card.name = this.name
+    card.imageUrl = this.imageUrl
+    card.company = this.company?.mutate()
+    card.description = this.description
+    return card
 }
+
 
 fun Card.mutate(): CardRealm {
     val card: CardRealm = CardRealm()
@@ -45,6 +50,22 @@ fun Card.mutate(): CardRealm {
     card.imageUrl = this.imageUrl
     card.company = this.company?.mutate()
     card.description = this.description
+    return card
+}
+
+fun Card.mutateLight(): CardRealmLight {
+    val card: CardRealmLight = CardRealmLight()
+    card.id = this.id
+    card.name = this.name
+    card.company = this.company?.mutate()
+    return card
+}
+
+fun CardRealmLight.mutate(): Card {
+    val card: Card = Card()
+    card.id = this.id
+    card.name = this.name
+    card.company = this.company?.mutate()
     return card
 }
 
@@ -60,4 +81,8 @@ fun Company.mutate(): CompanyRealm {
     company.id = this.id
     company.name = this.name
     return company
+}
+
+inline fun <T, R : RealmModel> Iterable<T>.mapToRealm(transform: (T) -> R): RealmList<R> {
+    return mapTo(RealmList<R>(), transform)
 }

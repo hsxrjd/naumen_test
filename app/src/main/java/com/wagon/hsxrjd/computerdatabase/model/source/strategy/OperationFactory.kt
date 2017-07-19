@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import com.wagon.hsxrjd.computerdatabase.log.Logger
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.model.net.Page
+import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
+import com.wagon.hsxrjd.computerdatabase.model.source.CardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.api.NaumenApi
 import com.wagon.hsxrjd.computerdatabase.model.source.api.RemoteCardDataSource
 import com.wagon.hsxrjd.computerdatabase.model.source.local.RealmCacheCardDataSource
@@ -43,33 +45,39 @@ class OperationFactory(val context: Context) {
         return false
     }
 
-    fun buildFetchCardOperation(): Operation<Card> {
+    fun buildFetchCardOperation(int: Int): Operation<Card> {
         if (hasActiveInternetConnection()) {
-            return Operation({ int: Int ->
-                remoteSource.getCard(int).doOnNext { realmSource.storeCard(it) }
-            })
+            return RemoteOperation(
+                    realmSource,
+                    remoteSource,
+                    { local: CacheDataSource, remote: CardDataSource ->
+                        remote.getCard(int).doOnNext { local.storeCard(it) }
+                    })
         } else {
-            return Operation({ int: Int -> realmSource.getDirtyCard(int) })
+            return LocalOperation(realmSource, { source: CardDataSource -> source.getCard(int) })
         }
     }
 
-    fun buildFetchPageOperation(): Operation<Page> {
+    fun buildFetchPageOperation(int: Int): Operation<Page> {
         if (hasActiveInternetConnection()) {
-            return Operation({ int: Int ->
-                remoteSource.getPage(int).doOnNext { realmSource.storePage(it) }
+            return RemoteOperation(realmSource, remoteSource, { local, remote ->
+                remote.getPage(int).doOnNext { local.storePage(it) }
             })
         } else {
-            return Operation({ int: Int -> realmSource.getDirtyPage(int) })
+            return LocalOperation(realmSource, { source: CardDataSource -> source.getPage(int) })
         }
     }
 
-    fun buildFetchSimilarOperation(): Operation<List<Card>> {
+    fun buildFetchSimilarOperation(int: Int): Operation<List<Card>> {
         if (hasActiveInternetConnection()) {
-            return Operation({ int: Int ->
-                remoteSource.getSimilarTo(int).doOnNext { realmSource.attachSimilaritiesTo(it, int) }
-            })
+            return RemoteOperation(
+                    realmSource,
+                    remoteSource,
+                    { local: CacheDataSource, remote: CardDataSource ->
+                        remote.getSimilarTo(int).doOnNext { local.attachSimilaritiesTo(it, int) }
+                    })
         } else {
-            return Operation({ int: Int -> realmSource.getDirtySimilarTo(int) })
+            return LocalOperation(realmSource, { source: CardDataSource -> source.getSimilarTo(int) })
         }
     }
 }

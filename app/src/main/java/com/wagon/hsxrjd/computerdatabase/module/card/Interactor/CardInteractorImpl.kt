@@ -22,15 +22,15 @@ class CardInteractorImpl(val operationFactory: OperationFactory) : CardInteracto
 //    }
     override fun getCard(id: Int): Observable<Card> {
         return operationFactory
-                .buildFetchCardOperation()
-                .perform(id)
+                .buildFetchCardOperation(id)
+                .perform()
 //                .onErrorResumeNext { _: Throwable -> fetchCardRemoteAndStore(id) }
 //                .onErrorResumeNext { _: Throwable -> mLocalSource.getDirtyCard(id) }
     }
 
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
         return operationFactory
-                .buildFetchSimilarOperation()
-                .perform(id)
+                .buildFetchSimilarOperation(id)
+                .perform()
     }
 }

@@ -4,7 +4,9 @@ import com.wagon.hsxrjd.computerdatabase.log.LoggedClass
 import com.wagon.hsxrjd.computerdatabase.log.Logger
 import com.wagon.hsxrjd.computerdatabase.model.db.CardRealm
 import com.wagon.hsxrjd.computerdatabase.model.db.PageRealm
+import com.wagon.hsxrjd.computerdatabase.model.db.SimilarCardsRealm
 import com.wagon.hsxrjd.computerdatabase.model.mutate
+import com.wagon.hsxrjd.computerdatabase.model.mutateLight
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.model.net.Page
 import com.wagon.hsxrjd.computerdatabase.model.source.CacheDataSource
@@ -15,7 +17,6 @@ import io.realm.Realm
  * Created by hsxrjd on 24.05.17.
  */
 class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
-
 
     override fun getDirtyCard(id: Int): Observable<Card> {
         Logger.logger.debug(getClassName(), this::getDirtyCard.name)
@@ -33,10 +34,9 @@ class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
 
     override fun getDirtySimilarTo(id: Int): Observable<List<Card>> {
         Logger.logger.debug(getClassName(), this::getDirtySimilarTo.name)
-
         val source = Realm.getDefaultInstance()
         source
-                .where(CardRealm::class.java)
+                .where(SimilarCardsRealm::class.java)
                 .equalTo("id", id)
                 .findFirst()
                 ?.let {
@@ -63,19 +63,29 @@ class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
 
     override fun attachSimilaritiesTo(cardList: List<Card>, id: Int) {
         Logger.logger.debug(getClassName(), this::attachSimilaritiesTo.name)
-
         val source = Realm.getDefaultInstance()
+        if (cardList.isEmpty())
+            return
         source
-                .where(CardRealm::class.java)
+                .where(SimilarCardsRealm::class.java)
                 .equalTo("id", id)
                 .findFirst()
                 ?.let {
-                    card: CardRealm ->
-                    source.beginTransaction()
-                    cardList.mapTo(card.similarities) { it.mutate() }
-                    source.copyToRealmOrUpdate(card)
-                    source.commitTransaction()
+                    container ->
+                    source.executeTransactionAsync {
+                        container.similarities.addAll(cardList.map { it.mutateLight() })
+                        it.copyToRealmOrUpdate(container)
+                    }
                 }
+                ?: let {
+            val container = SimilarCardsRealm()
+            container.id = id
+            source.executeTransactionAsync {
+                container.similarities.addAll(cardList.map { it.mutateLight() })
+                it.copyToRealmOrUpdate(container)
+            }
+        }
+        source.close()
     }
 
 
@@ -87,6 +97,7 @@ class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
         source.executeTransactionAsync {
             it.copyToRealmOrUpdate(rPage)
         }
+        source.close()
     }
 
 
@@ -98,61 +109,65 @@ class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
         source.executeTransactionAsync {
             it.copyToRealmOrUpdate(rCard)
         }
+        source.close()
     }
 
     override fun getPage(page: Int): Observable<Page> {
-        Logger.logger.debug(getClassName(), this::getPage.name)
-        val source = Realm.getDefaultInstance()
-        source
-                .where(PageRealm::class.java)
-                .equalTo("page", page)
-                .findFirst()
-                ?.let {
-                    if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
-                        return Observable.just(it.mutate())
-                    } else {
-                        return Observable.error { Throwable("Cache is dirty") }
-                    }
-                }
-                ?: return Observable.error { Throwable("Page #$page not in db") }
+        return getDirtyPage(page)
+//        Logger.logger.debug(getClassName(), this::getPage.name)
+//        val source = Realm.getDefaultInstance()
+//        source
+//                .where(PageRealm::class.java)
+//                .equalTo("page", page)
+//                .findFirst()
+//                ?.let {
+//                    if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
+//                        return Observable.just(it.mutate())
+//                    } else {
+//                        return Observable.error { Throwable("Cache is dirty") }
+//                    }
+//                }
+//                ?: return Observable.error { Throwable("Page #$page not in db") }
     }
 
     override fun getCard(id: Int): Observable<Card> {
-        Logger.logger.debug(getClassName(), this::getCard.name)
-        val source = Realm.getDefaultInstance()
-        source
-                .where(CardRealm::class.java)
-                .equalTo("id", id)
-                .findFirst()
-                ?.let {
-                    if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
-                        return Observable.just(it.mutate())
-                    } else {
-                        return Observable.error { Throwable("Cache is dirty") }
-                    }
-                }
-                ?: return Observable.error { Throwable("Card with id=$id not in db") }
+        return getDirtyCard(id)
+//        Logger.logger.debug(getClassName(), this::getCard.name)
+//        val source = Realm.getDefaultInstance()
+//        source
+//                .where(CardRealm::class.java)
+//                .equalTo("id", id)
+//                .findFirst()
+//                ?.let {
+//                    if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
+//                        return Observable.just(it.mutate())
+//                    } else {
+//                        return Observable.error { Throwable("Cache is dirty") }
+//                    }
+//                }
+//                ?: return Observable.error { Throwable("Card with id=$id not in db") }
     }
 
     override fun getSimilarTo(id: Int): Observable<List<Card>> {
-        Logger.logger.debug(getClassName(), this::getSimilarTo.name)
-        val source = Realm.getDefaultInstance()
-        source
-                .where(CardRealm::class.java)
-                .equalTo("id", id)
-                .findFirst()
-                ?.let {
-                    if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
-                        val list: MutableList<Card> = mutableListOf()
-                        it.similarities.mapTo(list) { it.mutate() }
-                        if (list.isEmpty())
-                            return Observable.error { Throwable("Similarities to Card#$id not in db") }
-                        return Observable.just(list)
-                    } else {
-                        return Observable.error { Throwable("Cache is dirty") }
-                    }
-                }
-                ?: return Observable.error { Throwable("Card with id=$id not in db") }
+        return getDirtySimilarTo(id)
+//        Logger.logger.debug(getClassName(), this::getSimilarTo.name)
+//        val source = Realm.getDefaultInstance()
+//        source
+//                .where(CardRealm::class.java)
+//                .equalTo("id", id)
+//                .findFirst()
+//                ?.let {
+//                    if (System.currentTimeMillis() - it.creationTime <= cacheLifeTime) {
+//                        val list: MutableList<Card> = mutableListOf()
+//                        it.similarities.mapTo(list) { it.mutate() }
+//                        if (list.isEmpty())
+//                            return Observable.error { Throwable("Similarities to Card#$id not in db") }
+//                        return Observable.just(list)
+//                    } else {
+//                        return Observable.error { Throwable("Cache is dirty") }
+//                    }
+//                }
+//                ?: return Observable.error { Throwable("Card with id=$id not in db") }
     }
 
 
@@ -163,6 +178,6 @@ class RealmCacheCardDataSource : CacheDataSource, LoggedClass {
     companion object {
         val className = "RealmCacheCardDataSource"
 
-        val cacheLifeTime: Int = 60 * 1000
+//        val cacheLifeTime: Int = 60 * 1000
     }
 }

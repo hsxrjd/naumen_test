@@ -5,14 +5,11 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 
 /**
- * Created by erychkov on 7/18/17.
+ * Created by erychkov on 7/19/17.
  */
 @RealmClass
-open class CardRealm : RealmObject() {
+open class CardRealmLight : RealmObject() {
     @PrimaryKey var id: Int = -1
     var name: String = ""
-    var imageUrl: String? = null
     var company: CompanyRealm? = null
-    var description: String? = null
-    var creationTime: Long = 0
 }

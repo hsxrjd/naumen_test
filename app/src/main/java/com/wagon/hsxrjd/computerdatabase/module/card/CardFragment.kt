@@ -43,6 +43,7 @@ class CardFragment : LoggedFragment(), CardFragmentView {
 
     @Inject lateinit var mCardPresenter: CardPresenter
     private var mRvAdapter: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
+    private var mRvAdapter2: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
     private var mCardId: Int = -1
     private var mCardName: String = ""
     private var mCard: Card? = null

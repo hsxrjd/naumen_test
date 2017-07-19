@@ -1,13 +1,11 @@
 package com.wagon.hsxrjd.computerdatabase.model.net
 
-import io.realm.annotations.PrimaryKey
-
 /**
  * Created by hsxrjd on 23.05.17.
  */
-open class Page(
-    var items: List<Card>,
-    var page: Int,
-    var offset: Int,
-    var total: Int
-    )
+open class Page{
+    var items: List<Card> = listOf()
+    var page: Int = -1
+    var offset: Int = -1
+    var total: Int = 0
+}

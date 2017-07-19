@@ -12,8 +12,8 @@ class ListInteractorImpl(val operationFactory: OperationFactory, internal val mS
 
     override fun loadPage(id: Int) {
         operationFactory
-                .buildFetchPageOperation()
-                .perform(id)
+                .buildFetchPageOperation(id)
+                .perform()
 //                .onErrorResumeNext { _: Throwable -> fetchRemoteAndStore(id) }
 //                .onErrorResumeNext { _: Throwable -> mLocalSource.getDirtyPage(id) }
                 .subscribe({ mSubject.onNext(ResultObject(it)) }, { mSubject.onNext(ResultObject(it)) })

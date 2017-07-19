@@ -47,7 +47,7 @@ class PaginationFragment : LoggedFragment(), PaginationFragmentView {
     }
 
     override fun showPage(id: Int, total: Int) {
-        mPageCount.text = String.format(getString(R.string.text_paginator), id + 1, total)
+        mPageCount.text = String.format(getString(R.string.text_paginator), if (total > 0) id + 1 else 0, total)
     }
 
     override fun changeButtonPrevState(state: Boolean) {

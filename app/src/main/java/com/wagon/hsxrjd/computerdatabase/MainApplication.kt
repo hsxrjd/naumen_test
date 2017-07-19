@@ -4,7 +4,6 @@ import android.app.Application
 import com.wagon.hsxrjd.computerdatabase.dagger.*
 import com.wagon.hsxrjd.computerdatabase.dagger.source.ApiModule
 import com.wagon.hsxrjd.computerdatabase.dagger.source.DataSourceModule
-import com.wagon.hsxrjd.computerdatabase.dagger.strategy.FactoryModule
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
