@@ -1,7 +1,6 @@
 package com.wagon.hsxrjd.computerdatabase.module.card
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,11 +18,11 @@ import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardInteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
+import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
 import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.module.card.presenter.CardPresenter
 import com.wagon.hsxrjd.computerdatabase.module.list.CardListFragment
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
-import com.wagon.hsxrjd.computerdatabase.other.Logger
 import com.wagon.hsxrjd.computerdatabase.other.ToastMessage
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -33,7 +32,7 @@ import javax.inject.Inject
 /**
  * Created by hsxrjd on 02.06.17.
  */
-class CardFragment : Fragment(), CardFragmentView {
+class CardFragment : LoggedFragment(), CardFragmentView {
     @BindView(R.id.computer_image) lateinit var mComputerImage: ImageView
     @BindView(R.id.company_name) lateinit var mCompanyName: TextView
     @BindView(R.id.company_text) lateinit var mCompanyNameText: TextView
@@ -248,13 +247,17 @@ class CardFragment : Fragment(), CardFragmentView {
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
     }
 
+    override fun getClassName(): String {
+        return className
+    }
+
     companion object {
         val BUNDLE_TAG_CARD_ID: String = "CARD_ID"
         val BUNDLE_TAG_CARD: String = "SAVED_CARD"
         val BUNDLE_TAG_CARD_NAME: String = "CARD_NAME"
         val BUNDLE_TAG_DATA_LIST: String = "LIST_OF_DATA"
         val DESCRIPTION_MAX_LINES_COLLAPSED: Int = 2
-
+        val className = "CardFragment"
 
         fun newInstance(id: Int, name: String): CardFragment {
             val fragment = CardFragment()

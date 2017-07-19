@@ -1,25 +1,24 @@
 package com.wagon.hsxrjd.computerdatabase.module.pagin
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.paginator.PaginationModule
+import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
 import com.wagon.hsxrjd.computerdatabase.module.pagin.presenter.PaginationPresenter
 import javax.inject.Inject
 
 /**
  * Created by erychkov on 7/14/17.
  */
-class PaginationFragment : Fragment(), PaginationFragmentView {
+class PaginationFragment : LoggedFragment(), PaginationFragmentView {
 
     companion object {
         fun newInstance(containerComponent: ContainerComponent): PaginationFragment {
@@ -65,6 +64,10 @@ class PaginationFragment : Fragment(), PaginationFragmentView {
 
     override fun showMessage(resource: Int) {
 
+    }
+
+    override fun getClassName(): String {
+        return "PaginationFragment"
     }
 
     @BindView(R.id.button_prev) lateinit var mButtonPrev: Button

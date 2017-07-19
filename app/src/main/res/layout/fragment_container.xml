@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    tools:context=".container.ContainerFragment"
+    tools:context=".module.container.ContainerFragment"
     android:layout_height="match_parent">
 
     <FrameLayout

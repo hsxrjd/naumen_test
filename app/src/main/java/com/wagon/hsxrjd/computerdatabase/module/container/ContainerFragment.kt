@@ -1,7 +1,6 @@
-package com.wagon.hsxrjd.computerdatabase.container
+package com.wagon.hsxrjd.computerdatabase.module.container
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,21 @@ import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ListInteractorModule
+import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
 import com.wagon.hsxrjd.computerdatabase.module.list.CardListFragment
 import com.wagon.hsxrjd.computerdatabase.module.pagin.PaginationFragment
 
 /**
  * Created by erychkov on 7/14/17.
  */
-class ContainerFragment : Fragment() {
+class ContainerFragment : LoggedFragment() {
+    override fun getClassName(): String {
+        return className
+    }
+
+    companion object {
+        val className = "ContainerFragment"
+    }
 
     lateinit var containerComponent: ContainerComponent
 

@@ -11,7 +11,6 @@ import com.wagon.hsxrjd.computerdatabase.model.net.Page
  * Created by erychkov on 7/18/17.
  */
 
-
 fun PageRealm.mutate(): Page {
     return Page(
             this.items.map { it.mutate() },
@@ -48,7 +47,6 @@ fun Card.mutate(): CardRealm {
     card.description = this.description
     return card
 }
-
 
 fun CompanyRealm.mutate(): Company {
     val company = Company()
