@@ -122,8 +122,8 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
 
     override fun showCardList(cardList: List<Card>) = mRvListAdapter.setData(cardList.map {
         CardAttribute(it, object : CardAttribute.OnItemClickListener {
-            override fun onItemClick(view: View, card: Card) {
-                mNavigator.startCardFragment(view, card)
+            override fun onItemClick(view: View, card:Card) {
+                mNavigator.startCardFragment(view, it)
             }
         })
     })

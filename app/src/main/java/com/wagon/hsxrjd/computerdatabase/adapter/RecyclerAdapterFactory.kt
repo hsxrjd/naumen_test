@@ -11,7 +11,9 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.squareup.picasso.Picasso
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.adapter.attribute.*
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.Attribute
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.CardAttribute
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.ClickableTextAttribute
 
 /**
  * Created by erychkov on 7/19/17.
@@ -45,31 +47,20 @@ class RecyclerAdapterFactory {
 
         override fun bind(attribute: Attribute) {
             super.bind(attribute)
+            textViewMain.text = attribute.getTitle()
+            attribute.getSubTitle()
+                    ?.let {
+                        textViewSupport.text = it
+                        textViewSupport.visibility = View.VISIBLE
+                    }
+                    ?: let { textViewSupport.visibility = View.GONE }
+
+
             when (attribute) {
-                is TextAttribute -> {
-                    textViewMain.text = attribute.title
-                    attribute.subTitle
-                            ?.let {
-                                textViewSupport.text = it
-                                textViewSupport.visibility = View.VISIBLE
-                            }
-                            ?: let { textViewSupport.visibility = View.GONE }
-                }
                 is ClickableTextAttribute -> {
-                    textViewMain.text = attribute.title
-                    textViewSupport.text = attribute.subTitle
-                    textViewSupport.visibility = View.VISIBLE
                     textViewMain.setOnClickListener { view -> attribute.listener.onClick(view) }
                 }
-
                 is CardAttribute -> {
-                    textViewMain.text = attribute.card.name
-                    attribute.card.company
-                            ?.let {
-                                textViewSupport.text = it.name
-                                textViewSupport.visibility = View.VISIBLE
-                            }
-                            ?: let { textViewSupport.visibility = View.GONE }
                     itemView.setOnClickListener { view -> attribute.listener.onItemClick(view, attribute.card) }
                 }
             }
@@ -88,15 +79,11 @@ class RecyclerAdapterFactory {
 
         override fun bind(attribute: Attribute) {
             super.bind(attribute)
-            when (attribute) {
-                is ImageAttribute -> {
-                    Picasso
-                            .with(context)
-                            .load(attribute.url)
-                            .placeholder(R.mipmap.ic_image_placeholder)
-                            .into(imageView)
-                }
-            }
+            Picasso
+                    .with(context)
+                    .load(attribute.getTitle())
+                    .placeholder(R.mipmap.ic_image_placeholder)
+                    .into(imageView)
         }
 
         @BindView(R.id.list_item_imageview) lateinit var imageView: ImageView
