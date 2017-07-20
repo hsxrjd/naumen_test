@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.adapter.attr.CardAttribute
+import com.wagon.hsxrjd.computerdatabase.adapter.RecyclerAdapterFactory
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.CardAttribute
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
 import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
@@ -30,19 +31,17 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     @BindView(R.id.card_list_swipe_refresh_layout) lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     @Inject lateinit var mNavigator: Navigator
 
-    private var mRvListAdapter: CardListRecyclerViewAdapter = CardListRecyclerViewAdapter()
+    @Inject lateinit var adapterFactory: RecyclerAdapterFactory
+    private lateinit var mRvListAdapter: CardListRecyclerViewAdapter
 
     @Inject lateinit var mListPresenter: CardListPresenter
 
     private var mIsStart: Boolean = true
     private var mLoading: Boolean = false
 
-    private val mOnRefreshListener = SwipeRefreshLayout.OnRefreshListener {
-        mIsStart = true
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mRvListAdapter = CardListRecyclerViewAdapter(adapterFactory)
         retainInstance = true
     }
 

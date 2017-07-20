@@ -11,37 +11,33 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.squareup.picasso.Picasso
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.adapter.attr.*
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.*
 
 /**
  * Created by erychkov on 7/19/17.
  */
 class RecyclerAdapterFactory {
-
-    companion object {
-        fun buildHolder(viewGroup: ViewGroup, viewType: Int): BaseViewHolder {
-            val v: View = LayoutInflater
-                    .from(viewGroup.context)
-                    .inflate(viewType, viewGroup, false)
-            when (viewType) {
-                R.layout.list_item_textview -> {
-                    return TextViewHolder(v)
-                }
-                R.layout.list_item_imageview -> {
-                    return ImageViewHolder(v, viewGroup.context)
-                }
-                R.layout.list_item_cardview -> {
-                    return TextViewHolder(v)
-                }
-                else -> {
-                    return BaseViewHolder(v)
-                }
+    fun buildHolder(viewGroup: ViewGroup, viewType: Int): BaseViewHolder {
+        val v: View = LayoutInflater
+                .from(viewGroup.context)
+                .inflate(viewType, viewGroup, false)
+        when (viewType) {
+            R.layout.list_item_textview -> {
+                return TextViewHolder(v)
+            }
+            R.layout.list_item_imageview -> {
+                return ImageViewHolder(v, viewGroup.context)
+            }
+            R.layout.list_item_cardview -> {
+                return TextViewHolder(v)
+            }
+            else -> {
+                return BaseViewHolder(v)
             }
         }
     }
 
     open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        open fun bind(title: String, subTitle: String?) {}
         open fun bind(attribute: Attribute) {}
     }
 
@@ -63,7 +59,7 @@ class RecyclerAdapterFactory {
                     textViewMain.text = attribute.title
                     textViewSupport.text = attribute.subTitle
                     textViewSupport.visibility = View.VISIBLE
-                    textViewMain.setOnClickListener {view -> attribute.listener.onClick(view) }
+                    textViewMain.setOnClickListener { view -> attribute.listener.onClick(view) }
                 }
 
                 is CardAttribute -> {
@@ -79,15 +75,6 @@ class RecyclerAdapterFactory {
             }
         }
 
-        override fun bind(title: String, subTitle: String?) {
-            textViewMain.text = title
-            subTitle
-                    ?.let {
-                        textViewSupport.text = it
-                        textViewSupport.visibility = View.VISIBLE
-                    }
-                    ?: let { textViewSupport.visibility = View.GONE }
-        }
 
         @BindView(R.id.list_item_textview_main) lateinit var textViewMain: TextView
         @BindView(R.id.list_item_textview_support) lateinit var textViewSupport: TextView
@@ -111,12 +98,6 @@ class RecyclerAdapterFactory {
                 }
             }
         }
-
-        override fun bind(title: String, subTitle: String?) = Picasso
-                .with(context)
-                .load(title)
-                .placeholder(R.mipmap.ic_image_placeholder)
-                .into(imageView)
 
         @BindView(R.id.list_item_imageview) lateinit var imageView: ImageView
 

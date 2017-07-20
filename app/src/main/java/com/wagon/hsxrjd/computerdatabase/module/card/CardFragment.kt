@@ -12,7 +12,8 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.adapter.attr.*
+import com.wagon.hsxrjd.computerdatabase.adapter.RecyclerAdapterFactory
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.*
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardInteractorModule
 import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
 import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
@@ -23,7 +24,6 @@ import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import com.wagon.hsxrjd.computerdatabase.other.ToastAdapter
 import com.wagon.hsxrjd.computerdatabase.other.ToastMessage
 import org.parceler.Parcels
-import org.w3c.dom.Attr
 import javax.inject.Inject
 
 /**
@@ -36,7 +36,8 @@ class CardFragment : LoggedFragment(), CardFragmentView {
 
     @Inject lateinit var mCardPresenter: CardPresenter
     //    private var mRvAdapterList: CardListRecyclerViewAdapter = CardListRecyclerViewAdapter()
-    private var mRvAdapter2: CardRecyclerViewAdapter = CardRecyclerViewAdapter()
+    @Inject lateinit var adapterFactory: RecyclerAdapterFactory
+    private lateinit var mRvAdapter2: CardRecyclerViewAdapter
     private var mCardId: Int = -1
     private var mCardName: String = ""
     private var mCard: Card? = null
@@ -198,6 +199,7 @@ class CardFragment : LoggedFragment(), CardFragmentView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainApplication.appComponent.plus(CardPresenterModule(), CardInteractorModule()).inject(this)
+        mRvAdapter2 = CardRecyclerViewAdapter(adapterFactory)
         mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
     }

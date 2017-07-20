@@ -23,11 +23,11 @@ import javax.inject.Singleton
                 ToastModule::class,
                 ContextModule::class,
                 FactoryModule::class,
+                AdapterFactoryModule::class,
                 NavigatorModule::class)
 )
 interface AppComponent {
     fun inject(mainActivity: MainActivity)
     fun plus(cardPresenterModule: CardPresenterModule, cardInteractorModule: CardInteractorModule): CardComponent
     fun plus(interactorModule: ListInteractorModule): ContainerComponent
-
 }

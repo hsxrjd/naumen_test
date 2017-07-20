@@ -1,4 +1,4 @@
-package com.wagon.hsxrjd.computerdatabase.adapter.attr
+package com.wagon.hsxrjd.computerdatabase.adapter.attribute
 
 import android.view.View
 

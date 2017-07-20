@@ -29,11 +29,9 @@ class MainApplication : Application() {
         val appComponent: AppComponent by lazy {
             DaggerAppComponent
                     .builder()
-                    .apiModule(ApiModule())
-
+                    .adapterFactoryModule(AdapterFactoryModule())
                     .contextModule(contextModule)
                     .toastModule(ToastModule())
-                    .dataSourceModule(DataSourceModule())
                     .navigatorModule(NavigatorModule())
                     .build()
         }
