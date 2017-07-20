@@ -10,19 +10,16 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
+import com.wagon.hsxrjd.computerdatabase.adapter.attr.CardAttribute
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
-import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
-import com.wagon.hsxrjd.computerdatabase.module.card.CardFragment
-import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
-import com.wagon.hsxrjd.computerdatabase.module.list.adapter.EndlessCardRecyclerViewAdapter
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
+import com.wagon.hsxrjd.computerdatabase.module.list.adapter.CardListRecyclerViewAdapter
 import com.wagon.hsxrjd.computerdatabase.module.list.presenter.CardListPresenter
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import com.wagon.hsxrjd.computerdatabase.other.ToastAdapter
 import com.wagon.hsxrjd.computerdatabase.other.ToastMessage
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import org.parceler.Parcels
 import javax.inject.Inject
 
@@ -33,7 +30,7 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     @BindView(R.id.card_list_swipe_refresh_layout) lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     @Inject lateinit var mNavigator: Navigator
 
-    private var mRvAdapter: EndlessCardRecyclerViewAdapter = EndlessCardRecyclerViewAdapter()
+    private var mRvListAdapter: CardListRecyclerViewAdapter = CardListRecyclerViewAdapter()
 
     @Inject lateinit var mListPresenter: CardListPresenter
 
@@ -62,7 +59,7 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG, mRecyclerView.layoutManager.onSaveInstanceState())
-        outState?.putParcelable(BUNDLE_TAG_DATA_LIST, Parcels.wrap(mRvAdapter.getCardList()))
+        outState?.putParcelable(BUNDLE_TAG_DATA_LIST, Parcels.wrap(mRvListAdapter.getData()))
     }
 
 
@@ -73,13 +70,13 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
         savedInstanceState
                 ?.let {
                     mRecyclerView.layoutManager.onRestoreInstanceState(it.getParcelable(BUNDLE_TAG_LAYOUT_MANAGER_CONFIG))
-                    mRvAdapter.setCardList(Parcels.unwrap(it.getParcelable(BUNDLE_TAG_DATA_LIST)))
+                    mRvListAdapter.setData(Parcels.unwrap(it.getParcelable(BUNDLE_TAG_DATA_LIST)))
                 }
         mIsStart = false
     }
 
     override fun switchLoadingAbility(flag: Boolean) {
-        mRvAdapter.setLoadItemVisibility(flag)
+//        mRvListAdapter.setLoadItemVisibility(flag)
     }
 
     override fun onResume() {
@@ -88,28 +85,30 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     }
 
     fun setupRecyclerView() {
-        mRvAdapter.setOnItemClickListener(object : CardRecyclerViewAdapter.OnItemClickListener {
+        mRvListAdapter.setOnItemClickListener(object : CardListRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, card: Card) {
                 mNavigator.startCardFragment(view, card)
             }
         })
         mRecyclerView.layoutManager = LinearLayoutManager(context)
-        mRecyclerView.adapter = mRvAdapter
+        mRecyclerView.adapter = mRvListAdapter
+//        mRecyclerView.layoutManager = LinearLayoutManager(context)
+//        mRecyclerView.adapter = mRvListAdapter
 //        mRecyclerView.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
     }
 
     override fun showLoading() {
         mLoading = true
-        if (mRvAdapter.itemCount == 0)
+        if (mRvListAdapter.itemCount == 0)
             mSwipeRefreshLayout.isRefreshing = true
-        else
-            mRvAdapter.showLoading()
+//        else
+//            mRvListAdapter.showLoading()
     }
 
     override fun hideLoading() {
         mLoading = false
         mSwipeRefreshLayout.isRefreshing = false
-        mRvAdapter.hideLoading()
+//        mRvListAdapter.hideLoading()
     }
 
     @Inject lateinit var toastAdapter: ToastAdapter
@@ -122,9 +121,15 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
         toastAdapter.makeToast(ToastMessage(resource))
     }
 
-    override fun showCardList(cardList: List<Card>) = mRvAdapter.setCardList(cardList)
+    override fun showCardList(cardList: List<Card>) = mRvListAdapter.setData(cardList.map {
+        CardAttribute(it, object : CardAttribute.OnItemClickListener {
+            override fun onItemClick(view: View, card: Card) {
+                mNavigator.startCardFragment(view, card)
+            }
+        })
+    })
 
-    override fun showNextPage(cardList: List<Card>) = mRvAdapter.addCardsToList(cardList)
+    override fun showNextPage(cardList: List<Card>) {}//= mRvListAdapter.addCardsToList(cardList)
 
     override fun getClassName(): String {
         return className

@@ -27,7 +27,7 @@
 
 
         <TextView
-            android:id="@+id/card_title_cardview"
+            android:id="@+id/list_item_textview_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -41,12 +41,12 @@
             android:textSize="@dimen/text_size_list_item_primary" />
 
         <TextView
-            android:id="@+id/card_company_name_cardview"
+            android:id="@+id/list_item_textview_support"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@id/card_title_cardview"
+            android:layout_below="@id/list_item_textview_main"
             android:fontFamily="@string/roboto_regular"
             android:textSize="@dimen/text_size_list_item_secondary"
             android:visibility="visible" />

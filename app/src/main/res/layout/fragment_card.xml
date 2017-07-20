@@ -15,119 +15,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/company_name"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/main_list"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:paddingEnd="@dimen/list_item_padding_end_right"
-                android:paddingLeft="@dimen/list_item_padding_start_left"
-                android:paddingRight="@dimen/list_item_padding_end_right"
-                android:paddingStart="@dimen/list_item_padding_start_left"
-                android:paddingTop="@dimen/padding_8dp"
-                android:textColor="@color/list_item_title"
-                android:textSize="@dimen/text_size_list_item_primary" />
-
-            <TextView
-                android:id="@+id/company_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/company_name"
-                android:paddingEnd="@dimen/list_item_padding_end_right"
-                android:paddingLeft="@dimen/list_item_padding_start_left"
-                android:paddingRight="@dimen/list_item_padding_end_right"
-                android:paddingStart="@dimen/list_item_padding_start_left"
-                android:text="@string/company"
-                android:textSize="@dimen/text_size_list_item_secondary" />
-
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/company_text"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:paddingEnd="@dimen/list_item_padding_end_right"
-                android:paddingLeft="@dimen/list_item_padding_start_left"
-                android:paddingRight="@dimen/list_item_padding_end_right"
-                android:paddingStart="@dimen/list_item_padding_start_left"
-                android:paddingTop="@dimen/padding_8dp"
-                android:textColor="@color/list_item_title"
-                android:textSize="@dimen/text_size_list_item_primary" />
-
-
-            <TextView
-                android:id="@+id/description_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/description"
-                android:paddingEnd="@dimen/list_item_padding_end_right"
-                android:paddingLeft="@dimen/list_item_padding_start_left"
-                android:paddingRight="@dimen/list_item_padding_end_right"
-                android:paddingStart="@dimen/list_item_padding_start_left"
-                android:text="@string/description"
-                android:textSize="@dimen/text_size_list_item_secondary" />
-
-            <ImageView
-                android:id="@+id/computer_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/description_text"
-                android:layout_centerHorizontal="true"
-                android:contentDescription="@string/computer_image"
-                android:maxHeight="@dimen/image_height"
-                android:maxWidth="@dimen/image_width"
-                android:minHeight="@dimen/image_height"
-                android:minWidth="@dimen/image_width"
-                android:paddingEnd="@dimen/list_item_padding_end_right"
-                android:paddingLeft="@dimen/list_item_padding_start_left"
-                android:paddingRight="@dimen/list_item_padding_end_right"
-                android:paddingStart="@dimen/list_item_padding_start_left"
-                android:paddingTop="@dimen/padding_8dp"
-                android:visibility="visible" />
-
-
-            <TextView
-                android:id="@+id/similar_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/computer_image"
-                android:paddingEnd="@dimen/list_item_padding_end_right"
-                android:paddingLeft="@dimen/list_item_padding_start_left"
-                android:paddingRight="@dimen/list_item_padding_end_right"
-                android:paddingStart="@dimen/list_item_padding_start_left"
-                android:paddingTop="@dimen/padding_8dp"
-                android:text="@string/you_might_be_looking_for"
-                android:textAlignment="center"
-                android:textSize="@dimen/text_size_list_item_secondary" />
-
-            <ImageView
-                android:id="@+id/similar_divider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/similar_text"
-                android:paddingTop="@dimen/padding_8dp"
-                android:src="@drawable/divider_dark"
-                tools:ignore="ContentDescription" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/similar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/similar_divider"
                 android:isScrollContainer="false"
                 android:overScrollMode="never"
                 android:paddingTop="@dimen/recycler_view_padding_top"
                 android:scrollbars="none" />
+
         </RelativeLayout>
     </ScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>
