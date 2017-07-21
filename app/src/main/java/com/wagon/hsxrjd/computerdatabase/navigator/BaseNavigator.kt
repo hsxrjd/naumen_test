@@ -6,8 +6,8 @@ import android.view.View
 import android.widget.TextView
 import com.wagon.hsxrjd.computerdatabase.MainActivity
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.card.CardFragment
-import com.wagon.hsxrjd.computerdatabase.model.Card
+import com.wagon.hsxrjd.computerdatabase.module.card.CardFragment
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import java.lang.ref.WeakReference
 
 /**
@@ -41,7 +41,7 @@ class BaseNavigator : Navigator {
         mToolbarTitle = WeakReference((activity as MainActivity).mToolbarTitle)
     }
 
-    override fun startCardFragment(view: View, card: Card) {
+    override fun startCardFragment(card: Card) {
         val fragment = CardFragment.newInstance(card.id, card.name)
         enableToolbar(true)
         setToolbarTitle(card.name)
@@ -51,14 +51,5 @@ class BaseNavigator : Navigator {
                 .addToBackStack(MainActivity.BACK_STACK_TAG_CARD + card.id)
                 .commit()
     }
-
-
-//    private object Holder {
-//        val mInstance = BaseNavigator()
-//    }
-//
-//    companion object {
-//        val instance: Navigator by lazy { Holder.mInstance }
-//    }
 
 }

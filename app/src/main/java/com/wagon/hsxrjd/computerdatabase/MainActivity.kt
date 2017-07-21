@@ -1,17 +1,20 @@
 package com.wagon.hsxrjd.computerdatabase
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.wagon.hsxrjd.computerdatabase.container.ContainerFragment
+import com.wagon.hsxrjd.computerdatabase.log.LoggedActivity
+import com.wagon.hsxrjd.computerdatabase.module.container.ContainerFragment
 import com.wagon.hsxrjd.computerdatabase.navigator.Navigator
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : LoggedActivity() {
+    override fun getClassName(): String {
+        return className
+    }
 
     @BindView(R.id.toolbar_main) lateinit var mToolbar: Toolbar
     @BindView(R.id.toolbar_title) lateinit var mToolbarTitle: TextView
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        val className = "MainActivity"
         val BACK_STACK_TAG_CARD: String = "CARD_FRAGMENT"
         val BACK_STACK_TAG_LIST_MAIN: String = "LIST_VIEW_MAIN"
         val BACK_STACK_TAG_CARD_LIST: String = "LIST_VIEW_FRAGMENT"
