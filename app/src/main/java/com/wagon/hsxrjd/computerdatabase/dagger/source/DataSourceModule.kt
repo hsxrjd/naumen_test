@@ -21,6 +21,12 @@ import javax.inject.Singleton
 class DataSourceModule {
     @Singleton
     @Provides
+    fun provideApi(): NaumenApi {
+        return NaumenApi()
+    }
+
+    @Singleton
+    @Provides
     @RemoteApiSource
     fun provideRemoteSource(api: NaumenApi): CardDataSource {
         return RemoteCardDataSource(api)

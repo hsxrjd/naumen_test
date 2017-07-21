@@ -42,7 +42,6 @@ fun CardRealm.mutate(): Card {
     return card
 }
 
-
 fun Card.mutate(): CardRealm {
     val card: CardRealm = CardRealm()
     card.id = this.id
@@ -81,8 +80,4 @@ fun Company.mutate(): CompanyRealm {
     company.id = this.id
     company.name = this.name
     return company
-}
-
-inline fun <T, R : RealmModel> Iterable<T>.mapToRealm(transform: (T) -> R): RealmList<R> {
-    return mapTo(RealmList<R>(), transform)
 }

@@ -17,7 +17,6 @@ open class Card() {
     var company: Company? = null
     var description: String? = null
 
-
     constructor(
             eid: Int,
             ename: String,
@@ -46,5 +45,4 @@ open class Card() {
     override fun hashCode(): Int {
         return id
     }
-
 }

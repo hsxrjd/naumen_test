@@ -12,6 +12,6 @@ interface Navigator {
     fun setActivity(activity: AppCompatActivity)
     fun setToolbarTitle(title: String)
     fun setToolbarTitle(resource: Int)
-    fun startCardFragment(view: View, card: Card)
+    fun startCardFragment(card: Card)
     fun enableToolbar(toggle:Boolean)
 }

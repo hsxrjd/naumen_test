@@ -8,7 +8,7 @@ import com.wagon.hsxrjd.computerdatabase.adapter.attribute.*
 /**
  * Created by erychkov on 7/20/17.
  */
-abstract class GenericRecyclerViewAdapter<T : Attribute>(val factory: RecyclerAdapterFactory) : RecyclerView.Adapter<RecyclerAdapterFactory.BaseViewHolder>() {
+abstract class GenericRecyclerViewAdapter<T : Attribute>(val factory: RecyclerAdapterFactory) : RecyclerView.Adapter<RecyclerAdapterFactory.BaseViewHolder>(), ClickableItem {
     protected var mContainer: MutableList<T> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapterFactory.BaseViewHolder {
@@ -16,8 +16,16 @@ abstract class GenericRecyclerViewAdapter<T : Attribute>(val factory: RecyclerAd
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapterFactory.BaseViewHolder?, position: Int) {
-        holder?.bind(mContainer[position])
+        when (holder) {
+            is RecyclerAdapterFactory.TextViewHolder? -> {
+                holder?.bind(mContainer[position], this)
+            }
+            else -> {
+                holder?.bind(mContainer[position])
+            }
+        }
     }
+
     override fun getItemCount(): Int {
         return mContainer.size
     }

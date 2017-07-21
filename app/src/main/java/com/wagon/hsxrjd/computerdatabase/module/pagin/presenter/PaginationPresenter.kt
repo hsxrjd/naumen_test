@@ -23,11 +23,9 @@ class PaginationPresenter(mObservable: Observable<ResultObject>, val mInteractor
                     p: ResultObject ->
                     when (p.state) {
                         ResultObject.State.Success -> {
-                            p.page?.let {
-                                mCurrent = p.page.page
-                                mTotal = p.page.total / 10
-                                mView.get()?.showPage(mCurrent, mTotal)
-                            }
+                            p.currentPage?.let { mCurrent = it }
+                            p.totalPageCount?.let { mTotal = it / 10 }
+                            mView.get()?.showPage(mCurrent, mTotal)
                             calcButtonNextState()
                             calcButtonPrevState()
                         }

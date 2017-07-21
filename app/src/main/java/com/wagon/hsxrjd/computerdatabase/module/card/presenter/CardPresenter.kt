@@ -1,8 +1,8 @@
 package com.wagon.hsxrjd.computerdatabase.module.card.presenter
 
 import com.wagon.hsxrjd.computerdatabase.R
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.Attribute
 import com.wagon.hsxrjd.computerdatabase.contract.BasePresenter
-import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.module.card.CardFragmentView
 import com.wagon.hsxrjd.computerdatabase.module.card.Interactor.CardInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,7 +22,7 @@ class CardPresenter(val mInteractor: CardInteractor) : BasePresenter<CardFragmen
                 .doOnComplete { view?.hideLoading() }
                 .doOnError { view?.showMessage(R.string.message_error_loading_card) }
                 .subscribe(
-                        { c: Card? -> c?.let { view?.showCard(it) } },
+                        { c: List<Attribute>? -> c?.let { mAdapter?.addAttributes(*it.toTypedArray()) } },
                         { view?.showMessage(R.string.message_error_loading_card) }
                 )
     }
@@ -36,7 +36,7 @@ class CardPresenter(val mInteractor: CardInteractor) : BasePresenter<CardFragmen
                 .doOnComplete { view?.hideLoading() }
                 .doOnError { view?.showMessage(R.string.message_error_loading_similar_to) }
                 .subscribe(
-                        { c: List<Card>? -> c?.let { view?.showSimilarTo(it) } },
+                        { c: List<Attribute>? -> c?.let { mAdapter?.addAttributes(*it.toTypedArray()) } },
                         { view?.showMessage(R.string.message_error_loading_similar_to) }
                 )
     }

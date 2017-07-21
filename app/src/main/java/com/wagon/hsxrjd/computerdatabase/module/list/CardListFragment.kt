@@ -12,8 +12,8 @@ import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.RecyclerAdapterFactory
 import com.wagon.hsxrjd.computerdatabase.adapter.attribute.CardAttribute
+import com.wagon.hsxrjd.computerdatabase.dagger.card.ListModule
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
-import com.wagon.hsxrjd.computerdatabase.dagger.list.ListPresenterModule
 import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.module.list.adapter.CardListRecyclerViewAdapter
@@ -32,7 +32,7 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     @Inject lateinit var mNavigator: Navigator
 
     @Inject lateinit var adapterFactory: RecyclerAdapterFactory
-    private lateinit var mRvListAdapter: CardListRecyclerViewAdapter
+    @Inject lateinit var mRvListAdapter: CardListRecyclerViewAdapter
 
     @Inject lateinit var mListPresenter: CardListPresenter
 
@@ -41,7 +41,6 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mRvListAdapter = CardListRecyclerViewAdapter(adapterFactory)
         retainInstance = true
     }
 
@@ -49,7 +48,6 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_card_list, container, false)
         ButterKnife.bind(this, view)
-//        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener)
         mSwipeRefreshLayout.isEnabled = false
         setupRecyclerView()
         return view
@@ -65,6 +63,7 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mListPresenter.setView(this)
+        mListPresenter.bindAdapter(mRvListAdapter)
         hideLoading()
         savedInstanceState
                 ?.let {
@@ -74,8 +73,9 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
         mIsStart = false
     }
 
-    override fun switchLoadingAbility(flag: Boolean) {
-//        mRvListAdapter.setLoadItemVisibility(flag)
+    override fun onDestroy() {
+        mListPresenter.unBind()
+        super.onDestroy()
     }
 
     override fun onResume() {
@@ -84,30 +84,19 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     }
 
     fun setupRecyclerView() {
-        mRvListAdapter.setOnItemClickListener(object : CardListRecyclerViewAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, card: Card) {
-                mNavigator.startCardFragment(view, card)
-            }
-        })
         mRecyclerView.layoutManager = LinearLayoutManager(context)
         mRecyclerView.adapter = mRvListAdapter
-//        mRecyclerView.layoutManager = LinearLayoutManager(context)
-//        mRecyclerView.adapter = mRvListAdapter
-//        mRecyclerView.addItemDecoration(MatItemDecoration(ContextCompat.getDrawable(activity, R.drawable.divider_dark)))
     }
 
     override fun showLoading() {
         mLoading = true
         if (mRvListAdapter.itemCount == 0)
             mSwipeRefreshLayout.isRefreshing = true
-//        else
-//            mRvListAdapter.showLoading()
     }
 
     override fun hideLoading() {
         mLoading = false
         mSwipeRefreshLayout.isRefreshing = false
-//        mRvListAdapter.hideLoading()
     }
 
     @Inject lateinit var toastAdapter: ToastAdapter
@@ -121,14 +110,12 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
     }
 
     override fun showCardList(cardList: List<Card>) = mRvListAdapter.setData(cardList.map {
-        CardAttribute(it, object : CardAttribute.OnItemClickListener {
-            override fun onItemClick(view: View, card:Card) {
-                mNavigator.startCardFragment(view, it)
-            }
-        })
+        CardAttribute(it)
     })
 
-    override fun showNextPage(cardList: List<Card>) {}//= mRvListAdapter.addCardsToList(cardList)
+    override fun startCardFragment(card: Card) {
+        mNavigator.startCardFragment(card)
+    }
 
     override fun getClassName(): String {
         return className
@@ -141,7 +128,7 @@ class CardListFragment : LoggedFragment(), CardListFragmentView {
 
         fun newInstance(containerComponent: ContainerComponent): CardListFragment {
             val fragment = CardListFragment()
-            containerComponent.plus(ListPresenterModule()).inject(fragment)
+            containerComponent.plus(ListModule()).inject(fragment)
             return fragment
         }
     }

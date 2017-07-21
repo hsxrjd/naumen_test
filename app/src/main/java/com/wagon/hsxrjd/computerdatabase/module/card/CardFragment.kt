@@ -7,15 +7,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.wagon.hsxrjd.computerdatabase.MainApplication
 import com.wagon.hsxrjd.computerdatabase.R
-import com.wagon.hsxrjd.computerdatabase.adapter.RecyclerAdapterFactory
-import com.wagon.hsxrjd.computerdatabase.adapter.attribute.*
-import com.wagon.hsxrjd.computerdatabase.dagger.card.CardInteractorModule
-import com.wagon.hsxrjd.computerdatabase.dagger.card.CardPresenterModule
+import com.wagon.hsxrjd.computerdatabase.dagger.card.CardModule
 import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
 import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.module.card.adapter.CardRecyclerViewAdapter
@@ -35,17 +31,13 @@ class CardFragment : LoggedFragment(), CardFragmentView {
     @BindView(R.id.card_swipe_refresh_layout) lateinit var mSwipeRefresh: SwipeRefreshLayout
 
     @Inject lateinit var mCardPresenter: CardPresenter
-    //    private var mRvAdapterList: CardListRecyclerViewAdapter = CardListRecyclerViewAdapter()
-    @Inject lateinit var adapterFactory: RecyclerAdapterFactory
-    private lateinit var mRvAdapter2: CardRecyclerViewAdapter
+    @Inject lateinit var mRvAdapter: CardRecyclerViewAdapter
     private var mCardId: Int = -1
     private var mCardName: String = ""
     private var mCard: Card? = null
     private var mOperationCount: Int = 0
 
     @Inject lateinit var mNavigator: Navigator
-    private var mPressed: Boolean = false
-
 
     private val mOnScrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -53,7 +45,7 @@ class CardFragment : LoggedFragment(), CardFragmentView {
             val layoutManager = recyclerView?.layoutManager as LinearLayoutManager?
             val lastVisibleItemPosition = layoutManager?.findLastVisibleItemPosition()
             if (lastVisibleItemPosition != null) {
-                if (lastVisibleItemPosition >= mRvAdapter2.itemCount - 1) {
+                if (lastVisibleItemPosition >= mRvAdapter.itemCount - 1) {
                     mCardPresenter.showSimilarTo(mCardId)
                     mRecyclerMain.removeOnScrollListener(this)
                 }
@@ -61,16 +53,8 @@ class CardFragment : LoggedFragment(), CardFragmentView {
         }
     }
 
-    private val mClickListener = View.OnClickListener {
-        l: View ->
-        val d = (l as TextView)
-        if (!mPressed) {
-            d.maxLines = Integer.MAX_VALUE
-            mPressed = true
-        } else {
-            d.maxLines = DESCRIPTION_MAX_LINES_COLLAPSED
-            mPressed = false
-        }
+    override fun startCardFragment(card: Card) {
+        mNavigator.startCardFragment(card)
     }
 
     private val mOnRefreshListener = SwipeRefreshLayout.OnRefreshListener {
@@ -100,40 +84,6 @@ class CardFragment : LoggedFragment(), CardFragmentView {
         }
     }
 
-    override fun showCard(card: Card) {
-        mCard = card
-        val list: MutableList<Attribute> = mutableListOf()
-
-        list.add(TextAttribute(card.name, null))
-
-        card.company?.let {
-            list.add(TextAttribute(it.name, getString(R.string.company)))
-        }
-        card.description?.let {
-            list.add(ClickableTextAttribute(it, getString(R.string.description), mClickListener))
-        }
-        card.imageUrl?.let {
-            list.add(ImageAttribute(it))
-        }
-        mRvAdapter2.setData(list)
-
-    }
-
-    override fun showSimilarTo(cardList: List<Card>) {
-        if (cardList.isNotEmpty()) {
-            val list = mRvAdapter2.getData().toMutableList()
-            list.add(TextAttribute(getString(R.string.you_might_be_looking_for), null))
-            list.addAll(cardList.map { c ->
-                CardAttribute(c, object : CardAttribute.OnItemClickListener {
-                    override fun onItemClick(view: View, card: Card) {
-                        mNavigator.startCardFragment(view, card)
-                    }
-                })
-            })
-            mRvAdapter2.setData(list)
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater!!.inflate(R.layout.fragment_card, container, false)
         ButterKnife.bind(this, view)
@@ -142,15 +92,19 @@ class CardFragment : LoggedFragment(), CardFragmentView {
         return view
     }
 
+    override fun onDestroy() {
+        mCardPresenter.unBind()
+        super.onDestroy()
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mCardPresenter.setView(this)
+        mCardPresenter.bindAdapter(mRvAdapter)
         savedInstanceState
                 ?.let {
-
                     mCard = Parcels.unwrap(it.getParcelable(BUNDLE_TAG_CARD))
                     mCardName = it.getString(BUNDLE_TAG_CARD_NAME)
-                    showSimilarTo(Parcels.unwrap(it.getParcelable(BUNDLE_TAG_DATA_LIST)))
                 }
                 ?: let {
             mCardPresenter.loadCard(mCardId)
@@ -158,16 +112,8 @@ class CardFragment : LoggedFragment(), CardFragmentView {
     }
 
     fun setupRecyclerView() {
-//        mRvAdapter2.setOnItemClickListener(object : CardListRecyclerViewAdapter.OnItemClickListener {
-//            override fun onItemClick(view: View, card: Card) {
-//                mSwipeRefresh.isRefreshing = false
-//                mNavigator.startCardFragment(view, card)
-//            }
-//        })
-
         mRecyclerMain.layoutManager = LinearLayoutManager(context)
-        mRecyclerMain.adapter = mRvAdapter2
-        mRecyclerMain.isNestedScrollingEnabled = false
+        mRecyclerMain.adapter = mRvAdapter
         mRecyclerMain.addOnScrollListener(mOnScrollListener)
     }
 
@@ -175,14 +121,12 @@ class CardFragment : LoggedFragment(), CardFragmentView {
         super.onSaveInstanceState(outState)
         outState?.putParcelable(BUNDLE_TAG_CARD, Parcels.wrap(mCard))
         outState?.putString(BUNDLE_TAG_CARD_NAME, mCardName)
-//        outState?.putParcelable(CardListFragment.BUNDLE_TAG_DATA_LIST, Parcels.wrap(mRvAdapterList.getData()))
     }
 
     override fun onResume() {
         super.onResume()
         mNavigator.setToolbarTitle(mCardName)
         mNavigator.enableToolbar(true)
-        mCard?.let { showCard(it) }
     }
 
     override fun onPause() {
@@ -198,8 +142,7 @@ class CardFragment : LoggedFragment(), CardFragmentView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MainApplication.appComponent.plus(CardPresenterModule(), CardInteractorModule()).inject(this)
-        mRvAdapter2 = CardRecyclerViewAdapter(adapterFactory)
+        MainApplication.appComponent.plus(CardModule()).inject(this)
         mCardId = arguments.get(CardFragment.BUNDLE_TAG_CARD_ID) as Int
         mCardName = arguments.get(CardFragment.BUNDLE_TAG_CARD_NAME) as String
     }
@@ -212,7 +155,6 @@ class CardFragment : LoggedFragment(), CardFragmentView {
         val BUNDLE_TAG_CARD_ID: String = "CARD_ID"
         val BUNDLE_TAG_CARD: String = "SAVED_CARD"
         val BUNDLE_TAG_CARD_NAME: String = "CARD_NAME"
-        val BUNDLE_TAG_DATA_LIST: String = "LIST_OF_DATA"
         val DESCRIPTION_MAX_LINES_COLLAPSED: Int = 2
         val className = "CardFragment"
 

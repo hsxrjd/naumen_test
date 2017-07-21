@@ -14,11 +14,14 @@ import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.adapter.attribute.Attribute
 import com.wagon.hsxrjd.computerdatabase.adapter.attribute.CardAttribute
 import com.wagon.hsxrjd.computerdatabase.adapter.attribute.ClickableTextAttribute
+import com.wagon.hsxrjd.computerdatabase.log.Logger
+import com.wagon.hsxrjd.computerdatabase.module.card.CardFragment
 
 /**
  * Created by erychkov on 7/19/17.
  */
 class RecyclerAdapterFactory {
+
     fun buildHolder(viewGroup: ViewGroup, viewType: Int): BaseViewHolder {
         val v: View = LayoutInflater
                 .from(viewGroup.context)
@@ -45,7 +48,7 @@ class RecyclerAdapterFactory {
 
     class TextViewHolder(itemView: View) : BaseViewHolder(itemView) {
 
-        override fun bind(attribute: Attribute) {
+        fun bind(attribute: Attribute, listener: ClickableItem) {
             super.bind(attribute)
             textViewMain.text = attribute.getTitle()
             attribute.getSubTitle()
@@ -53,15 +56,32 @@ class RecyclerAdapterFactory {
                         textViewSupport.text = it
                         textViewSupport.visibility = View.VISIBLE
                     }
-                    ?: let { textViewSupport.visibility = View.GONE }
-
+                    ?: let {
+                attribute.getSubTitleRes()
+                        ?.let {
+                            textViewSupport.setText(it)
+                            textViewSupport.visibility = View.VISIBLE
+                        }
+                        ?: let { textViewSupport.visibility = View.GONE }
+            }
 
             when (attribute) {
                 is ClickableTextAttribute -> {
-                    textViewMain.setOnClickListener { view -> attribute.listener.onClick(view) }
+                    textViewMain.setOnClickListener {
+                        text ->
+                        val textView = (text as TextView)
+                        if (textView.maxLines == CardFragment.DESCRIPTION_MAX_LINES_COLLAPSED) {
+                            textView.maxLines = Integer.MAX_VALUE
+                        } else {
+                            textView.maxLines = CardFragment.DESCRIPTION_MAX_LINES_COLLAPSED
+                        }
+                    }
                 }
                 is CardAttribute -> {
-                    itemView.setOnClickListener { view -> attribute.listener.onItemClick(view, attribute.card) }
+
+                    itemView.setOnClickListener {
+                        listener.onItemClick(attribute.card)
+                    }
                 }
             }
         }

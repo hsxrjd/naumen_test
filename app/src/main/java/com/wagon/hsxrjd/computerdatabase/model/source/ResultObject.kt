@@ -1,5 +1,7 @@
 package com.wagon.hsxrjd.computerdatabase.model.source
 
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.Attribute
+import com.wagon.hsxrjd.computerdatabase.adapter.attribute.CardAttribute
 import com.wagon.hsxrjd.computerdatabase.model.net.Page
 
 /**
@@ -7,11 +9,13 @@ import com.wagon.hsxrjd.computerdatabase.model.net.Page
  */
 class ResultObject(
         val state: State,
-        val page: Page?,
+        val items: List<Attribute>?,
+        val currentPage: Int?,
+        val totalPageCount: Int?,
         val throwable: Throwable?
 ) {
-    constructor(page: Page) : this(State.Success, page, null)
-    constructor(throwable: Throwable) : this(State.Failure, null, throwable)
+    constructor(page: Page) : this(State.Success, page.items.map { card -> CardAttribute(card) }, page.page, page.total, null)
+    constructor(throwable: Throwable) : this(State.Failure, null, null, null, throwable)
 
     enum class State {
         Success,

@@ -2,8 +2,6 @@ package com.wagon.hsxrjd.computerdatabase
 
 import android.app.Application
 import com.wagon.hsxrjd.computerdatabase.dagger.*
-import com.wagon.hsxrjd.computerdatabase.dagger.source.ApiModule
-import com.wagon.hsxrjd.computerdatabase.dagger.source.DataSourceModule
 import io.realm.Realm
 import io.realm.RealmConfiguration
 

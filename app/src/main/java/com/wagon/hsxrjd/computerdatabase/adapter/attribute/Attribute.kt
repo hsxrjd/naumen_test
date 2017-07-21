@@ -6,4 +6,5 @@ package com.wagon.hsxrjd.computerdatabase.adapter.attribute
 interface Attribute{
     fun getTitle():String
     fun getSubTitle():String?
+    fun getSubTitleRes():Int?
 }

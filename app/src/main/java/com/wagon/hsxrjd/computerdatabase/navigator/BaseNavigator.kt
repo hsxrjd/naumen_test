@@ -41,7 +41,7 @@ class BaseNavigator : Navigator {
         mToolbarTitle = WeakReference((activity as MainActivity).mToolbarTitle)
     }
 
-    override fun startCardFragment(view: View, card: Card) {
+    override fun startCardFragment(card: Card) {
         val fragment = CardFragment.newInstance(card.id, card.name)
         enableToolbar(true)
         setToolbarTitle(card.name)
@@ -51,14 +51,5 @@ class BaseNavigator : Navigator {
                 .addToBackStack(MainActivity.BACK_STACK_TAG_CARD + card.id)
                 .commit()
     }
-
-
-//    private object Holder {
-//        val mInstance = BaseNavigator()
-//    }
-//
-//    companion object {
-//        val instance: Navigator by lazy { Holder.mInstance }
-//    }
 
 }

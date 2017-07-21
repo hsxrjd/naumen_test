@@ -12,6 +12,7 @@ import com.wagon.hsxrjd.computerdatabase.R
 import com.wagon.hsxrjd.computerdatabase.dagger.container.ContainerComponent
 import com.wagon.hsxrjd.computerdatabase.dagger.paginator.PaginationModule
 import com.wagon.hsxrjd.computerdatabase.log.LoggedFragment
+import com.wagon.hsxrjd.computerdatabase.model.net.Card
 import com.wagon.hsxrjd.computerdatabase.module.pagin.presenter.PaginationPresenter
 import javax.inject.Inject
 
@@ -19,6 +20,9 @@ import javax.inject.Inject
  * Created by erychkov on 7/14/17.
  */
 class PaginationFragment : LoggedFragment(), PaginationFragmentView {
+    override fun startCardFragment(card: Card) {
+        
+    }
 
     companion object {
         fun newInstance(containerComponent: ContainerComponent): PaginationFragment {

@@ -31,7 +31,6 @@ class ContainerFragment : LoggedFragment() {
         super.onCreate(savedInstanceState)
         containerComponent = MainApplication.appComponent.plus(ListInteractorModule())
         createChildFragments()
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,7 +41,6 @@ class ContainerFragment : LoggedFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     }
-
 
     fun createChildFragments() {
         val fragmentL = CardListFragment.newInstance(containerComponent)
