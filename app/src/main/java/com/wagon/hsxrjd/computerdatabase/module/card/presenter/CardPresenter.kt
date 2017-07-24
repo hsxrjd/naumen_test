@@ -20,10 +20,13 @@ class CardPresenter(val mInteractor: CardInteractor) : BasePresenter<CardFragmen
                 .getCard(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnComplete { view?.hideLoading() }
-                .doOnError { view?.showMessage(R.string.message_error_loading_card) }
+                .doOnNext { l -> if (l.isEmpty()) throw Throwable("empty list") }
                 .subscribe(
-                        { c: List<Attribute>? -> c?.let { mAdapter?.addAttributes(*it.toTypedArray()) } },
-                        { view?.showMessage(R.string.message_error_loading_card) }
+                        { c: List<Attribute> -> c.let { mAdapter?.addAttributes(*it.toTypedArray()) } },
+                        {
+                            view?.hideLoading()
+                            view?.showMessage(R.string.message_error_loading_card)
+                        }
                 )
     }
 
