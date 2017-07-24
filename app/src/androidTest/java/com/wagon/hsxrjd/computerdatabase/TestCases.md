@@ -1,8 +1,8 @@
 **List Fragment**
-- scroll
-- onClick button next
-- onClick button prev
-- open CardFragment
+- scroll -
+- onClick button next +
+- onClick button prev + 
+- open CardFragment + 
 
 **Card Fragment**
 - scroll

@@ -6,6 +6,7 @@
 .DS_Store
 /captures
 .externalNativeBuild
+test.sh
 
 
 # Built application files
